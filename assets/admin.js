@@ -8,18 +8,20 @@
 
         $('#post-status-info').remove();
 
-        var textarea = $('.wp-editor-area')[0];
+        $('.wp-editor-area').each((i,e) => {
 
-        var editor = CodeMirror.fromTextArea(textarea, {
-            lineNumbers: true,
-            autoCloseBrackets: true,
-            matchBrackets: true,
-            matchTags: true,
-            autoCloseTags: true,
-            mode: "application/x-httpd-php",
-            theme: 'dracula',
-            keyMap: 'sublime',
-            viewportMargin: Infinity
+            CodeMirror.fromTextArea(e, {
+                lineNumbers: true,
+                autoCloseBrackets: true,
+                matchBrackets: true,
+                matchTags: true,
+                autoCloseTags: true,
+                mode: "application/x-httpd-php",
+                theme: 'dracula',
+                keyMap: 'sublime',
+                viewportMargin: Infinity
+            })
+
         });
 
     })

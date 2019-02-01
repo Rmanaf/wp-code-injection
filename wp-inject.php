@@ -160,7 +160,7 @@ if (!class_exists('WP_Inject_Plugin')) {
 
             $item = [
                 'template' => "[inject id='']",
-                'description' => __("Injects code in the content", 'wp-inject')
+                'description' => __("Injects code snippets into the content", 'wp-inject')
             ];
 
             if (!is_array($list)) {
@@ -516,6 +516,7 @@ if (!class_exists('WP_Inject_Plugin')) {
                     'show_ui' => true,
                     'has_archive' => true,
                     'rewrite' => ['slug' => 'codes'],
+                    'supports' => ['author' , 'revisions' , 'title' , 'editor']
                 ]
             );
 
