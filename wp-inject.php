@@ -1,27 +1,21 @@
 <?php
 
 /**
- * MIT License
+ * Apache License, Version 2.0
  * 
- * Copyright (c) 2017 Arman Afzal
+ * Copyright (C) 2018 Arman Afzal <arman.afzal@gmail.com>
  * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  * 
  * 
  * Third Party Licenses :
@@ -55,10 +49,10 @@
     Plugin Name: Inject
     Plugin URI: https://www.divanhub.com/wp-inject
     Description: Allows You to inject code snippets into the pages by just using the Wordpress shortcode
-    Version: 1.0.1
+    Version: 1.1.1
     Author: Arman Afzal
     Author URI: https://github.com/Rmanaf
-    License: MIT license
+    License: Apache License, Version 2.0
     Text Domain: wp-inject
  */
 
@@ -69,8 +63,10 @@
 
 defined('ABSPATH') or die;
 
+require_once __DIR__ . '/wp-inject-plugin-widget.php';
 
 if (!class_exists('WP_Inject_Plugin')) {
+
     class WP_Inject_Plugin
     {
 
@@ -85,11 +81,13 @@ if (!class_exists('WP_Inject_Plugin')) {
 
             if (is_super_admin()) {
 
+
                 add_action('init', [&$this, 'create_posttype']);
                 add_action('admin_init', [&$this, 'admin_init']);
                 add_action('admin_head', [&$this, 'hide_post_title_input']);
                 add_action('admin_head', [&$this, 'remove_mediabuttons']);
                 add_action('admin_enqueue_scripts', [$this, 'print_scripts']);
+                add_action('widgets_init', [$this, 'widgets_init']);
                 add_filter('title_save_pre', [&$this, 'auto_generate_post_title']);
                 add_filter('user_can_richedit', [&$this, 'disable_wysiwyg']);
                 add_filter('post_row_actions', [&$this, 'remove_quick_edit'], 10, 1);
@@ -119,7 +117,7 @@ if (!class_exists('WP_Inject_Plugin')) {
 
             $ver = $this->get_version();
 
-            
+
             wp_enqueue_style('dcp-codemirror', plugins_url('assets/codemirror/lib/codemirror.css', __FILE__), [], $ver, 'all');
             wp_enqueue_style('dcp-codemirror-dracula', plugins_url('assets/codemirror/theme/dracula.css', __FILE__), [], $ver, 'all');
             wp_enqueue_style('dcp-inject', plugins_url('assets/admin.css', __FILE__), [], $ver, 'all');
@@ -283,6 +281,14 @@ if (!class_exists('WP_Inject_Plugin')) {
         }
 
 
+        public function widgets_init()
+        {
+
+            register_widget('Wp_Inject_Plugin_Widget');
+
+        }
+
+
 
         /**
          * Checks if is in post edit page
@@ -390,9 +396,9 @@ if (!class_exists('WP_Inject_Plugin')) {
                 $render_shortcodes = get_option('wp_dcp_inject_allow_shortcode', false);
 
                 $nested_injections = $this->get_shortcode_by_name($code->post_content, 'inject');
-                   
+
                 foreach ($nested_injections as $i) {
-                
+
                     $params = $i['params'];
 
                     if (isset($params['id']) && $params['id'] == $id) {
@@ -443,8 +449,8 @@ if (!class_exists('WP_Inject_Plugin')) {
 
                     list($opt, $val) = explode("=", $d);
 
-                    $params[$opt]  = trim($val , "[\"]'");
-                
+                    $params[$opt] = trim($val, "[\"]'");
+
                 }
 
                 array_push($result, [
