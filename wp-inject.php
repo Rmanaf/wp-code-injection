@@ -55,7 +55,7 @@
     Plugin Name: Inject
     Plugin URI: https://www.divanhub.com/wp-inject
     Description: Allows You to inject code snippets into the pages by just using the Wordpress shortcode
-    Version: 1.0.0
+    Version: 1.0.1
     Author: Arman Afzal
     Author URI: https://github.com/Rmanaf
     License: MIT license
@@ -64,7 +64,7 @@
 
 /**
  * @package WP_Inject_Plugin
- * @version 1.0.0
+ * @version 1.0.1
  */
 
 defined('ABSPATH') or die;
@@ -119,10 +119,12 @@ if (!class_exists('WP_Inject_Plugin')) {
 
             $ver = $this->get_version();
 
-            wp_enqueue_style('dcp-inject', plugins_url('assets/admin.css', __FILE__), [], $ver, 'all');
+            
             wp_enqueue_style('dcp-codemirror', plugins_url('assets/codemirror/lib/codemirror.css', __FILE__), [], $ver, 'all');
             wp_enqueue_style('dcp-codemirror-dracula', plugins_url('assets/codemirror/theme/dracula.css', __FILE__), [], $ver, 'all');
+            wp_enqueue_style('dcp-inject', plugins_url('assets/admin.css', __FILE__), [], $ver, 'all');
 
+            //codemirror
             wp_enqueue_script('dcp-codemirror', plugins_url('assets/codemirror/lib/codemirror.js', __FILE__), ['jquery'], $ver, false);
 
             // addons
@@ -134,8 +136,10 @@ if (!class_exists('WP_Inject_Plugin')) {
             wp_enqueue_script('dcp-codemirror-addon-search', plugins_url('assets/codemirror/addons/search/match-highlighter.js', __FILE__), [], $ver, false);
             wp_enqueue_script('dcp-codemirror-addon-fullscreen', plugins_url('assets/codemirror/addons/display/fullscreen.js', __FILE__), [], $ver, false);
 
+            //keymap
             wp_enqueue_script('dcp-codemirror-keymap', plugins_url('assets/codemirror/keymap/sublime.js', __FILE__), [], $ver, false);
 
+            //mode
             wp_enqueue_script('dcp-codemirror-mode-xml', plugins_url('assets/codemirror/mode/xml/xml.js', __FILE__), [], $ver, false);
             wp_enqueue_script('dcp-codemirror-mode-js', plugins_url('assets/codemirror/mode/javascript/javascript.js', __FILE__), [], $ver, false);
             wp_enqueue_script('dcp-codemirror-mode-css', plugins_url('assets/codemirror/mode/css/css.js', __FILE__), [], $ver, false);
@@ -385,6 +389,20 @@ if (!class_exists('WP_Inject_Plugin')) {
 
                 $render_shortcodes = get_option('wp_dcp_inject_allow_shortcode', false);
 
+                $nested_injections = $this->get_shortcode_by_name($code->post_content, 'inject');
+                   
+                foreach ($nested_injections as $i) {
+                
+                    $params = $i['params'];
+
+                    if (isset($params['id']) && $params['id'] == $id) {
+
+                        return '';
+
+                    }
+
+                }
+
                 if ($render_shortcodes) {
 
                     return do_shortcode($code->post_content);
@@ -396,6 +414,46 @@ if (!class_exists('WP_Inject_Plugin')) {
                 }
 
             }
+
+        }
+
+
+        /**
+         * finds shortcode, and its parameters from the string
+         * @since 1.0.1
+         */
+        private function get_shortcode_by_name($text, $name)
+        {
+
+            $result = [];
+
+            $shortcodes = [];
+
+            preg_match("/\[" . $name . " (.+?)\]/", $text, $shortcodes);
+
+            foreach ($shortcodes as $sh) {
+
+                $params = [];
+
+                $data = explode(" ", $sh);
+
+                unset($data[0]);
+
+                foreach ($data as $d) {
+
+                    list($opt, $val) = explode("=", $d);
+
+                    $params[$opt]  = trim($val , "[\"]'");
+                
+                }
+
+                array_push($result, [
+                    'params' => $params
+                ]);
+
+            }
+
+            return $result;
 
         }
 
