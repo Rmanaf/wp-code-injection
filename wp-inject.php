@@ -73,27 +73,18 @@ if (!class_exists('WP_Inject_Plugin')) {
         function __construct()
         {
 
-            if (!function_exists('wp_get_current_user')) {
 
-                include ABSPATH . "wp-includes/pluggable.php";
+            add_action('init', [&$this, 'create_posttype']);
+            add_action('admin_init', [&$this, 'admin_init']);
+            add_action('admin_head', [&$this, 'hide_post_title_input']);
+            add_action('admin_head', [&$this, 'remove_mediabuttons']);
+            add_action('admin_enqueue_scripts', [$this, 'print_scripts']);
+            add_action('widgets_init', [$this, 'widgets_init']);
+            add_filter('title_save_pre', [&$this, 'auto_generate_post_title']);
+            add_filter('user_can_richedit', [&$this, 'disable_wysiwyg']);
+            add_filter('post_row_actions', [&$this, 'remove_quick_edit'], 10, 1);
+            add_filter('manage_codes_posts_columns', [&$this, 'manage_codes_columns']);
 
-            }
-
-            if (is_super_admin()) {
-
-
-                add_action('init', [&$this, 'create_posttype']);
-                add_action('admin_init', [&$this, 'admin_init']);
-                add_action('admin_head', [&$this, 'hide_post_title_input']);
-                add_action('admin_head', [&$this, 'remove_mediabuttons']);
-                add_action('admin_enqueue_scripts', [$this, 'print_scripts']);
-                add_action('widgets_init', [$this, 'widgets_init']);
-                add_filter('title_save_pre', [&$this, 'auto_generate_post_title']);
-                add_filter('user_can_richedit', [&$this, 'disable_wysiwyg']);
-                add_filter('post_row_actions', [&$this, 'remove_quick_edit'], 10, 1);
-                add_filter('manage_codes_posts_columns', [&$this, 'manage_codes_columns']);
-
-            }
 
             add_shortcode('inject', [&$this, 'shortcode']);
 
@@ -175,6 +166,11 @@ if (!class_exists('WP_Inject_Plugin')) {
 
         public function admin_init()
         {
+
+            if (!is_super_admin()) {
+                return;
+            }
+
             if (defined('DIVAN_CONTROL_PANEL')) {
 
                 global $_DCP_PLUGINS;
@@ -284,7 +280,11 @@ if (!class_exists('WP_Inject_Plugin')) {
         public function widgets_init()
         {
 
-            register_widget('Wp_Inject_Plugin_Widget');
+            if (current_user_can('edit_theme_options')) {
+
+                register_widget('Wp_Inject_Plugin_Widget');
+
+            }
 
         }
 
@@ -516,7 +516,18 @@ if (!class_exists('WP_Inject_Plugin')) {
                     'show_ui' => true,
                     'has_archive' => true,
                     'rewrite' => ['slug' => 'codes'],
-                    'supports' => ['author' , 'revisions' , 'title' , 'editor']
+                    'supports' => ['author', 'revisions', 'title', 'editor'],
+                    'capabilities' => [
+                        'edit_post'          => 'update_core',
+                        'read_post'          => 'update_core',
+                        'delete_post'        => 'update_core',
+                        'edit_posts'         => 'update_core',
+                        'edit_others_posts'  => 'update_core',
+                        'delete_posts'       => 'update_core',
+                        'publish_posts'      => 'update_core',
+                        'read_private_posts' => 'update_core'
+                    ],
+                    'can_export' => true
                 ]
             );
 
