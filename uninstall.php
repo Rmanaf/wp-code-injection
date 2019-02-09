@@ -47,7 +47,7 @@
 
 /**
  * @package WP_Code_Inject_Plugin
- * @version 2.1.1
+ * @version 2.1.2
  */
 
 if (!defined('WP_UNINSTALL_PLUGIN')) {

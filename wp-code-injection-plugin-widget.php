@@ -47,7 +47,7 @@
 
 /**
  * @package WP_Code_Inject_Plugin
- * @version 1.1.1
+ * @version 2.1.2
  */
 
 if (!class_exists('Wp_Code_Injection_Plugin_Widget')) {
