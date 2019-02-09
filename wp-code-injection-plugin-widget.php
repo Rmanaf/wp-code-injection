@@ -47,7 +47,7 @@
 
 /**
  * @package WP_Code_Inject_Plugin
- * @version 2.1.2
+ * @version 2.1.3
  */
 
 if (!class_exists('Wp_Code_Injection_Plugin_Widget')) {
@@ -100,7 +100,7 @@ if (!class_exists('Wp_Code_Injection_Plugin_Widget')) {
 
              <p>
                 <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Code ID:' , 'wp-code-injection'); ?></label>
-                <select id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>">
+                <select style="width:100%;" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>">
             
             <?php
 

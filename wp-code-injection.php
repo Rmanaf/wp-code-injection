@@ -49,7 +49,7 @@
     Plugin Name: Code Injection
     Plugin URI: https://wordpress.org/plugins/wp-code-injection
     Description: Allows You to inject code snippets into the pages by just using the Wordpress shortcode
-    Version: 2.1.2
+    Version: 2.1.3
     Author: Arman Afzal
     Author URI: https://github.com/Rmanaf
     License: Apache License, Version 2.0
@@ -58,7 +58,7 @@
 
 /**
  * @package WP_Code_Injection_Plugin
- * @version 2.1.2
+ * @version 2.1.3
  */
 
 defined('ABSPATH') or die;
