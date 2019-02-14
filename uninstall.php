@@ -46,8 +46,8 @@
  */
 
 /**
- * @package WP_Code_Inject_Plugin
- * @version 2.1.3
+ * @package WP_Divan_Control_Panel
+ * @version 2.1.5
  */
 
 if (!defined('WP_UNINSTALL_PLUGIN')) {

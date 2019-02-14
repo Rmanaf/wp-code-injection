@@ -47,18 +47,18 @@
 
  /*
     Plugin Name: Code Injection
-    Plugin URI: https://wordpress.org/plugins/wp-code-injection
+    Plugin URI: https://wordpress.org/plugins/code-injection
     Description: Allows You to inject code snippets into the pages by just using the Wordpress shortcode
-    Version: 2.1.3
+    Version: 2.1.5
     Author: Arman Afzal
     Author URI: https://github.com/Rmanaf
     License: Apache License, Version 2.0
-    Text Domain: wp-code-injection
+    Text Domain: code-injection
  */
 
 /**
- * @package WP_Code_Injection_Plugin
- * @version 2.1.3
+ * @package WP_Divan_Control_Panel
+ * @version 2.1.5
  */
 
 defined('ABSPATH') or die;
@@ -67,14 +67,18 @@ require_once __DIR__ . '/wp-code-injection-plugin-widget.php';
 
 if (!class_exists('WP_Code_Injection_Plugin')) {
 
+
     class WP_Code_Injection_Plugin
     {
+
 
         function __construct()
         {
 
 
+            // create CPT
             add_action('init', [&$this, 'create_posttype']);
+
             add_action('admin_init', [&$this, 'admin_init']);
             add_action('admin_head', [&$this, 'hide_post_title_input']);
             add_action('admin_head', [&$this, 'remove_mediabuttons']);
@@ -84,7 +88,6 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
             add_filter('user_can_richedit', [&$this, 'disable_wysiwyg']);
             add_filter('post_row_actions', [&$this, 'remove_quick_edit'], 10, 1);
             add_filter('manage_codes_posts_columns', [&$this, 'manage_codes_columns']);
-
 
             add_shortcode('inject', [&$this, 'shortcode']);
 
@@ -151,7 +154,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
             $item = [
                 'template' => "[inject id='']",
-                'description' => __("Injects code snippets into the content", 'wp-code-injection')
+                'description' => __("Injects code snippets into the content", 'code-injection')
             ];
 
             if (!is_array($list)) {
@@ -163,7 +166,10 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
         }
 
 
-
+        /**
+         * register settings
+         * @since 1.0.0
+         */
         public function admin_init()
         {
 
@@ -171,13 +177,17 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                 return;
             }
 
+            // checks for control panel plugin 
+
             if (defined('DIVAN_CONTROL_PANEL')) {
 
                 global $_DCP_PLUGINS;
 
+                // control panel will take owner of setting section
+
                 $group = 'dcp-settings-general';
 
-                array_push($_DCP_PLUGINS, ['slug' => 'unsafe', 'version' => $this->get_version()]);
+                array_push($_DCP_PLUGINS, ['slug' => 'code-injection', 'version' => $this->get_version()]);
 
             } else {
 
@@ -185,19 +195,19 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
             }
 
-            register_setting($group, 'wp_dcp_code_injection_allow_shortcode', ['default' => false]);
 
+            register_setting($group, 'wp_dcp_code_injection_allow_shortcode', ['default' => false]);
 
             add_settings_section(
                 'wp_code_injection_plugin',
-                __('Code Injection Plugin', 'wp-code-injection') . "<span class=\"gdcp-version-box wp-ui-notification\">" . ($group != 'general' ? $this->get_version() : '') . "<span>",
+                __('Code Injection', 'code-injection') . "<span class=\"gdcp-version-box wp-ui-notification\">" . ($group != 'general' ? $this->get_version() : '') . "<span>",
                 [&$this, 'settings_section_cb'],
                 $group
             );
 
             add_settings_field(
                 'wp_dcp_code_injection_allow_shortcode',
-                __("Accessibility", 'wp-code-injection'),
+                __("Accessibility", 'code-injection'),
                 [&$this, 'settings_field_cb'],
                 $group,
                 'wp_code_injection_plugin',
@@ -206,22 +216,33 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
         }
 
+        /**
+         * Settings section header
+         * @since 1.0.0
+         */ 
         public function settings_section_cb()
         {
 
-            echo "<p>" . __("Code Injection Plugin Settings", 'wp-code-injection') . "</p>";
+            echo "<p>" . __("General Settings", 'code-injection') . "</p>";
 
         }
 
+        /** 
+         * Settings section 
+         * @since 1.0.0
+         */
         public function settings_field_cb($args)
         {
 
             switch ($args['label_for']) {
                 case 'wp_dcp_code_injection_allow_shortcode':
+
+                    $nested_shortcode = get_option('wp_dcp_code_injection_allow_shortcode', false);
+
                     ?>
                     <label>
-                        <input type="checkbox" value="1" id="wp_dcp_code_injection_allow_shortcode" name="wp_dcp_code_injection_allow_shortcode" <?php checked(get_option('wp_dcp_code_injection_allow_shortcode', false), true); ?> />
-                        <?php _e("Allow rendering nested shortcodes", 'wp-code-injection'); ?>
+                        <input type="checkbox" value="1" id="wp_dcp_code_injection_allow_shortcode" name="wp_dcp_code_injection_allow_shortcode" <?php checked($nested_shortcode , true); ?> />
+                        <?php _e("Allow rendering nested shortcodes", 'code-injection'); ?>
                     </label>
                     <?php
                     break;
@@ -232,7 +253,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
 
         /**
-         * Renames Title Column to ID
+         * Rename header of title column to ID
          * @since 1.0.0
          */
         public function manage_codes_columns($columns)
@@ -496,15 +517,15 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
         {
 
             $lables = [
-                'name' => __('Codes', 'wp-code-injection'),
-                'singular_name' => __('Code', 'wp-code-injection'),
-                'add_new_item' => __('Add New Code', 'wp-code-injection'),
-                'edit_item' => __('Edit Code', 'wp-code-injection'),
-                'new_item' => __('New Code', 'wp-code-injection'),
-                'search_items ' => __('Search Codes', 'wp-code-injection'),
-                'not_found' => __('No codes found', 'wp-code-injection'),
-                'not_found_in_trash ' => __('No codes found in Trash', 'wp-code-injection'),
-                'all_items' => __('All Codes', 'wp-code-injection')
+                'name' => __('Codes', 'code-injection'),
+                'singular_name' => __('Code', 'code-injection'),
+                'add_new_item' => __('Add New Code', 'code-injection'),
+                'edit_item' => __('Edit Code', 'code-injection'),
+                'new_item' => __('New Code', 'code-injection'),
+                'search_items ' => __('Search Codes', 'code-injection'),
+                'not_found' => __('No codes found', 'code-injection'),
+                'not_found_in_trash ' => __('No codes found in Trash', 'code-injection'),
+                'all_items' => __('All Codes', 'code-injection')
             ];
 
             register_post_type(
@@ -520,13 +541,13 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                     'publicly_queryable' => false,
                     'supports' => ['author', 'revisions', 'title', 'editor'],
                     'capabilities' => [
-                        'edit_post'          => 'update_core',
-                        'read_post'          => 'update_core',
-                        'delete_post'        => 'update_core',
-                        'edit_posts'         => 'update_core',
-                        'edit_others_posts'  => 'update_core',
-                        'delete_posts'       => 'update_core',
-                        'publish_posts'      => 'update_core',
+                        'edit_post' => 'update_core',
+                        'read_post' => 'update_core',
+                        'delete_post' => 'update_core',
+                        'edit_posts' => 'update_core',
+                        'edit_others_posts' => 'update_core',
+                        'delete_posts' => 'update_core',
+                        'publish_posts' => 'update_core',
                         'read_private_posts' => 'update_core'
                     ],
                     'can_export' => true
