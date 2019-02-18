@@ -49,7 +49,7 @@
     Plugin Name: Code Injection
     Plugin URI: https://wordpress.org/plugins/code-injection
     Description: Allows You to inject code snippets into the pages by just using the Wordpress shortcode
-    Version: 2.1.5
+    Version: 2.1.6
     Author: Arman Afzal
     Author URI: https://github.com/Rmanaf
     License: Apache License, Version 2.0
@@ -58,7 +58,7 @@
 
 /**
  * @package WP_Divan_Control_Panel
- * @version 2.1.5
+ * @version 2.1.6
  */
 
 defined('ABSPATH') or die;
@@ -200,7 +200,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
             add_settings_section(
                 'wp_code_injection_plugin',
-                __('Code Injection', 'code-injection') . "<span class=\"gdcp-version-box wp-ui-notification\">" . ($group != 'general' ? $this->get_version() : '') . "<span>",
+                __('Code Injection', 'code-injection') . "<span class=\"gdcp-version-box wp-ui-notification\">" . $this->get_version() . "<span>",
                 [&$this, 'settings_section_cb'],
                 $group
             );
@@ -219,11 +219,17 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
         /**
          * Settings section header
          * @since 1.0.0
-         */ 
+         */
         public function settings_section_cb()
         {
 
-            echo "<p>" . __("General Settings", 'code-injection') . "</p>";
+            _e("<p>General Settings</p>", 'code-injection');
+
+            if (!is_plugin_active('wp-unsafe/wp-unsafe.php')) {
+
+                _e("<p>You may also want to install the <a target=\"_blank\" href=\"\">Unsafe<a> plugin, to run PHP code snippets in your post/pages.</p>", 'code-injection');
+
+            }
 
         }
 
@@ -241,8 +247,8 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
                     ?>
                     <label>
-                        <input type="checkbox" value="1" id="wp_dcp_code_injection_allow_shortcode" name="wp_dcp_code_injection_allow_shortcode" <?php checked($nested_shortcode , true); ?> />
-                        <?php _e("Allow rendering nested shortcodes", 'code-injection'); ?>
+                        <input type="checkbox" value="1" id="wp_dcp_code_injection_allow_shortcode" name="wp_dcp_code_injection_allow_shortcode" <?php checked($nested_shortcode, true); ?> />
+                        <?php _e("Render nested shortcodes", 'code-injection'); ?>
                     </label>
                     <?php
                     break;

@@ -47,7 +47,7 @@
 
 /**
  * @package WP_Divan_Control_Panel
- * @version 2.1.5
+ * @version 2.1.6
  */
 
 if (!defined('WP_UNINSTALL_PLUGIN')) {
