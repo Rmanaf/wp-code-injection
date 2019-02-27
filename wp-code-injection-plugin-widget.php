@@ -19,7 +19,13 @@
  * 
  * 
  * Third Party Licenses :
+ * 
+ * tagEditor :
+ * 
+ * MIT License
  *
+ * 
+ * 
  * CodeMirror :
  * 
  * MIT License
@@ -72,6 +78,11 @@ if (!class_exists('Wp_Code_Injection_Plugin_Widget')) {
 
             $title = apply_filters('widget_title', $instance['title']);
 
+            if($title == '0')
+            {
+                return;
+            }
+
             //output
             echo do_shortcode("[inject id='$title']");
 
@@ -101,7 +112,7 @@ if (!class_exists('Wp_Code_Injection_Plugin_Widget')) {
              <p>
                 <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Code ID:' , 'wp-code-injection'); ?></label>
                 <select style="width:100%;" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>">
-            
+                <option value="0">— Select —</option>
             <?php
 
             while ($query->have_posts()) {

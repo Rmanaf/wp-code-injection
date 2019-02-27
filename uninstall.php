@@ -19,7 +19,13 @@
  * 
  * 
  * Third Party Licenses :
+ * 
+ * tagEditor :
+ * 
+ * MIT License
  *
+ * 
+ * 
  * CodeMirror :
  * 
  * MIT License
@@ -47,12 +53,30 @@
 
 /**
  * @package WP_Divan_Control_Panel
- * @version 2.1.6
+ * @version 2.2.6
  */
 
 if (!defined('WP_UNINSTALL_PLUGIN')) {
     die;
 }
 
+// "CI" settings
+delete_option('wp_dcp_code_injection_db_version');
 
-delete_option( 'wp_dcp_code_injection_allow_shortcode' );
+delete_option('wp_dcp_code_injection_allow_shortcode');
+
+delete_option('wp_dcp_code_injection_role_version');
+
+
+// "Unsafe" settings
+delete_option('wp_dcp_unsafe_widgets_shortcodes');
+
+delete_option('wp_dcp_unsafe_widgets_php');
+
+delete_option('wp_dcp_unsafe_ignore_keys');
+
+
+if (empty(get_option('wp_dcp_unsafe_keys', ''))) {
+
+    delete_option('wp_dcp_unsafe_keys');
+}

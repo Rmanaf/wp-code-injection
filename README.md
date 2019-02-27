@@ -1,5 +1,5 @@
 # Wordpress Code Injection Plugin
-> Current Version [2.1.6]("https://github.com/Rmanaf/wp-code-injection")
+> Current Version [2.2.6](https://github.com/Rmanaf/wp-code-injection) - [Change logs](https://github.com/Rmanaf/wp-code-injection/blob/master/CHANGELOG.md)
 
 Allows You to inject code snippets into the pages by just using the Wordpress shortcode
 
@@ -12,6 +12,14 @@ Once the plugin activated you will see the Code button in the dashboard menu.
 Or
 - Place the Code Injection widget into the desired sidebar.
 - Find and select the Code ID.
+
+### In order to run PHP codes, follow the instruction below
+
+Go to `Settings > General`, In the **Code Injection** section, You will see **Activator Keys**
+
+- Create a strong key that includes digits and characters
+- Put the Shortcode `[unsafe key='#']` in Your post or page content, and replace `#` with the Key You've created before.
+- Write Your PHP code and close unsafe section by using `[/unsafe]`
 
 ## Bug & Issues Reporting
 If you faced any issues, please tell us on [Github](https://github.com/Rmanaf/wp-code-injection/issues/new)
