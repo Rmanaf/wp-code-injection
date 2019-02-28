@@ -55,7 +55,7 @@
     Plugin Name: Code Injection
     Plugin URI: https://wordpress.org/plugins/code-injection
     Description: Allows You to inject code snippets into the pages by just using the Wordpress shortcode
-    Version: 2.2.6
+    Version: 2.2.7
     Author: Arman Afzal
     Author URI: https://github.com/Rmanaf
     License: Apache License, Version 2.0
@@ -65,7 +65,7 @@
 /**
  * @author Arman Afzal <rman.afzal@gmail.com>
  * @package WP_Divan_Control_Panel
- * @version 2.2.6
+ * @version 2.2.7
  */
 
 defined('ABSPATH') or die;
@@ -242,13 +242,12 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
             
             if( $this->is_settings_page() ) {
 
-                // "Unsafe" assets
+                
                 wp_enqueue_style('dcp-tag-editor', plugins_url('assets/jquery.tag-editor.css', __FILE__), [], $ver, 'all');
-                wp_enqueue_style('dcp-unsafe', plugins_url('assets/wp-unsafe-admin.css', __FILE__), [], $ver, 'all');
 
                 wp_enqueue_script('dcp-caret', plugins_url('assets/jquery.caret.min.js', __FILE__), ['jquery'], $ver, true);
                 wp_enqueue_script('dcp-tag-editor', plugins_url('assets/jquery.tag-editor.min.js', __FILE__), [], $ver, true);
-                wp_enqueue_script('dcp-unsafe', plugins_url('assets/wp-unsafe-admin.js', __FILE__), [], $ver, true);
+                
 
             }
 
@@ -725,7 +724,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                     <dl>
                         <dd>
                             <p class="description">
-                                <?php _e("By default <code>[inject]</code> just renders HTML content.", self::$text_domain); ?>
+                                <?php _e("By default, <code>[inject]</code> just renders HTML content.", self::$text_domain); ?>
                             </p>
                         </dd>
                         <dd>

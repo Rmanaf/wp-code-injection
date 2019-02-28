@@ -11,7 +11,7 @@ Once the plugin activated you will see the Code button in the dashboard menu.
 
 Or
 - Place the Code Injection widget into the desired sidebar.
-- Find and select the Code ID.
+- Find and select the Code ID from the Widget drop-down list.
 
 ### In order to run PHP codes, follow the instruction below
 

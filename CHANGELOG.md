@@ -1,5 +1,8 @@
 
 ## Changelog
+### **v2.2.7**
+> Feb 28, 2019 
+- [Fix] Assets Error
 ---
 ### **v2.2.6**
 > Feb 27, 2019 
