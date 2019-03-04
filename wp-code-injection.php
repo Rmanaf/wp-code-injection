@@ -815,8 +815,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
         {
             $columns = [];
 
-            $columns['id'] = __("Code" , self::$text_domain); 
-            $columns['taxonomy-code_category'] = __("Categories", self::$text_domain);
+            $columns['id'] = __("Code" , self::$text_domain);
             $columns['statistics'] = __("Hits", self::$text_domain) . " — " . WP_Calendar_Heatmap::map();
             $columns['info'] = __("Info", self::$text_domain);
 
@@ -830,23 +829,35 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
                     $code = get_post($post_id);
 
+                    $categories = get_the_terms( $code, 'code_category' );
+
                     ?>
 
                     <dl>
                         <dt>
-                            Author
+                            <strong>Categories</strong>
                         <dt>
                         <dd>
                             <?php 
-                                get_avatar( $code->post_author); 
+                                foreach($categories as $c){
+                                    echo "<span>$c->name<span>,";
+                                }
+                            ?>
+                        <dd>
+                        <dt>
+                            <strong>Author</strong>
+                        <dt>
+                        <dd>
+                            <?php 
+                                echo get_avatar( $code->post_author); 
                                 echo get_the_author_meta('display_name' , $code->post_author); 
                             ?>
                         <dd>
                         <dt>
-                            Date
+                            <strong>Date</strong>
                         <dt>
                         <dd>
-                            <?php echo date_i18n( 'F j, Y - g:i a' , strtotime($code->post_date) ); ?>
+                            <?php echo date_i18n( 'F j, Y - g:i a' , strtotime($code->post_modified) ); ?>
                         <dd>
                     </dl>
 
@@ -860,7 +871,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                     $code_options = WP_Code_Metabox::get_code_options($code);
                  
                     ?>
-                        <p>
+                        <p style="text-align: justify;">
                             <?php echo $code_options['description']; ?>  —  <strong><?php echo ucwords(get_post_status($post_id)); ?></strong>
                         </p>
                         <dl>
