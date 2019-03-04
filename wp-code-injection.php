@@ -839,7 +839,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                         <dd>
                             <?php 
                                 get_avatar( $code->post_author); 
-                                echo get_author_name( $code->post_author ); 
+                                echo get_the_author_meta('display_name' , $code->post_author); 
                             ?>
                         <dd>
                         <dt>
