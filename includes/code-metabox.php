@@ -101,10 +101,17 @@ if (!class_exists('WP_Code_Metabox')) {
 
             }
 
+            public function get_action_name($code)
+            {
+
+                return empty($code->post_title) ? '' : uniqid('action_') . '_' .  $code->post_title;
+
+            }
+
             public function code_options_meta_box_cb($code)
             {
 
-                $action_name = empty($code->post_title) ? '' : uniqid('action_') . '_' .  $code->post_title;
+                $action_name = $this->get_action_name($code);
 
                 $defaults = [
                     'description' => '',
@@ -129,16 +136,28 @@ if (!class_exists('WP_Code_Metabox')) {
 
                 <input type="hidden" id="action_name" name="action_name" value="<?php echo $action_name; ?>" />
                 
-                <p><?php _e("Description" , "code-injection") ?></p>
-                <textarea id="description" name="description"><?php echo $description; ?></textarea>
                 <p>
-                <label>
-                    <input <?php checked($allow_ajax_call , true); ?> type="checkbox" class="regular-text" id="allow_ajax_call" name="allow_ajax_call" value="1" />
-                    <?php _e("Access through ajax call" , "code-injection"); ?>
-                </label>
-                <p class="description">
-                    <?php echo __("Action Name:" , "code-injection") . $action_name; ?>
+                    <b><?php _e("Description" , "code-injection") ?></b>
                 </p>
+                <textarea style="width:100%;" id="description" name="description"><?php echo $description; ?></textarea>
+                
+                <p>
+                    <label>
+                        <input <?php checked($allow_ajax_call , true); ?> type="checkbox" class="regular-text" id="allow_ajax_call" name="allow_ajax_call" value="1" />
+                        <?php _e("Accessible through AJAX call" , "code-injection"); ?>
+                    </label>
+                    <p class="description">
+                        <?php 
+                            if(!empty($action_name))
+                            {
+                                _e("<p>Action Name:</p>" , "code-injection"); "<code>$action_name</code>";
+                            }
+                            else
+                            {
+                                _e("<p>Save code to see action name</p>" , "code-injection"); 
+                            }
+                        ?>
+                    </p>
                 </p>
 
                 <?php
