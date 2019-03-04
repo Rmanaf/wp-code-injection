@@ -1085,7 +1085,6 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                 'parent_item_colon' => __('Parent Directory:', self::$text_domain),
                 'search_items ' => __('Search Directories', self::$text_domain),
                 'not_found' => __('No directories found', self::$text_domain),
-                'not_found_in_trash ' => __('No codes found in Trash', self::$text_domain),
                 'all_items' => __('All Directories', self::$text_domain)
             ];
 
@@ -1105,7 +1104,8 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                 'directory', 
                 'code', 
                 [
-                   'labels' => $deps_lables
+                   'labels' => $deps_lables,
+                   'hierarchical' => true
                 ]
             );
 
