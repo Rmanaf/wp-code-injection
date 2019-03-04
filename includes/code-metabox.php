@@ -106,6 +106,12 @@ if (!class_exists('WP_Code_Metabox')) {
 
                 $code_options = get_post_meta($code->ID, 'code_options', true);
 
+                if(!isset($code_options)){
+                    
+                    $code_options = [];
+
+                }
+
                 extract( $code_options , [
                     'description' => '',
                     'allow_ajax_call' => false,
