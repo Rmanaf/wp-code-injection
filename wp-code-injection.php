@@ -950,7 +950,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
         {
 
             if ($this->is_edit_page('new')) {
-                if (isset($_GET['post_type']) && $_GET['post_type'] == 'codes') {
+                if (isset($_GET['post_type']) && $_GET['post_type'] == 'code') {
                     return true;
                 }
             }
@@ -959,7 +959,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
                 global $post;
 
-                if ('codes' == get_post_type($post)) {
+                if ('code' == get_post_type($post)) {
                     return true;
                 }
 
