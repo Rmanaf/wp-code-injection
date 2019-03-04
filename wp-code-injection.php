@@ -1122,6 +1122,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                 'code', 
                 [
                    'labels' => $lables,
+                   'show_admin_column' => true,
                    'public' => false,
                     'show_ui' => true,
                     'rewrite' => false,
@@ -1142,6 +1143,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                 'code_category', 
                 'code', 
                 [
+                   'show_admin_column' => true,
                    'public' => false,
                    'show_ui' => true,
                    'rewrite' => false,
