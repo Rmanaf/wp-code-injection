@@ -141,8 +141,8 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
             add_filter('title_save_pre', [$this, 'auto_generate_post_title']);
             add_filter('user_can_richedit', [$this, 'disable_wysiwyg']);
             add_filter('post_row_actions', [$this, 'remove_quick_edit'], 10, 1);
-            add_filter('manage_codes_posts_columns', [$this, 'manage_codes_columns']);
-            add_action('manage_codes_posts_custom_column' , [$this, 'manage_codes_custom_columns'], 10, 2 );
+            add_filter('manage_code_posts_columns', [$this, 'manage_code_posts_columns']);
+            add_action('manage_code_posts_custom_column' , [$this, 'manage_code_posts_custom_column'], 10, 2 );
 
             add_filter('dcp_shortcodes_list', [&$this, 'add_shortcode_to_list']);
 
@@ -811,7 +811,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
          * Rename header of title column to ID
          * @since 1.0.0
          */
-        public function manage_codes_columns($columns)
+        public function manage_code_posts_columns($columns)
         {
             $columns = [];
 
@@ -824,7 +824,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
         }
 
-        public function manage_codes_custom_columns( $column, $post_id ){
+        public function manage_code_posts_custom_column( $column, $post_id ){
             switch ( $column ) {
                 case 'statistics':
 
