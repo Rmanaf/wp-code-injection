@@ -1075,6 +1075,20 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
         public function create_posttype()
         {
 
+            $deps_lables = [
+                'name' => __('Directory' , self::$text_domain),
+                'singular_name' => __('Directory', self::$text_domain),
+                'add_new_item' => __('Add New Directory', self::$text_domain),
+                'edit_item' => __('Edit Directory', self::$text_domain),
+                'new_item_name' => __('New Directory Name', self::$text_domain),
+                'parent_item' => __('Parent Directory', self::$text_domain),
+                'parent_item_colon' => __('Parent Directory:', self::$text_domain),
+                'search_items ' => __('Search Directories', self::$text_domain),
+                'not_found' => __('No directories found', self::$text_domain),
+                'not_found_in_trash ' => __('No codes found in Trash', self::$text_domain),
+                'all_items' => __('All Directories', self::$text_domain)
+            ];
+
             $code_lables = [
                 'name' => __('Codes', self::$text_domain),
                 'singular_name' => __('Code', self::$text_domain),
@@ -1086,6 +1100,14 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                 'not_found_in_trash ' => __('No codes found in Trash', self::$text_domain),
                 'all_items' => __('All Codes', self::$text_domain)
             ];
+
+            register_taxonomy( 
+                'directory', 
+                'code', 
+                [
+                   'labels' => $deps_lables
+                ]
+            );
 
             register_post_type(
                 'Code',
@@ -1099,7 +1121,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                     'exclude_from_search' => true,
                     'publicly_queryable' => false,
                     'supports' => ['author', 'revisions', 'title', 'editor'],
-                    'taxonomies' => ['category', 'post_tag'],
+                    'taxonomies' => ['directory'],
                     'capability_type' => ['code','codes'],
                     'can_export' => true,
                     'map_meta_cap' => true
