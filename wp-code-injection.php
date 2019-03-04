@@ -839,8 +839,9 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                         <p>
                             <?php echo $code_options['description']; ?>
                         </p>
-
-                        <input class="regular-text" readonly type="text" value="<?php echo $code->post_title; ?>" />  —  <strong><?php echo ucwords(get_post_status($post_id)); ?></strong>
+                        <p>
+                            <span style="font-size:10px;"><?php echo $code->post_title; ?></span>  —  <strong><?php echo ucwords(get_post_status($post_id)); ?></strong>
+                        </p>
 
                     <?php
 
