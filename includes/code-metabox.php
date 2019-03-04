@@ -56,55 +56,55 @@
  * @version 2.2.8
  */
 
-if (!class_exists('WP_Package_Manager')) {
 
-    class WP_Package_Manager
+if (!class_exists('WP_Code_Metabox')) {
+
+    class WP_Code_Metabox
     {
 
         function __construct()
         {
 
-            add_action('admin_menu', [$this, 'admin_menu']);
-
-            add_action('dcp_settings_tab', [$this, 'dcp_packages_tab'], 60);
-
-        }
-
-        /**
-         * Adds the "Packages" tab into the Control panel
-         * @since 1.0.0
-         */
-        public function dcp_packages_tab()
-        {
-
-            global $_DCP_ACTIVE_TAB;
-
-            $class = $_DCP_ACTIVE_TAB == "packages" ? 'nav-tab-active' : '';
-
-            $href = admin_url('options-general.php?page=dcp-settings&tab=packages');
-
-            echo "<a class=\"nav-tab $class\" href=\"$href\"><span class=\"dcp-package\"></span>Packages</a>";
+            add_action('add_meta_boxes',       [$this, 'add_meta_box']);
+            add_action('save_post',            [$this, 'save_post']);
 
         }
 
-        /**
-         * adds the packages menu item into the admin menu
-         * @since 1.0.0
-         */
-        public function admin_menu()
+        public function add_meta_box()
         {
 
-            add_menu_page(
-                __("Packages", 'code-injection'),
-                __("Packages", 'code-injection'),
-                'manage_options',
-                'dcp-package-manager',
-                [$this, 'packages_content'],
-                'dashicons-cloud'
+            add_meta_box(
+                'code_config_metabox',
+                __('Configs', 'code-injection'),
+                [$this, 'code_config_meta_box_cb'],
+                'code',
+                'side'
             );
             
         }
 
-    }
+        public function code_config_meta_box_cb($code)
+        {
 
+            $data = get_post_meta($code->ID, 'empty_page_data', true);
+        }
+
+        public function save_post($id)
+        {
+
+            if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
+                return;
+
+            if (!isset($_POST['meta_box_nonce']) || !wp_verify_nonce($_POST['meta_box_nonce'], 'page-configs-nonce'))
+                return;
+
+            if (!current_user_can('edit_post'))
+                return;
+
+            update_post_meta($id, 'empty_page_data', array(
+                'scripts' => $_POST['scripts'],
+                'styles' => $_POST['styles'],
+            ));
+        }
+    }
 }

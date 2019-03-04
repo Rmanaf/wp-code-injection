@@ -83,6 +83,8 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
     class WP_Code_Injection_Plugin
     {
 
+        private $code_meta_box;
+
         private static $text_domain = 'code-injection';
 
         private static $db_version  = '1.0.0';
@@ -103,6 +105,9 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
         {
 
             $this->check_db();
+
+            $this->init_meta_box();
+
 
             // check "Unsafe" settings
             $use_shortcode = get_option('wp_dcp_unsafe_widgets_shortcodes', 0);
@@ -133,6 +138,9 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
             add_action('manage_codes_posts_custom_column' , [$this, 'manage_codes_custom_columns'], 10, 2 );
 
             add_filter('dcp_shortcodes_list', [&$this, 'add_shortcode_to_list']);
+
+
+
 
         }
 
@@ -292,6 +300,13 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
             wp_enqueue_script('dcp-codemirror-mode-php', plugins_url('assets/codemirror/mode/php/php.js', __FILE__), [], $ver, false);
 
             wp_enqueue_script('dcp-code-injection', plugins_url('assets/code-editor.js', __FILE__), [], $ver, false);
+
+        }
+
+
+        public function init_meta_box(){
+
+           $this->code_meta_box = new WP_Code_Metabox();
 
         }
 
@@ -1180,8 +1195,6 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
 
 $CODE_INJECTION_PLUGIN_INSTANCE = new WP_Code_Injection_Plugin();
-
-$PACKAGE_MANAGER_INSTANCE = new WP_Package_Manager();
 
 register_activation_hook(__FILE__, [$CODE_INJECTION_PLUGIN_INSTANCE, 'activate']);
 
