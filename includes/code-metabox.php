@@ -104,10 +104,12 @@ if (!class_exists('WP_Code_Metabox')) {
             public function code_options_meta_box_cb($code)
             {
 
+                $action_name = empty($code->post_title) ? '' : uniqid('action_') . '_' .  $code->post_title;
+
                 $defaults = [
                     'description' => '',
                     'allow_ajax_call' => false,
-                    'action_name' => uniqid('action_') . '_' . $code->post_title,
+                    'action_name' =>  $action_name,
                 ];
 
                 $code_options = get_post_meta($code->ID, 'code_options', true);
@@ -125,13 +127,13 @@ if (!class_exists('WP_Code_Metabox')) {
                 ?>
 
                 <input type="hidden" id="action_name" name="action_name" value="<?php echo $action_name; ?>" />
-                <label>
-                    <?php _e("Description" , "code-injection") ?>
-                </label>
+                
+                <p><?php _e("Description" , "code-injection") ?></p>
                 <textarea id="description" name="description"><?php echo $description; ?></textarea>
+                
                 <label>
                     <input <?php checked($allow_ajax_call , true); ?> type="checkbox" class="regular-text" id="allow_ajax_call" name="allow_ajax_call" value="1" />
-                    <?php _e("Access to this code through ajax call" , "code-injection"); ?>
+                    <?php _e("Access through ajax call" , "code-injection"); ?>
                 </label>
                 <p class="description">
                     <?php echo __("Action Name:" , "code-injection") . $action_name; ?>
