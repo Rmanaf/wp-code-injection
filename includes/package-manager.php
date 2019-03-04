@@ -56,27 +56,53 @@
  * @version 2.2.8
  */
 
-if (!defined('WP_UNINSTALL_PLUGIN')) {
-    die;
-}
+if (!class_exists('WP_Package_Manager')) {
 
-// "CI" settings
-delete_option('wp_dcp_code_injection_db_version');
+    class WP_Package_Manager
+    {
 
-delete_option('wp_dcp_code_injection_allow_shortcode');
+        function __construct()
+        {
 
-delete_option('wp_dcp_code_injection_role_version');
+            add_action('admin_menu', [$this, 'admin_menu']);
 
+            add_action('dcp_settings_tab', [$this, 'dcp_packages_tab'], 60);
 
-// "Unsafe" settings
-delete_option('wp_dcp_unsafe_widgets_shortcodes');
+        }
 
-delete_option('wp_dcp_unsafe_widgets_php');
+        /**
+         * Adds the "Packages" tab into the Control panel
+         * @since 1.0.0
+         */
+        public function dcp_packages_tab()
+        {
 
-delete_option('wp_dcp_unsafe_ignore_keys');
+            global $_DCP_ACTIVE_TAB;
 
+            $class = $_DCP_ACTIVE_TAB == "packages" ? 'nav-tab-active' : '';
 
-if (empty(get_option('wp_dcp_unsafe_keys', ''))) {
+            $href = admin_url('options-general.php?page=dcp-settings&tab=packages');
 
-    delete_option('wp_dcp_unsafe_keys');
+            echo "<a class=\"nav-tab $class\" href=\"$href\"><span class=\"dcp-package\"></span>Packages</a>";
+
+        }
+
+        /**
+         * adds the packages menu item into the admin menu
+         * @since 1.0.0
+         */
+        public function admin_menu()
+        {
+
+            add_menu_page(
+                __("Packages", 'code-injection'),
+                __("Packages", 'code-injection'),
+                'manage_options',
+                'dcp-package-manager',
+                [$this, 'packages_content'],
+                'dashicons-cloud'
+            );
+        }
+
+    }
 }

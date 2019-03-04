@@ -55,7 +55,7 @@
     Plugin Name: Code Injection
     Plugin URI: https://wordpress.org/plugins/code-injection
     Description: Allows You to inject code snippets into the pages by just using the Wordpress shortcode
-    Version: 2.2.7
+    Version: 2.2.8
     Author: Arman Afzal
     Author URI: https://github.com/Rmanaf
     License: Apache License, Version 2.0
@@ -65,13 +65,18 @@
 /**
  * @author Arman Afzal <rman.afzal@gmail.com>
  * @package WP_Divan_Control_Panel
- * @version 2.2.7
+ * @version 2.2.8
  */
 
 defined('ABSPATH') or die;
 
 require_once __DIR__ . '/wp-code-injection-plugin-widget.php';
+
 require_once __DIR__ . '/includes/calendar-heatmap.php';
+
+require_once __DIR__ . '/includes/package-manager.php';
+
+
 
 if (!class_exists('WP_Code_Injection_Plugin')) {
 
@@ -117,6 +122,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
             add_action('admin_init', [$this, 'admin_init']);
             add_action('admin_head', [$this, 'hide_post_title_input']);
             add_action('admin_head', [$this, 'remove_mediabuttons']);
+            
             add_action('admin_enqueue_scripts', [$this, 'print_scripts']);
             add_action('widgets_init', [$this, 'widgets_init']);
             
@@ -249,6 +255,8 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                 wp_enqueue_script('dcp-tag-editor', plugins_url('assets/jquery.tag-editor.min.js', __FILE__), [], $ver, true);
                 
 
+                wp_enqueue_script('dcp-code-injection', plugins_url('assets/wp-code-injection-admin.js', __FILE__), [], $ver, false);
+
             }
 
             // "CI" assets
@@ -283,7 +291,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
             wp_enqueue_script('dcp-codemirror-mode-clike', plugins_url('assets/codemirror/mode/clike/clike.js', __FILE__), [], $ver, false);
             wp_enqueue_script('dcp-codemirror-mode-php', plugins_url('assets/codemirror/mode/php/php.js', __FILE__), [], $ver, false);
 
-            wp_enqueue_script('dcp-code-injection', plugins_url('assets/wp-code-injection-admin.js', __FILE__), [], $ver, false);
+            wp_enqueue_script('dcp-code-injection', plugins_url('assets/code-editor.js', __FILE__), [], $ver, false);
 
         }
 
@@ -380,7 +388,11 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
          */
         public function ci_shortcode($atts = [], $content = null)
         {
-            
+
+            global $post;
+
+            $temp_post = $post;
+
             extract(shortcode_atts(['id' => ''], $atts));
 
             if (empty($id)) {
@@ -390,6 +402,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                 return;
 
             }
+            
 
             $code = get_page_by_title($id, OBJECT, 'codes');
 
@@ -413,7 +426,8 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
                 }
 
-                
+                $post = $temp_post;
+
                 if ($render_shortcodes) {
 
                     $this->record_activity(0 , $id, 0);
@@ -748,7 +762,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                     ?>
                     <label>
                         <input type="checkbox" value="1" id="wp_dcp_unsafe_debug" name="wp_dcp_unsafe_debug" <?php checked($debug, true); ?> />
-                        <?php _e("Show PHP errors", self::$text_domain); ?>
+                        <?php _e("Show PHP errors (Experimental)", self::$text_domain); ?>
                     </label>
                     <dl>
                         <dd>
@@ -1166,6 +1180,8 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
 
 $CODE_INJECTION_PLUGIN_INSTANCE = new WP_Code_Injection_Plugin();
+
+$PACKAGE_MANAGER_INSTANCE = new WP_Package_Manager();
 
 register_activation_hook(__FILE__, [$CODE_INJECTION_PLUGIN_INSTANCE, 'activate']);
 

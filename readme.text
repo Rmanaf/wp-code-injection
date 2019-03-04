@@ -1,0 +1,25 @@
+=== Code Injection ===
+Contributors: rmanaf
+Tags: code, snippets, injection
+Requires at least: 4.5.0
+Tested up to: 5.0.3
+Requires PHP: 5.2.4
+Stable tag: 2.1C:\Users\Rman\OneDrive\Repositories\SVN\heimdall.5
+License: Apache License, Version 2.0
+License URI: http://www.apache.org/licenses/LICENSE-2.0
+
+Allows You to inject code snippets into the pages by just using the Wordpress shortcode.
+
+== Changelog ==
+
+ = 2.1.5 =
+* [fix] Text domain
+
+= 2.1.4 =
+* Initial SVN commit
+
+[More](https://github.com/Rmanaf/wp-code-injection/blob/master/CHANGELOG.md)
+
+== Screenshots ==
+
+1. Injection shortcode sample
