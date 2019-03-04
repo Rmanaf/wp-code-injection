@@ -846,7 +846,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                             Date
                         <dt>
                         <dd>
-                            <?php echo date_i18n( 'F j, Y - g:i a' , new DateTime($code->post_date) ); ?>
+                            <?php echo date_i18n( 'F j, Y - g:i a' , strtotime($code->post_date) ); ?>
                         <dd>
                     </dl>
 
