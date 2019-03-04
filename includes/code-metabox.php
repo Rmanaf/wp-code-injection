@@ -102,15 +102,32 @@ if (!class_exists('WP_Code_Metabox')) {
                     return;
                 }
 
-                update_post_meta($id, 'code_options', array_merge_recursive(array_map(function($item){
+                $code = get_post( $id );
 
-                    return [$item => $_POST[$item]];
+                $params = [
+                    'description' => '',
+                    'allow_ajax_call' => false, 
+                    'action_name' => self::get_action_name($code)
+                ];
 
-                }, [
-                    'description' ,
-                    'allow_ajax_call' , 
-                    'action_name'
-                ])));
+                $value = [];
+
+                foreach(array_keys($params) as $p){
+
+                    if(!isset($_REQUEST[$p]))
+                    {
+
+                        $value[$p] = $params[$p];
+
+                    } else {
+
+                        $value[$p] = $_REQUEST[$p];
+
+                    }
+
+                }
+
+                update_post_meta($id, 'code_options',  $value);
 
             }
 
