@@ -817,10 +817,8 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
             $columns['id'] = __("Code" , self::$text_domain); 
             $columns['taxonomy-code_category'] = __("Categories", self::$text_domain);
-            $columns['taxonomy-directory'] = __("Directories", self::$text_domain);
             $columns['statistics'] = __("Hits", self::$text_domain) . " — " . WP_Calendar_Heatmap::map();
-            $columns['author'] = __("Author", self::$text_domain);
-            $columns['date'] = __("Date", self::$text_domain);
+            $columns['info'] = __("Info", self::$text_domain);
 
             return $columns;
 
@@ -828,6 +826,33 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
         public function manage_code_posts_custom_column( $column, $post_id ){
             switch ( $column ) {
+                case 'info':
+
+                    $code = get_post($post_id);
+
+                    ?>
+
+                    <dl>
+                        <dt>
+                            Author
+                        <dt>
+                        <dd>
+                            <?php 
+                                get_avatar( $code->post_author); 
+                                echo get_author_name( $code->post_author ); 
+                            ?>
+                        <dd>
+                        <dt>
+                            Date
+                        <dt>
+                        <dd>
+                            <?php echo date_i18n( 'F j, Y - g:i a' , $code->post_date ); ?>
+                        <dd>
+                    </dl>
+
+                    <?php
+
+                    break;
                 case 'id':
 
                     $code = get_post($post_id);
