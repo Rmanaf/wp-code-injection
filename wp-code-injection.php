@@ -838,17 +838,10 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                         
                         echo $code_options['description'];
 
-                        echo  $code->post_title . " — " . get_post_status($post_id); 
+                        echo $code->post_title . " — " . get_post_status($post_id); 
 
                         ?>
-                        <div class="row-actions">
-                            <span class="edit">
-                                <?php edit_post_link("Edit"); ?>
-                            </span>
-                            <span class="trash">
-                                <a href="<?php get_delete_post_link("Edit “{$code->post_title}”"); ?>">Trash</a>
-                            </span>
-                        </div>
+
                     <?php
                     break;
                 case 'statistics':

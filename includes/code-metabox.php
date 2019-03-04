@@ -88,18 +88,25 @@ if (!class_exists('WP_Code_Metabox')) {
             {
 
                 if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
+                {
                     return;
+                }
 
                 if (!isset($_POST['code_meta_box_nonce']) || !wp_verify_nonce($_POST['code_meta_box_nonce'], 'code-settings-nonce'))
+                {
                     return;
+                }
 
                 if (!current_user_can('edit_post'))
+                {
                     return;
+                }
 
-                update_post_meta($id, 'empty_page_data', [
-                    'scripts' => $_POST['scripts'],
-                    'styles' => $_POST['styles']
-                ]);
+                update_post_meta($id, 'code_options', array_map(function($item){
+
+                    return $_POST[$item];
+
+                }, ['description' , 'allow_ajax_call' , 'action_name']));
 
             }
 
