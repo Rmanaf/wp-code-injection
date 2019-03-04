@@ -813,7 +813,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
          */
         public function manage_code_posts_columns($columns)
         {
-            $columns = $columns;
+            $columns = [];
 
             $columns['id'] = __("Code" , self::$text_domain); 
             $columns['taxonomy-code_category'] = __("Categories", self::$text_domain);
