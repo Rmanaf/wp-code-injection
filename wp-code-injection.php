@@ -815,7 +815,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
         {
             $columns = [];
 
-            $columns['title'] = __("ID");
+            $columns['id'] = __("Code"); 
             $columns['statistics'] = __("Hits") . " — " . WP_Calendar_Heatmap::map();
             $columns['author'] = __("Author");
             $columns['date'] = __("Date");
@@ -826,6 +826,31 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
         public function manage_code_posts_custom_column( $column, $post_id ){
             switch ( $column ) {
+                case 'id':
+
+                    $code = get_post($post_id);
+                    
+                    $code_options = WP_Code_Metabox::get_code_options($code);
+                 
+                    ?>
+                        
+                        <?php 
+                        
+                        echo $code_options['description'];
+
+                        echo  $code->post_title . " — " . get_post_status($post_id); 
+
+                        ?>
+                        <div class="row-actions">
+                            <span class="edit">
+                                <?php edit_post_link("Edit"); ?>
+                            </span>
+                            <span class="trash">
+                                <a href="<?php get_delete_post_link("Edit “{$code->post_title}”"); ?>">Trash</a>
+                            </span>
+                        </div>
+                    <?php
+                    break;
                 case 'statistics':
 
                     // get GMT
@@ -854,7 +879,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
         public function remove_quick_edit($actions)
         {
 
-            if (isset($_GET['post_type']) && $_GET['post_type'] == 'codes') {
+            if (isset($_GET['post_type']) && $_GET['post_type'] == 'code') {
                 
                 unset($actions['inline hide-if-no-js']);
 

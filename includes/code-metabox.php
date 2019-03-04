@@ -103,17 +103,17 @@ if (!class_exists('WP_Code_Metabox')) {
 
             }
 
-            public function get_action_name($code)
+            public static function get_action_name($code)
             {
 
                 return empty($code->post_title) ? '' : uniqid('action_') . '_' .  $code->post_title;
 
             }
 
-            public function code_options_meta_box_cb($code)
+            public static function get_code_options($code)
             {
 
-                $action_name = $this->get_action_name($code);
+                $action_name = self::get_action_name($code);
 
                 $defaults = [
                     'description' => '',
@@ -129,6 +129,15 @@ if (!class_exists('WP_Code_Metabox')) {
                     $code_options = $defaults;
 
                 }
+
+                return $code_options;
+
+            }
+
+            public function code_options_meta_box_cb($code)
+            {
+
+                $code_options = self::get_code_options($code);
 
                 extract( $code_options );
 
