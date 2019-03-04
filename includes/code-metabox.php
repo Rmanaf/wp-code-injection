@@ -77,7 +77,7 @@ if (!class_exists('WP_Code_Metabox')) {
                     'code_options_metabox',
                     __('Options', 'code-injection'),
                     [$this, 'code_options_meta_box_cb'],
-                    'codes',
+                    'code',
                     'side'
                 );
             }
@@ -139,7 +139,7 @@ if (!class_exists('WP_Code_Metabox')) {
                 <p>
                     <b><?php _e("Description" , "code-injection") ?></b>
                 </p>
-                <textarea style="width:100%;" id="description" name="description"><?php echo $description; ?></textarea>
+                <textarea rows="5" style="width:100%;" id="description" name="description"><?php echo $description; ?></textarea>
                 
                 <p>
                     <label>
@@ -150,11 +150,11 @@ if (!class_exists('WP_Code_Metabox')) {
                         <?php 
                             if(!empty($action_name))
                             {
-                                _e("<p>Action Name:</p>" , "code-injection"); "<code>$action_name</code>";
+                                _e("<p>Action Name:</p><code>$action_name</code>" , "code-injection");
                             }
                             else
                             {
-                                _e("<p>Save code to see action name</p>" , "code-injection"); 
+                                _e("<p>Save code to see action name.</p>" , "code-injection"); 
                             }
                         ?>
                     </p>

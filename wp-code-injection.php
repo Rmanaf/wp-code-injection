@@ -1075,7 +1075,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
         public function create_posttype()
         {
 
-            $lables = [
+            $code_lables = [
                 'name' => __('Codes', self::$text_domain),
                 'singular_name' => __('Code', self::$text_domain),
                 'add_new_item' => __('Add New Code', self::$text_domain),
@@ -1088,10 +1088,10 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
             ];
 
             register_post_type(
-                'Codes',
+                'Code',
                 [
                     'menu_icon' => 'dashicons-editor-code',
-                    'labels' => $lables,
+                    'labels' => $code_lables,
                     'public' => false,
                     'show_ui' => true,
                     'rewrite' => false,
@@ -1099,6 +1099,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                     'exclude_from_search' => true,
                     'publicly_queryable' => false,
                     'supports' => ['author', 'revisions', 'title', 'editor'],
+                    'taxonomies' => ['category', 'post_tag'],
                     'capability_type' => ['code','codes'],
                     'can_export' => true,
                     'map_meta_cap' => true
