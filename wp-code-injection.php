@@ -843,6 +843,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                         ?>
 
                     <?php
+                    
                     break;
                 case 'statistics':
 

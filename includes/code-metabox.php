@@ -120,6 +120,7 @@ if (!class_exists('WP_Code_Metabox')) {
             public static function get_code_options($code)
             {
 
+               
                 $action_name = self::get_action_name($code);
 
                 $defaults = [
@@ -136,6 +137,8 @@ if (!class_exists('WP_Code_Metabox')) {
                     $code_options = $defaults;
 
                 }
+
+                print_r($code_options);
 
                 return $code_options;
 
