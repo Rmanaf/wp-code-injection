@@ -849,7 +849,6 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                         <dt>
                         <dd>
                             <?php 
-                                echo get_avatar( $code->post_author); 
                                 echo get_the_author_meta('display_name' , $code->post_author); 
                             ?>
                         <dd>
@@ -876,16 +875,22 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                         </p>
                         <dl>
                             <dt>
-                                Code ID
+                                <strong>Code ID</strong>
                             <dt>
                             <dd>
                                 <code style="font-size:11px;"><?php echo $code->post_title; ?></code>
                             <dd>
                             <dt>
-                                Action ID
+                                <strong>Action ID</strong>
                             <dt>
                             <dd>
+                                <?php if(!empty($code_options['action_name'])) : ?>
                                 <code style="font-size:11px;"><?php echo $code_options['action_name']; ?></code>
+                                <?php 
+                                      else :
+                                        _e("You have to publish the Code in order to see AID.");
+                                      endif;
+                                ?>
                             <dd>
                         </dl>
                     <?php
