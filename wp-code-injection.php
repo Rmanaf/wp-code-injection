@@ -1055,7 +1055,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
             if (isset($post->ID)) {
 
-                if (empty($_POST['post_title']) && 'codes' == get_post_type($post->ID)) {
+                if (empty($_POST['post_title']) && 'code' == get_post_type($post->ID)) {
 
                     $title = 'code-' . md5(uniqid(rand(0,1), true));
 
