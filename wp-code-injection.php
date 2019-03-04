@@ -813,14 +813,10 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
          */
         public function manage_code_posts_columns($columns)
         {
-            $columns = [];
+            $columns = $columns;
 
             $columns['id'] = __("Code" , self::$text_domain); 
-            $columns['code_category'] = __("Categories", self::$text_domain);
-            $columns['categories'] = __("Directory", self::$text_domain);
             $columns['statistics'] = __("Hits", self::$text_domain) . " — " . WP_Calendar_Heatmap::map();
-            $columns['author'] = __("Author", self::$text_domain);
-            $columns['date'] = __("Date", self::$text_domain);
 
             return $columns;
 
