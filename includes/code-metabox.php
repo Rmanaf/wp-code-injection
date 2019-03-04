@@ -106,8 +106,8 @@ if (!class_exists('WP_Code_Metabox')) {
 
                 $code_options = get_post_meta($code->ID, 'code_options', true);
 
-                if(!isset($code_options)){
-                    
+                if(!is_array($code_options)){
+
                     $code_options = [];
 
                 }
@@ -121,10 +121,12 @@ if (!class_exists('WP_Code_Metabox')) {
                 wp_nonce_field('code-settings-nonce', 'code_meta_box_nonce');
 
                 ?>
+
+                <input type="hidden" id="action_name" name="action_name" value="<?php echo $action_name; ?>" />
                 <label>
                     <?php _e("Description" , "code-injection") ?>
                 </label>
-                <textarea><?php echo $description; ?></textarea>
+                <textarea id="description" name="description"><?php echo $description; ?></textarea>
                 <label>
                     <input <?php checked($allow_ajax_call , true); ?> type="checkbox" class="regular-text" id="allow_ajax_call" name="allow_ajax_call" value="1" />
                     <?php _e("Access to this code through ajax call" , "code-injection"); ?>
