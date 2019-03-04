@@ -836,17 +836,22 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                  
                     ?>
                         <p>
-                            <?php echo $code_options['description']; ?>
+                            <?php echo $code_options['description']; ?>  —  <strong><?php echo ucwords(get_post_status($post_id)); ?></strong>
                         </p>
-                        <p>
-                            <p>Code ID:</p>
-                            <span style="font-size:11px;"><code><?php echo $code->post_title; ?></code></span>  —  <strong><?php echo ucwords(get_post_status($post_id)); ?></strong>
-                        </p>
-                        <p>
-                            <p>Action ID:</p>
-                            <span style="font-size:11px;"><code><?php echo $code_options['action_name']; ?></code></span>
-                        </p>
-
+                        <dl>
+                            <dt>
+                                Code ID
+                            <dt>
+                            <dd>
+                                <code style="font-size:11px;"><?php echo $code->post_title; ?></code>
+                            <dd>
+                            <dt>
+                                Action ID
+                            <dt>
+                            <dd>
+                                <code style="font-size:11px;"><?php echo $code_options['action_name']; ?></code>
+                            <dd>
+                        </dl>
                     <?php
 
                     break;
