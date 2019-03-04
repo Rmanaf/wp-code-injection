@@ -76,6 +76,8 @@ require_once __DIR__ . '/includes/calendar-heatmap.php';
 
 require_once __DIR__ . '/includes/package-manager.php';
 
+require_once __DIR__ . '/includes/code-metabox.php';
+
 
 
 if (!class_exists('WP_Code_Injection_Plugin')) {
