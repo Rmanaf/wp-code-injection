@@ -835,12 +835,16 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                     $code_options = WP_Code_Metabox::get_code_options($code);
                  
                     ?>
-
                         <p>
                             <?php echo $code_options['description']; ?>
                         </p>
                         <p>
-                            <span style="font-size:10px;"><?php echo $code->post_title; ?></span>  —  <strong><?php echo ucwords(get_post_status($post_id)); ?></strong>
+                            <p>Code ID:</p>
+                            <span style="font-size:11px;"><code><?php echo $code->post_title; ?></code></span>  —  <strong><?php echo ucwords(get_post_status($post_id)); ?></strong>
+                        </p>
+                        <p>
+                            <p>Action ID:</p>
+                            <span style="font-size:11px;"><code><?php echo $code_options['action_name']; ?></code></span>
                         </p>
 
                     <?php
