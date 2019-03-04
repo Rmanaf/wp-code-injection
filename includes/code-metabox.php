@@ -145,11 +145,11 @@ if (!class_exists('WP_Code_Metabox')) {
                     if(!isset($_REQUEST[$p]))
                     {
 
-                        $value[$p] = $params[$p];
+                        $value[$p] =  $params[$p];
 
                     } else {
 
-                        $value[$p] = $_REQUEST[$p];
+                        $value[$p] = esc_html( $_REQUEST[$p] );
 
                     }
 
@@ -195,7 +195,7 @@ if (!class_exists('WP_Code_Metabox')) {
             }
 
 
-            
+
             public function code_options_meta_box_cb($code)
             {
 
@@ -227,7 +227,7 @@ if (!class_exists('WP_Code_Metabox')) {
                             }
                             else
                             {
-                                _e("<p>Save code to see action name.</p>" , "code-injection"); 
+                                _e("<p>Publish code to see action name.</p>" , "code-injection"); 
                             }
                         ?>
                     </p>

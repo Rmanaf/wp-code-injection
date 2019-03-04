@@ -838,12 +838,12 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                             <?php echo $code_options['description']; ?>
                         </p>
 
-                        <input readonly type="text" value="<?php echo $code->post_title; ?>" />  —  <?php echo get_post_status($post_id); ?>
+                        <input class="regular-text" readonly type="text" value="<?php echo $code->post_title; ?>" />  —  <strong><?php echo ucwords(get_post_status($post_id)); ?></strong>
 
                     <?php
 
                     break;
-                    
+
                 case 'statistics':
 
                     // get GMT
