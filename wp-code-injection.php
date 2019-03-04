@@ -80,6 +80,7 @@ require_once __DIR__ . '/includes/code-metabox.php';
 
 
 
+
 if (!class_exists('WP_Code_Injection_Plugin')) {
 
     class WP_Code_Injection_Plugin
@@ -144,8 +145,6 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
             add_action('manage_codes_posts_custom_column' , [$this, 'manage_codes_custom_columns'], 10, 2 );
 
             add_filter('dcp_shortcodes_list', [&$this, 'add_shortcode_to_list']);
-
-
 
 
         }

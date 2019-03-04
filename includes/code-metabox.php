@@ -59,52 +59,77 @@
 
 if (!class_exists('WP_Code_Metabox')) {
 
-    class WP_Code_Metabox
-    {
-
-        function __construct()
+        class WP_Code_Metabox
         {
 
-            add_action('add_meta_boxes',       [$this, 'add_meta_box']);
-            add_action('save_post',            [$this, 'save_post']);
+            function __construct()
+            {
 
-        }
+                add_action('add_meta_boxes',       [$this, 'add_meta_box']);
 
-        public function add_meta_box()
-        {
+                add_action('save_post',            [$this, 'save_post']);
+            }
 
-            add_meta_box(
-                'code_config_metabox',
-                __('Configs', 'code-injection'),
-                [$this, 'code_config_meta_box_cb'],
-                'codes',
-                'side'
-            );
+            public function add_meta_box()
+            {
 
-        }
+                add_meta_box(
+                    'code_options_metabox',
+                    __('Options', 'code-injection'),
+                    [$this, 'code_options_meta_box_cb'],
+                    'codes',
+                    'side'
+                );
+            }
 
-        public function code_config_meta_box_cb($code)
-        {
+            public function save_post($id)
+            {
 
-            $data = get_post_meta($code->ID, 'empty_page_data', true);
-        }
+                if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
+                    return;
 
-        public function save_post($id)
-        {
+                if (!isset($_POST['code_meta_box_nonce']) || !wp_verify_nonce($_POST['code_meta_box_nonce'], 'code-settings-nonce'))
+                    return;
 
-            if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
-                return;
+                if (!current_user_can('edit_post'))
+                    return;
 
-            if (!isset($_POST['meta_box_nonce']) || !wp_verify_nonce($_POST['meta_box_nonce'], 'page-configs-nonce'))
-                return;
+                update_post_meta($id, 'empty_page_data', [
+                    'scripts' => $_POST['scripts'],
+                    'styles' => $_POST['styles']
+                ]);
 
-            if (!current_user_can('edit_post'))
-                return;
+            }
 
-            update_post_meta($id, 'empty_page_data', array(
-                'scripts' => $_POST['scripts'],
-                'styles' => $_POST['styles'],
-            ));
+            public function code_options_meta_box_cb($code)
+            {
+
+                $code_options = get_post_meta($code->ID, 'code_options', true);
+
+                extract( $code_options , [
+                    'description' => '',
+                    'allow_ajax_call' => false,
+                    'action_name' => uniqid('action_') . '_' . $code->post_title,
+                ]);
+
+                wp_nonce_field('code-settings-nonce', 'code_meta_box_nonce');
+
+                ?>
+                <label>
+                    <?php _e("Description" , "code-injection") ?>
+                </label>
+                <textarea><?php echo $description; ?></textarea>
+                <label>
+                    <input <?php checked($allow_ajax_call , true); ?> type="checkbox" class="regular-text" id="allow_ajax_call" name="allow_ajax_call" value="1" />
+                    <?php _e("Access to this code through ajax call" , "code-injection"); ?>
+                </label>
+                <p class="description">
+                    <?php echo __("Action Name:" , "code-injection") . $action_name; ?>
+                </p>
+
+                <?php
+
+            }
+
         }
     }
-}

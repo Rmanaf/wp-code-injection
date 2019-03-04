@@ -56,7 +56,8 @@
  * @version 2.2.8
  */
 
-if (!class_exists('WP_Package_Manager')) {
+if (!class_exists('WP_Package_Manager')) 
+{
 
     class WP_Package_Manager
     {
@@ -102,7 +103,7 @@ if (!class_exists('WP_Package_Manager')) {
                 [$this, 'packages_content'],
                 'dashicons-cloud'
             );
-            
+
         }
 
     }
