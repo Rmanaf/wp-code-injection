@@ -816,7 +816,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
             $columns = [];
 
             $columns['id'] = __("Code" , self::$text_domain); 
-            $columns['code_categories'] = __("Categories", self::$text_domain);
+            $columns['code_category'] = __("Categories", self::$text_domain);
             $columns['categories'] = __("Directory", self::$text_domain);
             $columns['statistics'] = __("Hits", self::$text_domain) . " — " . WP_Calendar_Heatmap::map();
             $columns['author'] = __("Author", self::$text_domain);
