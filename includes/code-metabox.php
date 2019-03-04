@@ -114,7 +114,8 @@ if (!class_exists('WP_Code_Metabox')) {
 
                 $code_options = get_post_meta($code->ID, 'code_options', true);
 
-                if(!is_array($code_options) || empty($code_options)){
+                if(!is_array($code_options) || empty($code_options))
+                {
 
                     $code_options = $defaults;
 
@@ -130,13 +131,14 @@ if (!class_exists('WP_Code_Metabox')) {
                 
                 <p><?php _e("Description" , "code-injection") ?></p>
                 <textarea id="description" name="description"><?php echo $description; ?></textarea>
-                
+                <p>
                 <label>
                     <input <?php checked($allow_ajax_call , true); ?> type="checkbox" class="regular-text" id="allow_ajax_call" name="allow_ajax_call" value="1" />
                     <?php _e("Access through ajax call" , "code-injection"); ?>
                 </label>
                 <p class="description">
                     <?php echo __("Action Name:" , "code-injection") . $action_name; ?>
+                </p>
                 </p>
 
                 <?php
