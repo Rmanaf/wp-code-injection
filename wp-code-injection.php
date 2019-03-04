@@ -1074,7 +1074,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
         private function create_directory_tax(){
 
             $lables = [
-                'name' => __('Directory' , self::$text_domain),
+                'name' => __('Directories' , self::$text_domain),
                 'menu_name' => __('Directories' , self::$text_domain),
                 'singular_name' => __('Directory', self::$text_domain),
                 'add_new_item' => __('Add New Directory', self::$text_domain),
@@ -1151,7 +1151,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                 'all_items' => __('All Codes', self::$text_domain)
             ];
 
-            
+
             register_post_type(
                 'Code',
                 [
