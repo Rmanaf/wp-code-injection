@@ -77,10 +77,10 @@ if (!class_exists('WP_Code_Metabox')) {
                 'code_config_metabox',
                 __('Configs', 'code-injection'),
                 [$this, 'code_config_meta_box_cb'],
-                'code',
+                'codes',
                 'side'
             );
-            
+
         }
 
         public function code_config_meta_box_cb($code)

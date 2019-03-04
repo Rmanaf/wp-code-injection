@@ -87,6 +87,8 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
         private $code_meta_box;
 
+        private $package_manager;
+
         private static $text_domain = 'code-injection';
 
         private static $db_version  = '1.0.0';
@@ -109,6 +111,8 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
             $this->check_db();
 
             $this->init_meta_box();
+
+            $this->init_package_manager();
 
 
             // check "Unsafe" settings
@@ -308,7 +312,13 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
         public function init_meta_box(){
 
-           $this->code_meta_box = new WP_Code_Metabox();
+            $this->code_meta_box = new WP_Code_Metabox();
+
+        }
+
+        public function init_package_manager(){
+
+            $this->package_manager = new WP_Package_Manager();
 
         }
 
