@@ -815,10 +815,12 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
         {
             $columns = [];
 
-            $columns['id'] = __("Code"); 
-            $columns['statistics'] = __("Hits") . " — " . WP_Calendar_Heatmap::map();
-            $columns['author'] = __("Author");
-            $columns['date'] = __("Date");
+            $columns['id'] = __("Code" , self::$text_domain); 
+            $columns['category'] = __("Category", self::$text_domain);
+            $columns['directory'] = __("Directory", self::$text_domain);
+            $columns['statistics'] = __("Hits", self::$text_domain) . " — " . WP_Calendar_Heatmap::map();
+            $columns['author'] = __("Author", self::$text_domain);
+            $columns['date'] = __("Date", self::$text_domain);
 
             return $columns;
 
@@ -875,6 +877,12 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
             if (isset($_GET['post_type']) && $_GET['post_type'] == 'code') {
                 
                 unset($actions['inline hide-if-no-js']);
+
+                $title = __("Copy the code ID into the clipboard", self::$text_domain);
+
+                $text = __("Copy to Clipboard" , self::$text_domain);
+
+                $actions['copy_to_clipboard'] = "<a href=\"javascript:void(0);\" title=\"$title\" rel=\"permalink\">$text</a>";
 
             }
 
