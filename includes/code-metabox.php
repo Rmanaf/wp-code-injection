@@ -102,11 +102,15 @@ if (!class_exists('WP_Code_Metabox')) {
                     return;
                 }
 
-                update_post_meta($id, 'code_options', array_map(function($item){
+                update_post_meta($id, 'code_options', array_merge_recursive(array_map(function($item){
 
-                    return $_POST[$item];
+                    return [$item => $_POST[$item]];
 
-                }, ['description' , 'allow_ajax_call' , 'action_name']));
+                }, [
+                    'description' ,
+                    'allow_ajax_call' , 
+                    'action_name'
+                ])));
 
             }
 
