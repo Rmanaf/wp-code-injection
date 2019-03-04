@@ -70,8 +70,13 @@ if (!class_exists('WP_Code_Metabox')) {
                 add_action('add_meta_boxes',       [$this, 'add_meta_box']);
 
                 add_action('save_post',            [$this, 'save_post']);
+
             }
 
+            /**
+             * adds the options meta box
+             * @since 2.2.8
+             */
             public function add_meta_box()
             {
 
@@ -84,6 +89,35 @@ if (!class_exists('WP_Code_Metabox')) {
                 );
             }
 
+            /**
+             * returns the code options default values
+             * @since 2.2.8
+             */
+            private static function get_default_values($code)
+            {
+
+                if(is_object($code))
+                {
+                    $action = self::get_action_name($code);
+                }
+                else
+                {
+                    $action = self::get_action_name(get_post(intval($code)));
+                }
+
+                return [
+                    'description' => '',
+                    'tracking' => false,
+                    'allow_ajax_call' => false,
+                    'action_name' =>  $action,
+                ];
+
+            }
+
+            /**
+             * handle the code options
+             * @since 2.2.8
+             */
             public function save_post($id)
             {
 
@@ -102,13 +136,7 @@ if (!class_exists('WP_Code_Metabox')) {
                     return;
                 }
 
-                $code = get_post( $id );
-
-                $params = [
-                    'description' => '',
-                    'allow_ajax_call' => false, 
-                    'action_name' => self::get_action_name($code)
-                ];
+                $params = self::get_default_values($id);
 
                 $value = [];
 
@@ -131,6 +159,11 @@ if (!class_exists('WP_Code_Metabox')) {
 
             }
 
+
+            /**
+             * returns the code action name
+             * @since 2.2.8
+             */
             public static function get_action_name($code)
             {
 
@@ -138,17 +171,15 @@ if (!class_exists('WP_Code_Metabox')) {
 
             }
 
+
+            /**
+             * returns the code options
+             * @since 2.2.8
+             */
             public static function get_code_options($code)
             {
 
-               
-                $action_name = self::get_action_name($code);
-
-                $defaults = [
-                    'description' => '',
-                    'allow_ajax_call' => false,
-                    'action_name' =>  $action_name,
-                ];
+                $defaults = self::get_default_values($code);
 
                 $code_options = get_post_meta($code->ID, 'code_options', true);
 
@@ -163,6 +194,8 @@ if (!class_exists('WP_Code_Metabox')) {
 
             }
 
+
+            
             public function code_options_meta_box_cb($code)
             {
 

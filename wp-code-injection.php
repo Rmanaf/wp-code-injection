@@ -833,18 +833,17 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                     $code_options = WP_Code_Metabox::get_code_options($code);
                  
                     ?>
-                        
-                        <?php 
-                        
-                        echo $code_options['description'];
 
-                        echo $code->post_title . " — " . get_post_status($post_id); 
+                        <p>
+                            <?php echo $code_options['description']; ?>
+                        </p>
 
-                        ?>
+                        <input readonly type="text" value="<?php echo $code->post_title; ?>" />  —  <?php echo get_post_status($post_id); ?>
 
                     <?php
-                    
+
                     break;
+                    
                 case 'statistics':
 
                     // get GMT
