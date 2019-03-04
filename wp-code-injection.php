@@ -1067,16 +1067,15 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
         }
 
 
-
         /**
-         * Create CPT
-         * @since 1.0.0
+         * create directory taxonomy
+         * @since 2.2.8
          */
-        public function create_posttype()
-        {
+        private function create_directory_tax(){
 
-            $deps_lables = [
+            $lables = [
                 'name' => __('Directory' , self::$text_domain),
+                'menu_name' => __('Directories' , self::$text_domain),
                 'singular_name' => __('Directory', self::$text_domain),
                 'add_new_item' => __('Add New Directory', self::$text_domain),
                 'edit_item' => __('Edit Directory', self::$text_domain),
@@ -1085,8 +1084,60 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                 'parent_item_colon' => __('Parent Directory:', self::$text_domain),
                 'search_items ' => __('Search Directories', self::$text_domain),
                 'not_found' => __('No directories found', self::$text_domain),
-                'all_items' => __('All Directories', self::$text_domain)
+                'all_items' => __('All Directories', self::$text_domain),
+                'popular_items' => __('Popular Directories', self::$text_domain),
+                'choose_from_most_used' => __('Choose from the most used directories', self::$text_domain),
+                'add_or_remove_items' => __('Add or remove directories', self::$text_domain),
+                'back_to_items' => __('← Back to directories', self::$text_domain)
             ];
+
+            register_taxonomy( 
+                'directory', 
+                'code', 
+                [
+                   'labels' => $lables,
+                   'public' => false,
+                    'show_ui' => true,
+                    'rewrite' => false,
+                   'hierarchical' => true
+                ]
+            );
+
+        }
+
+        
+        /**
+         * create category taxonomy
+         * @since 2.2.8
+         */
+        private function create_category_tax(){
+
+            register_taxonomy( 
+                'code_category', 
+                'code', 
+                [
+                   'public' => false,
+                   'show_ui' => true,
+                   'rewrite' => false,
+                   'hierarchical' => true
+                ]
+            );
+
+        }
+
+
+
+        /**
+         * create code post type
+         * @since 1.0.0
+         */
+        public function create_posttype()
+        {
+
+            $this->create_category_tax();
+
+            $this->create_directory_tax();
+
 
             $code_lables = [
                 'name' => __('Codes', self::$text_domain),
@@ -1100,15 +1151,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                 'all_items' => __('All Codes', self::$text_domain)
             ];
 
-            register_taxonomy( 
-                'directory', 
-                'code', 
-                [
-                   'labels' => $deps_lables,
-                   'hierarchical' => true
-                ]
-            );
-
+            
             register_post_type(
                 'Code',
                 [

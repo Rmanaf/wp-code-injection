@@ -62,6 +62,8 @@ if (!class_exists('WP_Code_Metabox')) {
         class WP_Code_Metabox
         {
 
+            private static $text_domain = 'code-injection';
+
             function __construct()
             {
 
