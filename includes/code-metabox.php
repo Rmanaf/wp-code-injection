@@ -159,8 +159,6 @@ if (!class_exists('WP_Code_Metabox')) {
 
                 }
 
-                print_r($code_options);
-
                 return $code_options;
 
             }
