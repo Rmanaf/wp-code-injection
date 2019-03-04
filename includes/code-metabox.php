@@ -104,19 +104,21 @@ if (!class_exists('WP_Code_Metabox')) {
             public function code_options_meta_box_cb($code)
             {
 
-                $code_options = get_post_meta($code->ID, 'code_options', true);
-
-                if(!is_array($code_options)){
-
-                    $code_options = [];
-
-                }
-
-                extract( $code_options , [
+                $defaults = [
                     'description' => '',
                     'allow_ajax_call' => false,
                     'action_name' => uniqid('action_') . '_' . $code->post_title,
-                ]);
+                ];
+
+                $code_options = get_post_meta($code->ID, 'code_options', true);
+
+                if(!is_array($code_options) || empty($code_options)){
+
+                    $code_options = $defaults;
+
+                }
+
+                extract( $code_options );
 
                 wp_nonce_field('code-settings-nonce', 'code_meta_box_nonce');
 
