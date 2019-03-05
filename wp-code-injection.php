@@ -946,9 +946,9 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
                 $text = __("Copy the ID" , self::$text_domain);
 
-                $actions['edit'] = $post->post_title;//str_replace("“{$post->post_title}”" , '' , $actions['edit']);
+                $actions['edit'] = str_replace($post->post_title , '' , $actions['edit']);
 
-                $actions['trash'] = str_replace("“{$post->post_title}”" , '' , $actions['trash']);
+                $actions['trash'] = str_replace($post->post_title , '' , $actions['trash']);
 
                 $actions['copy_to_clipboard'] = "<a href=\"javascript:void(0);\" title=\"$title\" rel=\"permalink\">$text</a>";
 
