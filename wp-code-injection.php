@@ -72,12 +72,11 @@ defined('ABSPATH') or die;
 
 require_once __DIR__ . '/wp-code-injection-plugin-widget.php';
 
+require_once __DIR__ . '/includes/database.php';
 require_once __DIR__ . '/includes/calendar-heatmap.php';
-
 require_once __DIR__ . '/includes/package-manager.php';
-
 require_once __DIR__ . '/includes/code-metabox.php';
-
+require_once __DIR__ . '/includes/ajax-call-handler.php';
 
 
 
@@ -86,47 +85,65 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
     class WP_Code_Injection_Plugin
     {
 
+        private $ajax_call_handler;
         private $code_meta_box;
-
         private $package_manager;
+        private $database;
 
+        
         private static $not_ready_states = ['private', 'draft', 'trash', 'pending'];
 
         private static $text_domain = 'code-injection';
 
-        private static $db_version  = '1.0.0';
-
         private static $role_version = '1.0.0';
 
-        private static $db_shortcodes_types = ['HTML', 'PHP'];
 
-        private static $db_errors = [
-            '',                                   // 0 no error
-            'Rendering of PHP code is disabled',  // 1
-            'Code not founds',                    // 2
-            'Infinity loop ignored',              // 3
-            'An unexpected error occurred',       // 4
-        ];
 
         function __construct()
         {
 
-            $this->check_db();
+            /**
+             * initialize database
+             * @since 2.2.6
+             */
+            $this->database = new WP_CI_Database();
 
-            $this->init_meta_box();
 
-            $this->init_package_manager();
+            /**
+             * initialize the meta box component
+             * @since 2.2.8
+             */
+            $this->code_meta_box = new WP_Code_Metabox();
+
+
+            /**
+             * initialize the package manager component
+             * @since 2.2.8
+             */
+            $this->package_manager = new WP_Package_Manager();
+
+
+            /**
+             * initialize the ajax call handler component
+             * @since 2.2.8
+             */
+            $this->ajax_call_handler = new WP_AJAX_Call_Handler();
+
 
 
             // check "Unsafe" settings
             $use_shortcode = get_option('wp_dcp_unsafe_widgets_shortcodes', 0);
 
+
+
             if ($use_shortcode) {
 
                 add_filter('widget_text', 'shortcode_unautop');
+
                 add_filter('widget_text', 'do_shortcode');
 
             }
+
 
             // create CPT
             add_shortcode('inject', [$this, 'ci_shortcode']);
@@ -149,109 +166,9 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
             add_filter('dcp_shortcodes_list', [&$this, 'add_shortcode_to_list']);
 
 
-            $this->active_ajax_calls();
-
-
         }
 
-        /**
-         * Checks database
-         * @since 2.2.6
-         */
-        private function check_db()
-        {
-
-            global $wpdb;
-
-            $dbv = get_option('wp_dcp_code_injection_db_version', '');
-
-            if($dbv == self::$db_version){
-
-                return;
-
-            }
-
-            $table_name = self::table_name();
-
-            $charset_collate = $wpdb->get_charset_collate();
-
-            $sql = "CREATE TABLE $table_name (
-                id mediumint(9) NOT NULL AUTO_INCREMENT,
-                blog smallint,
-                time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
-                ip tinytext NOT NULL,
-                post smallint,
-                user smallint,
-                code tinytext,
-                type smallint,
-                error smallint,
-                PRIMARY KEY  (id)
-                ) $charset_collate;";
-
-            require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-
-            dbDelta($sql);
-
-            update_option('wp_dcp_code_injection_db_version', self::$db_version);
-
-        }
-
-         /**
-         * Records activity into the database
-         * @since 2.2.6
-         */
-        private function record_activity($type = 0, $code = null, $error = 0)
-        {
-
-            global $wpdb, $post;
-
-            /**
-             * type 0 for HTML, CSS and, javascript
-             * type 1 for PHP
-             */
-            $wpdb->insert(
-                self::table_name(),
-                [
-                    'time'  => current_time('mysql' , 1),
-                    'ip'    => $this->get_ip_address(),
-                    'post'  => isset($post->ID) && is_single() ? $post->ID : null,
-                    'blog'  => get_current_blog_id(),
-                    'user'  => get_current_user_id(),
-                    'type'  => $type,
-                    'code'  => $code,
-                    'error' => $error
-                ]
-            );
-
-            
-
-        }
-
-        /**
-         * Returns client IP address
-         * @since 1.0.0
-         */
-        private function get_ip_address()
-        {
-
-            foreach (['HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_X_CLUSTER_CLIENT_IP', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR'] as $key) {
-
-                if (array_key_exists($key,(array) $_SERVER) === true) {
-
-                    foreach (explode(',', $_SERVER[$key]) as $ip) {
-                        $ip = trim($ip);
-
-                        if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) !== false) {
-                            return $ip;
-                        }
-
-                    }
-
-                }
-
-            }
-
-        }
+       
 
         /**
          * Prints admin scripts
@@ -316,56 +233,6 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
         }
 
 
-        public function init_meta_box(){
-
-            $this->code_meta_box = new WP_Code_Metabox();
-
-        }
-
-        public function init_package_manager(){
-
-            $this->package_manager = new WP_Package_Manager();
-
-        }
-
-        private function active_ajax_calls(){
-
-            global $wpdb;
-
-            $querystr = "
-                SELECT $wpdb->posts.ID, $wpdb->posts.post_title, $wpdb->posts.post_content, $wpdb->postmeta.meta_value
-                FROM $wpdb->posts, $wpdb->postmeta
-                WHERE $wpdb->posts.ID = $wpdb->postmeta.post_id 
-                AND $wpdb->postmeta.meta_key = 'code_options'
-                AND $wpdb->posts.post_status = 'publish' 
-                AND $wpdb->posts.post_type = 'code'
-            ";
-
-            $codes = $wpdb->get_results($querystr, OBJECT);
-
-            
-            foreach($codes as $c)
-            {
-
-                $code_options = maybe_unserialize( $c->meta_value );
-
-                $acn = $code_options['action_name'];
-                $allow = $code_options['allow_ajax_call'];
-
-                if(!empty($acn) && $allow)
-                {
-
-                    add_action("wp_ajax_$acn" , "__return_false");
-
-                    print_r($acn);
-
-                }
-
-            }
-            
-        }
-
-
         /**
          * "Unsafe" shortcode
          * @since 2.2.6
@@ -379,7 +246,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
             if (!$use_php) {
 
-                $this->record_activity(1 , null , 1);
+                $this->database->record_activity(1 , null , 1);
 
                 if($debug){
 
@@ -401,7 +268,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
                 if (!empty($keys) && !in_array($key, $keys)) {
 
-                    $this->record_activity(1 , $key , 3);
+                    $this->database->record_activity(1 , $key , 3);
 
                     if($debug){
 
@@ -431,7 +298,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                 catch(Exception $ex)
                 {
 
-                    $this->record_activity(1 , $key , 4);
+                    $this->database->record_activity(1 , $key , 4);
 
                     if($debug) {
 
@@ -467,7 +334,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
             if (empty($id)) {
 
-                $this->record_activity(0 , null , 2);
+                $this->database->record_activity(0 , null , 2);
 
                 return;
 
@@ -488,7 +355,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
                     if (isset($params['id']) && $params['id'] == $id) {
 
-                        $this->record_activity(0 , $id , 3);
+                        $this->database->record_activity(0 , $id , 3);
 
                         return;
 
@@ -500,7 +367,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
                 if ($render_shortcodes) {
 
-                    $this->record_activity(0 , $id, 0);
+                    $this->database->record_activity(0 , $id, 0);
 
                     return do_shortcode($code->post_content);
 
@@ -976,7 +843,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                     $end = new DateTime($cdate);
                     
                     $heatmap = new WP_Calendar_Heatmap();
-                    $heatmap->load(self::table_name() , $post_id, $start, $end);
+                    $heatmap->load($this->database->table_activities_name , $post_id, $start, $end);
                     $heatmap->render();
 
                 break;
@@ -1390,24 +1257,6 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
 
             update_option( 'wp_dcp_code_injection_role_version', self::$role_version );
-
-        }
-
-
-        /**
-         * returns table name
-         * @since 1.0.0
-         */
-        public static function table_name()
-        {
-
-            global $wpdb;
-
-            $dbname = "dcp_code_injection";
-
-            //return $wpdb->prefix . $dbname;
-
-            return $dbname;
 
         }
 

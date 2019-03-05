@@ -53,7 +53,7 @@
  /**
  * @author Arman Afzal <rman.afzal@gmail.com>
  * @package WP_Divan_Control_Panel
- * @version 2.2.7
+ * @version 2.2.8
  */
 
 if (!class_exists('WP_Calendar_Heatmap')) {
