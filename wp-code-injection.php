@@ -90,6 +90,8 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
         private $package_manager;
 
+        private static $not_ready_states = ['private', 'draft', 'trash', 'pending'];
+
         private static $text_domain = 'code-injection';
 
         private static $db_version  = '1.0.0';
@@ -889,9 +891,9 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                         <?php 
                             /**
                              * prevents the showing of the code IDs in the following states
-                             * private, draft, trash
+                             * private, draft, trash, pending
                              */
-                            if(in_array($status , ['private', 'draft' , 'trash'])) 
+                            if(in_array($status , self::$not_ready_states)) 
                             {
                                 break;
                             } 
@@ -902,14 +904,14 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                                 <strong><?php _e("Code ID") ?></strong>
                             <dt>
                             <dd>
-                                <code style="font-size:11px;"><?php echo $code->post_title; ?></code>
+                                <code id='cid' style="font-size:11px;"><?php echo $code->post_title; ?></code>
                             <dd>
                             <dt>
                                 <strong><?php _e("Action Name") ?></strong>
                             <dt>
                             <dd>
                                 <?php if(!empty($code_options['action_name'])) : ?>
-                                <code style="font-size:11px;"><?php echo $code_options['action_name']; ?></code>
+                                <code id='aid' style="font-size:11px;"><?php echo $code_options['action_name']; ?></code>
                                 <?php 
                                       else :
                                         _e("In order to see the AID, You have to publish this Code.");
@@ -968,7 +970,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                 }
 
 
-                if(!in_array($status , ['private', 'draft' , 'trash']))
+                if(!in_array($status , self::$not_ready_states))
                 {
 
                     $cid_title = __("Copy the Code ID into the Clipboard", self::$text_domain);
@@ -977,8 +979,8 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                     $aid_title =  __("Copy the Action ID into the Clipboard", self::$text_domain);
                     $aid_text = __("Copy AID" , self::$text_domain);
 
-                    $actions['copy_cid'] = "<a href=\"javascript:void(0);\" title=\"$cid_title\" rel=\"permalink\">$cid_text</a>";
-                    $actions['copy_aid'] = "<a href=\"javascript:void(0);\" title=\"$aid_title\" rel=\"permalink\">$aid_text</a>";
+                    $actions['copy_cid'] = "<a href=\"javascript:void(0);\" click=\"window.ci.copyToClipboard('#cid')\" title=\"$cid_title\" rel=\"permalink\">$cid_text</a>";
+                    $actions['copy_aid'] = "<a href=\"javascript:void(0);\" click=\"window.ci.copyToClipboard('#aid')\" title=\"$aid_title\" rel=\"permalink\">$aid_text</a>";
 
                 }
 
