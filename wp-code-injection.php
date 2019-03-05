@@ -228,13 +228,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
             wp_enqueue_style('dcp-code-injection', plugins_url('assets/wp-code-injection-admin.css', __FILE__), [], $ver, 'all');
             
-            if(!($this->is_settings_page())) {
-
-                print_r($this->is_settings_page());
-
-                return;
-
-            }
+            
  
             wp_enqueue_style('dcp-tag-editor', plugins_url('assets/jquery.tag-editor.css', __FILE__), [], $ver, 'all');
 
