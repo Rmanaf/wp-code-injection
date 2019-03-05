@@ -727,7 +727,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
             $columns = [];
 
             $columns['id'] = __("Code" , self::$text_domain);
-            $columns['statistics'] = __("Hits", self::$text_domain) . " — " . WP_Calendar_Heatmap::map();
+            $columns['statistics'] = __("Hits", self::$text_domain) . " — " . WP_CI_Calendar_Heatmap::map();
             $columns['info'] = __("Info", self::$text_domain);
 
             return $columns;
@@ -842,8 +842,8 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                     // today
                     $end = new DateTime($cdate);
                     
-                    $heatmap = new WP_Calendar_Heatmap();
-                    $heatmap->load($this->database->table_activities_name , $post_id, $start, $end);
+                    $heatmap = new WP_CI_Calendar_Heatmap();
+                    $heatmap->load(WP_CI_Database::$table_activities_name , $post_id, $start, $end);
                     $heatmap->render();
 
                 break;
