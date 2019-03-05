@@ -93,13 +93,13 @@ if (!class_exists('WP_CI_Code_Type')) {
 
         public function print_scripts()
         {
-            
+
             // "CI" assets
             if (!$this->is_code_page()) {
                 return;
             }
 
-            $ver = $this->get_version();
+            $ver = WP_Code_Injection_Plugin::get_version();
 
             wp_enqueue_style('dcp-codemirror', plugins_url('assets/codemirror/lib/codemirror.css', __FILE__), [], $ver, 'all');
             wp_enqueue_style('dcp-codemirror-dracula', plugins_url('assets/codemirror/theme/dracula.css', __FILE__), [], $ver, 'all');
