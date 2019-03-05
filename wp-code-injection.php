@@ -831,6 +831,8 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
                     $categories = get_the_terms( $code, 'code_category' );
 
+                    $status = get_post_status($post_id);
+
                     ?>
 
                     <dl>
@@ -848,9 +850,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                             <strong>Author</strong>
                         <dt>
                         <dd>
-                            <?php 
-                                echo get_the_author_meta('display_name' , $code->post_author); 
-                            ?>
+                            <?php  echo get_the_author_meta('display_name' , $code->post_author) . " — <" . get_the_author_meta('user_email' , $code->post_author) . ">"; ?>
                         <dd>
                         <dt>
                             <strong>Date</strong>
@@ -871,8 +871,18 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                  
                     ?>
                         <p style="text-align: justify;">
-                            <?php echo $code_options['description']; ?>  —  <strong><?php echo ucwords(get_post_status($post_id)); ?></strong>
+                            <?php echo $code_options['description']; ?>  —  <strong><?php echo ucwords($status); ?></strong>
                         </p>
+                        
+                        <?php 
+                            /**
+                             * prevents showing of the code IDs in private mode
+                             */
+                            if('private' == $status) {
+                                break;
+                            } 
+                        ?>
+
                         <dl>
                             <dt>
                                 <strong>Code ID</strong>
@@ -888,7 +898,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                                 <code style="font-size:11px;"><?php echo $code_options['action_name']; ?></code>
                                 <?php 
                                       else :
-                                        _e("You have to publish the Code in order to see AID.");
+                                        _e("In order to see the AID, You have to publish the Code.");
                                       endif;
                                 ?>
                             <dd>
@@ -932,6 +942,10 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                 $title = __("Copy the code ID into the clipboard", self::$text_domain);
 
                 $text = __("Copy the ID" , self::$text_domain);
+
+                $actions['edit'] = preg_replace('/(Edit “)(.*?)(”)/' , 'Edit' ,$actions['edit']);
+
+                $actions['trash'] = preg_replace('/(Move “)(.*?)(”)/' , 'Move' ,$actions['trash']);
 
                 $actions['copy_to_clipboard'] = "<a href=\"javascript:void(0);\" title=\"$title\" rel=\"permalink\">$text</a>";
 
