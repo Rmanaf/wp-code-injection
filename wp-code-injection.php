@@ -824,14 +824,15 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
         }
 
         public function manage_code_posts_custom_column( $column, $post_id ){
+
+           
+
             switch ( $column ) {
                 case 'info':
 
                     $code = get_post($post_id);
 
                     $categories = get_the_terms( $code, 'code_category' );
-
-                    $status = get_post_status($post_id);
 
                     ?>
 
@@ -866,6 +867,8 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                 case 'id':
 
                     $code = get_post($post_id);
+
+                    $status = get_post_status($post_id);
                     
                     $code_options = WP_Code_Metabox::get_code_options($code);
                  
