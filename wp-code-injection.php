@@ -757,6 +757,8 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                 
             } 
 
+            print_r($screen->id);
+
             return $screen->id == 'options-general';
 
         }
