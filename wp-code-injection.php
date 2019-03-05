@@ -883,9 +883,11 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                         
                         <?php 
                             /**
-                             * prevents the showing of the code IDs in private mode
+                             * prevents the showing of the code IDs in the following states
+                             * private, draft, trash
                              */
-                            if('private' == $status) {
+                            if(!in_array($status , ['private', 'draft' , 'trash'])) 
+                            {
                                 break;
                             } 
                         ?>
@@ -961,19 +963,16 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                 }
 
 
-                if(!in_array($status , ['private', 'draft']))
+                if(!in_array($status , ['private', 'draft' , 'trash']))
                 {
 
                     $cid_title = __("Copy the Code ID into the Clipboard", self::$text_domain);
-
                     $cid_text = __("Copy CID" , self::$text_domain);
 
                     $aid_title =  __("Copy the Action ID into the Clipboard", self::$text_domain);
-
                     $aid_text = __("Copy AID" , self::$text_domain);
 
                     $actions['copy_cid'] = "<a href=\"javascript:void(0);\" title=\"$cid_title\" rel=\"permalink\">$cid_text</a>";
-
                     $actions['copy_aid'] = "<a href=\"javascript:void(0);\" title=\"$aid_title\" rel=\"permalink\">$aid_text</a>";
 
                 }
