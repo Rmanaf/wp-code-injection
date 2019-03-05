@@ -744,18 +744,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
         private function is_settings_page()
         {
 
-            global $pagenow;
-
             $screen = get_current_screen();
-
-            print_r($pagenow);
-
-            print_r($screen);
-
-            if(!in_array($pagenow , ['options-general.php']))
-            {
-                return false;
-            }
 
             if(defined('DIVAN_CONTROL_PANEL'))
             {
@@ -765,12 +754,10 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                     return  $_GET['page'] == 'dcp-settings' &&  $_GET['tab'] == 'general';
 
                 }
-
-                return false;
                 
-            }
+            } 
 
-            return true;
+            return $screen->id == 'options-general';
 
         }
 
