@@ -843,7 +843,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
          * Returns plugin version
          * @since 1.0.0
          */
-        private function get_version()
+        public function get_version()
         {
 
             return get_plugin_data(__FILE__)['Version'];
