@@ -93,7 +93,7 @@ if (!class_exists('WP_Code_Metabox')) {
              * returns the code options default values
              * @since 2.2.8
              */
-            private static function get_default_values($code)
+            public static function get_default_values($code)
             {
 
                 if(is_object($code))

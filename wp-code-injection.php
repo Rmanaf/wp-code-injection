@@ -901,7 +901,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                                 <code style="font-size:11px;"><?php echo $code_options['action_name']; ?></code>
                                 <?php 
                                       else :
-                                        _e("In order to see the AID, You have to publish the Code.");
+                                        _e("In order to see the AID, You have to publish this Code.");
                                       endif;
                                 ?>
                             <dd>
@@ -942,15 +942,37 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                 
                 unset($actions['inline hide-if-no-js']);
 
-                $title = __("Copy the code ID into the clipboard", self::$text_domain);
+                $status = get_post_status($post);
 
-                $text = __("Copy the ID" , self::$text_domain);
+                $needles = [$post->post_title, '”' , '“'];
 
-                $actions['edit'] = str_replace($post->post_title , '' , $actions['edit']);
+                if(isset($actions['edit']))
+                {
+                    $actions['edit'] = str_replace($needles , '' , $actions['edit']);
+                }
 
-                $actions['trash'] = str_replace($post->post_title , '' , $actions['trash']);
+                if(isset($actions['trash']))
+                {
+                    $actions['trash'] = str_replace($needles , '' , $actions['trash']);
+                }
 
-                $actions['copy_to_clipboard'] = "<a href=\"javascript:void(0);\" title=\"$title\" rel=\"permalink\">$text</a>";
+                
+                if('private' != $status)
+                {
+
+                    $cid_title = __("Copy the Code ID into the Clipboard", self::$text_domain);
+
+                    $cid_text = __("Copy CID" , self::$text_domain);
+
+                    $aid_title =  __("Copy the Action ID into the Clipboard", self::$text_domain);
+
+                    $aid_text = __("Copy AID" , self::$text_domain);
+
+                    $actions['copy_cid'] = "<a href=\"javascript:void(0);\" title=\"$cid_title\" rel=\"permalink\">$cid_text</a>";
+
+                    $actions['copy_aid'] = "<a href=\"javascript:void(0);\" title=\"$aid_title\" rel=\"permalink\">$aid_text</a>";
+
+                }
 
             }
 
