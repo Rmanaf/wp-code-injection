@@ -837,16 +837,20 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                     ?>
 
                     <dl>
-                        <dt>
-                            <strong>Categories</strong>
-                        <dt>
-                        <dd>
-                            <?php 
-                                foreach($categories as $c){
-                                    echo "<span>$c->name<span>,";
-                                }
-                            ?>
-                        <dd>
+
+                        <?php if(is_array($categories) && count($categories) > 0) : ?>
+                            <dt>
+                                <strong>Categories</strong>
+                            <dt>
+                            <dd>
+                                <?php 
+                                    foreach($categories as $c){
+                                        echo "<span>$c->name<span>,";
+                                    }
+                                ?>
+                            <dd>
+                        <?php endif; ?>
+
                         <dt>
                             <strong>Author</strong>
                         <dt>
@@ -956,8 +960,8 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                     $actions['trash'] = str_replace($needles , '' , $actions['trash']);
                 }
 
-                
-                if('private' != $status)
+
+                if(!in_array($status , ['private', 'draft']))
                 {
 
                     $cid_title = __("Copy the Code ID into the Clipboard", self::$text_domain);
