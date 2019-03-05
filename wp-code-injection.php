@@ -240,7 +240,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
             
             wp_enqueue_script('dcp-tag-editor', plugins_url('assets/jquery.tag-editor.min.js', __FILE__), [], $ver, true);
             
-            wp_enqueue_script('dcp-code-injection', plugins_url('assets/wp-code-injection-admin.js', __FILE__), [], $ver, false);
+            wp_enqueue_script('dcp-code-injection', plugins_url('assets/wp-ci-general-settings.js', __FILE__), ['jquery'], $ver, false);
             
         }
 
@@ -746,6 +746,12 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
             global $pagenow;
 
+            $screen = get_current_screen();
+
+            print_r($pagenow);
+
+            print_r($screen);
+
             if(!in_array($pagenow , ['options-general.php']))
             {
                 return false;
@@ -761,6 +767,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                 }
 
                 return false;
+                
             }
 
             return true;
