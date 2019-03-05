@@ -232,6 +232,8 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
             if($this->is_settings_page()) {  
 
+                print_r(range(0,100));
+
                 wp_enqueue_style('dcp-tag-editor');
 
                 wp_enqueue_script('dcp-caret');
@@ -740,7 +742,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
 
         /**
-         * Checks if is in code edit/new page
+         * checks if is in the General settings page
          * @since 2.2.6
          */
         private function is_settings_page()
