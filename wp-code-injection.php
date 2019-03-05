@@ -257,6 +257,8 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
             $ver = $this->get_version();
 
+            wp_enqueue_script('dcp-code-injection-essentials', plugins_url('assets/essentials.js', __FILE__), ['jquery'] , $ver, true);
+
             wp_enqueue_style('dcp-code-injection', plugins_url('assets/wp-code-injection-admin.css', __FILE__), [], $ver, 'all');
             
             if( $this->is_settings_page() ) {
@@ -897,13 +899,13 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
                         <dl>
                             <dt>
-                                <strong>Code ID</strong>
+                                <strong><?php _e("Code ID") ?></strong>
                             <dt>
                             <dd>
                                 <code style="font-size:11px;"><?php echo $code->post_title; ?></code>
                             <dd>
                             <dt>
-                                <strong>Action ID</strong>
+                                <strong><?php _e("Action Name") ?></strong>
                             <dt>
                             <dd>
                                 <?php if(!empty($code_options['action_name'])) : ?>

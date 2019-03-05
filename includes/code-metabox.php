@@ -212,7 +212,7 @@ if (!class_exists('WP_Code_Metabox')) {
                         <?php 
                             if(!empty($action_name))
                             {
-                                _e("<p>Action Name:</p><code>$action_name</code>" , self::$text_domain);
+                                _e("<p>Action Name:</p><code style=\"font-size:11px;\">$action_name</code>" , self::$text_domain);
                             }
                             else
                             {
