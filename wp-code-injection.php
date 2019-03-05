@@ -140,7 +140,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
             
             add_filter('title_save_pre', [$this, 'auto_generate_post_title']);
             add_filter('user_can_richedit', [$this, 'disable_wysiwyg']);
-            add_filter('post_row_actions', [$this, 'remove_quick_edit'], 10, 1);
+            add_filter('post_row_actions', [$this, 'remove_quick_edit'], 10, 2);
             add_filter('manage_code_posts_columns', [$this, 'manage_code_posts_columns']);
             add_action('manage_code_posts_custom_column' , [$this, 'manage_code_posts_custom_column'], 10, 2 );
 
@@ -879,7 +879,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                         
                         <?php 
                             /**
-                             * prevents showing of the code IDs in private mode
+                             * prevents the showing of the code IDs in private mode
                              */
                             if('private' == $status) {
                                 break;
@@ -935,7 +935,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
          * Disable quick edit button
          * @since 1.0.0
          */
-        public function remove_quick_edit($actions)
+        public function remove_quick_edit($actions, $post)
         {
 
             if (isset($_GET['post_type']) && $_GET['post_type'] == 'code') {
@@ -945,8 +945,6 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                 $title = __("Copy the code ID into the clipboard", self::$text_domain);
 
                 $text = __("Copy the ID" , self::$text_domain);
-
-                $post = the_post();
 
                 $actions['edit'] = str_replace("“{$post->post_title}”" , '' , $actions['edit']);
 
