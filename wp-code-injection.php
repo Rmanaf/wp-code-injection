@@ -333,7 +333,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
             global $wpdb;
 
             $querystr = "
-                SELECT $wpdb->posts.ID, $wpdb->posts.post_title, $wpdb->postmeta.meta_value
+                SELECT $wpdb->posts.ID, $wpdb->posts.post_title, $wpdb->posts.post_content, $wpdb->postmeta.meta_value
                 FROM $wpdb->posts, $wpdb->postmeta
                 WHERE $wpdb->posts.ID = $wpdb->postmeta.post_id 
                 AND $wpdb->postmeta.meta_key = 'code_options'
@@ -348,14 +348,14 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
             {
 
                 $code_options = maybe_unserialize( $c->meta_value );
-                
+
                 $acn = $code_options['action_name'];
                 $allow = $code_options['allow_ajax_call'];
 
                 if(!empty($acn) && $allow)
                 {
 
-                    add_action("wp_ajax_$acn");
+                    add_action("wp_ajax_$acn" , "__return_false");
 
                     print_r($acn);
 
