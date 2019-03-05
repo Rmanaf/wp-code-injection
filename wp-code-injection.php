@@ -886,7 +886,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                              * prevents the showing of the code IDs in the following states
                              * private, draft, trash
                              */
-                            if(!in_array($status , ['private', 'draft' , 'trash'])) 
+                            if(in_array($status , ['private', 'draft' , 'trash'])) 
                             {
                                 break;
                             } 
