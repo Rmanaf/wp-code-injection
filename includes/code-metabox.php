@@ -93,23 +93,14 @@ if (!class_exists('WP_Code_Metabox')) {
              * returns the code options default values
              * @since 2.2.8
              */
-            public static function get_default_values($code)
+            public static function get_default_values($code_id)
             {
-
-                if(is_object($code))
-                {
-                    $action = self::get_action_name($code);
-                }
-                else
-                {
-                    $action = self::get_action_name(get_post(intval($code)));
-                }
 
                 return [
                     'description' => '',
                     'tracking' => false,
                     'allow_ajax_call' => false,
-                    'action_name' =>  $action,
+                    'action_name' =>  self::get_action_name(get_post($code_id)),
                 ];
 
             }
@@ -187,6 +178,14 @@ if (!class_exists('WP_Code_Metabox')) {
                 {
 
                     $code_options = $defaults;
+
+                }
+
+                
+                if(empty($code_options['action_name']))
+                {
+
+                    $code_options['action_name'] = self::get_action_name($code);
 
                 }
 

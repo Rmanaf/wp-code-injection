@@ -840,7 +840,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
                         <?php if(is_array($categories) && count($categories) > 0) : ?>
                             <dt>
-                                <strong>Categories</strong>
+                                <strong><?php _e("Categories") ?></strong>
                             <dt>
                             <dd>
                                 <?php 
@@ -852,7 +852,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                         <?php endif; ?>
 
                         <dt>
-                            <strong>Author</strong>
+                            <strong><?php _e("Author") ?></strong>
                         <dt>
                         <dd>
                             <?php  
@@ -861,7 +861,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                             ?>
                         <dd>
                         <dt>
-                            <strong>Date</strong>
+                            <strong><?php _e("Date") ?></strong>
                         <dt>
                         <dd>
                             <?php echo date_i18n( 'F j, Y - g:i a' , strtotime($code->post_modified) ); ?>
