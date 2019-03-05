@@ -5,13 +5,16 @@
     window.ci.ctc = function(element) {
 
         var text = $(element).text();
-        var $temp = $(`<input type="hidden" value="${text}" />`);
+        var $temp = $(`<input value="${text}" />`).css({
+            'position' : 'absolute',
+            'top'   : '-1000px'
+        });
 
         $("body").append($temp);
 
         $temp.select();
         document.execCommand("copy");
-        //$temp.remove();
+        $temp.remove();
         
     }
 
