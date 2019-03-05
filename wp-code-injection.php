@@ -333,15 +333,25 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
             global $wpdb;
 
             $querystr = "
-                SELECT $wpdb->posts.* , $wpdb->postmeta.*
+                SELECT $wpdb->posts.ID cid, $wpdb->posts.post_title ctit, $wpdb->postmeta.meta_value copt
                 FROM $wpdb->posts, $wpdb->postmeta
-                WHERE $wpdb->posts.ID = $wpdb->postmeta.post_id 
+                WHERE cid = $wpdb->postmeta.post_id 
                 AND $wpdb->postmeta.meta_key = 'code_options'
                 AND $wpdb->posts.post_status = 'publish' 
                 AND $wpdb->posts.post_type = 'code'
             ";
-        
+
             $codes = $wpdb->get_results($querystr, OBJECT);
+
+            foreach($codes as $c)
+            {
+                
+                $code_options = maybe_unserialize( $c->copt );
+
+                print_r($code_options);
+
+            }
+            
 
             print_r($codes);
 
