@@ -52,14 +52,15 @@
  */
 
 /**
+ * @author Arman Afzal <rman.afzal@gmail.com>
  * @package WP_Divan_Control_Panel
  * @version 2.2.8
  */
 
 
-if (!class_exists('WP_Code_Metabox')) {
+if (!class_exists('WP_CI_Code_Metabox')) {
 
-        class WP_Code_Metabox
+        class WP_CI_Code_Metabox
         {
 
             private static $action_prefix = 'action-';

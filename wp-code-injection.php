@@ -113,7 +113,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
              * initialize the meta box component
              * @since 2.2.8
              */
-            $this->code_meta_box = new WP_Code_Metabox();
+            $this->code_meta_box = new WP_CI_Code_Metabox();
 
 
             /**
@@ -788,7 +788,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
                     $status = get_post_status($post_id);
                     
-                    $code_options = WP_Code_Metabox::get_code_options($code);
+                    $code_options = WP_CI_Code_Metabox::get_code_options($code);
                  
                     ?>
                         <p style="text-align: justify;">
