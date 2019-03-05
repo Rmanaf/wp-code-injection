@@ -855,7 +855,10 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                             <strong>Author</strong>
                         <dt>
                         <dd>
-                            <?php  echo get_the_author_meta('display_name' , $code->post_author) . " — <" . get_the_author_meta('user_email' , $code->post_author) . ">"; ?>
+                            <?php  
+                                echo esc_html(get_the_author_meta('display_name' , $code->post_author) . 
+                                " — <" . get_the_author_meta('user_email' , $code->post_author) . ">"); 
+                            ?>
                         <dd>
                         <dt>
                             <strong>Date</strong>
