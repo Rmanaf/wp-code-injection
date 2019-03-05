@@ -137,8 +137,6 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
             $this->ajax_call_handler = new WP_AJAX_Call_Handler();
 
 
-            $this->register_scripts();
-
 
             // check "Unsafe" settings
             $use_shortcode = get_option('wp_dcp_unsafe_widgets_shortcodes', 0);
@@ -157,10 +155,8 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
             add_shortcode('unsafe', [$this, 'unsafe_shortcode']);
             
-
             add_action('admin_init', [$this, 'admin_init']);
             
-
             add_action('admin_enqueue_scripts', [$this, 'print_scripts']);
 
             add_action('widgets_init', [$this, 'widgets_init']);    
@@ -170,10 +166,8 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
         }
 
 
-        private function register_scripts()
+        private function register_scripts($ver)
         {
-
-            $ver = self::get_version();
 
             self::$codemirror_bundle = [
                 'dcp-codemirror','dcp-codemirror-addon-fold','dcp-codemirror-addon-closebrackets',
@@ -227,6 +221,8 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
         {
 
             $ver = $this->get_version();
+
+            $this->register_scripts($ver);
 
             wp_enqueue_script('dcp-code-injection-essentials', plugins_url('assets/essentials.js', __FILE__), ['jquery'] , $ver, true);
 
