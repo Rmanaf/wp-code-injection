@@ -232,10 +232,9 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
             if($this->is_settings_page()) {  
 
-                print_r(range(0,100));
-
                 wp_enqueue_style('dcp-tag-editor');
 
+                wp_enqueue_script('jquery');
                 wp_enqueue_script('dcp-caret');
                 wp_enqueue_script('dcp-tag-editor');
                 wp_enqueue_script('dcp-code-injection', plugins_url('assets/wp-ci-general-settings.js', __FILE__), ['jquery'], $ver, false);
