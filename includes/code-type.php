@@ -109,8 +109,7 @@ if (!class_exists('WP_CI_Code_Type')) {
                 wp_enqueue_script($script);
             }
             
-            // ci script
-            wp_enqueue_script('dcp-code-injection');
+            wp_enqueue_script('dcp-code-injection-editor');
 
         }
 

@@ -206,7 +206,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
              wp_register_script('dcp-codemirror-mode-clike', plugins_url('assets/codemirror/mode/clike/clike.js', __FILE__), [], $ver, false);
              wp_register_script('dcp-codemirror-mode-php', plugins_url('assets/codemirror/mode/php/php.js', __FILE__), [], $ver, false);
  
-             wp_register_script('dcp-code-injection', plugins_url('assets/code-editor.js', __FILE__), [], $ver, false);
+             wp_register_script('dcp-code-injection-editor', plugins_url('assets/code-editor.js', __FILE__), [], $ver, false);
  
 
              //tagEditor
@@ -230,6 +230,9 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
             $this->register_scripts($ver);
 
+            wp_enqueue_script('dcp-code-injection-essentials', plugins_url('assets/essentials.js', __FILE__), ['jquery'] , $ver, true);
+            wp_enqueue_style('dcp-code-injection', plugins_url('assets/wp-code-injection-admin.css', __FILE__), [], $ver, 'all');
+
             if($this->is_settings_page()) {  
 
                 wp_enqueue_style('dcp-tag-editor');
@@ -239,10 +242,6 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                 wp_enqueue_script('dcp-code-injection', plugins_url('assets/wp-ci-general-settings.js', __FILE__), ['jquery'], $ver, true);
             
             }
-
-            wp_enqueue_script('dcp-code-injection-essentials', plugins_url('assets/essentials.js', __FILE__), ['jquery'] , $ver, true);
-            wp_enqueue_style('dcp-code-injection', plugins_url('assets/wp-code-injection-admin.css', __FILE__), [], $ver, 'all');
-            
             
         }
 
