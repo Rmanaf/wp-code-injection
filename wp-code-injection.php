@@ -149,6 +149,9 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
             add_filter('dcp_shortcodes_list', [&$this, 'add_shortcode_to_list']);
 
 
+            $this->init_codes_actions();
+
+
         }
 
         /**
@@ -322,6 +325,25 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
         public function init_package_manager(){
 
             $this->package_manager = new WP_Package_Manager();
+
+        }
+
+        private function init_codes_actions(){
+
+            global $wpdb;
+
+            $querystr = "
+                SELECT $wpdb->posts.* 
+                FROM $wpdb->posts, $wpdb->postmeta
+                WHERE $wpdb->posts.ID = $wpdb->postmeta.post_id 
+                AND $wpdb->postmeta.meta_key = 'code_options'
+                AND $wpdb->posts.post_status = 'publish' 
+                AND $wpdb->posts.post_type = 'code'
+            ";
+        
+            $codes = $wpdb->get_results($querystr, OBJECT);
+
+            print_r($codes);
 
         }
 
