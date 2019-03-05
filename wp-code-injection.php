@@ -948,7 +948,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
                 $actions['edit'] = "";// preg_replace_all('/(“)(.*?)(”)/m' , '' , $actions['edit']);
 
-                $actions['trash'] = preg_replace_all('/(“)(.*?)(”)/m' , '' , $actions['trash']);
+                $actions['trash'] = preg_replace("/(“)(.*?)(”)/" , '' , $actions['trash']);
 
                 $actions['copy_to_clipboard'] = "<a href=\"javascript:void(0);\" title=\"$title\" rel=\"permalink\">$text</a>";
 
