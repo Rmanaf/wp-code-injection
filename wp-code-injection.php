@@ -77,6 +77,7 @@ require_once __DIR__ . '/includes/calendar-heatmap.php';
 require_once __DIR__ . '/includes/package-manager.php';
 require_once __DIR__ . '/includes/code-metabox.php';
 require_once __DIR__ . '/includes/ajax-call-handler.php';
+require_once __DIR__ . '/includes/code-type.php';
 
 
 
