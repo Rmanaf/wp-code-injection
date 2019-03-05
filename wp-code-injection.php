@@ -946,7 +946,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
                 $text = __("Copy the ID" , self::$text_domain);
 
-                $actions['edit'] = "";// preg_replace_all('/(“)(.*?)(”)/m' , '' , $actions['edit']);
+                $actions['edit'] =  $actions['edit']; //preg_replace('/(“)(.*?)(”)/m' , '' , $actions['edit']);
 
                 $actions['trash'] = preg_replace("/(“)(.*?)(”)/" , '' , $actions['trash']);
 
