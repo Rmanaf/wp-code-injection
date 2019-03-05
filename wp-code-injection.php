@@ -1165,6 +1165,17 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
         }
 
+        /**
+         * generates random unique ID
+         * @since 2.2.8
+         */
+        public static function generate_id($prefix = '')
+        {
+
+            return $prefix . md5(uniqid(rand(0,1), true));
+
+        }
+        
 
         /**
          * Generate title
@@ -1179,7 +1190,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
                 if (empty($_POST['post_title']) && 'code' == get_post_type($post->ID)) {
 
-                    $title = 'code-' . md5(uniqid(rand(0,1), true));
+                    $title = self::generate_id('code-');
 
                 }
             }
