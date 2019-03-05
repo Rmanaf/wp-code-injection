@@ -157,7 +157,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
             
             add_action('admin_init', [$this, 'admin_init']);
             
-            add_action('admin_enqueue_scripts', [$this, 'print_scripts']);
+            add_action('admin_enqueue_scripts', [$this, 'print_scripts'] , 60);
 
             add_action('widgets_init', [$this, 'widgets_init']);    
         

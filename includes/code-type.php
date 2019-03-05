@@ -86,7 +86,7 @@ if (!class_exists('WP_CI_Code_Type')) {
 
             add_action('manage_code_posts_custom_column' , [$this, 'manage_code_posts_custom_column'], 10, 2 );
 
-            add_action('admin_enqueue_scripts', [$this, 'print_scripts']);
+            add_action('admin_enqueue_scripts', [$this, 'print_scripts'], 50);
 
         }
 
