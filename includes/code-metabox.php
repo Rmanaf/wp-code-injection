@@ -65,10 +65,12 @@ if (!class_exists('WP_CI_Code_Metabox')) {
 
             private static $action_prefix = 'action-';
 
-            private static $text_domain = 'code-injection';
+            private static $text_domain;
 
             function __construct()
             {
+
+                self::$text_domain = WP_Code_Injection_Plugin::$text_domain;
 
                 add_action('add_meta_boxes',       [$this, 'add_meta_box']);
 
