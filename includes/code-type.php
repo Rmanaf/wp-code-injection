@@ -83,11 +83,54 @@ if (!class_exists('WP_CI_Code_Type')) {
             add_filter('post_row_actions', [$this, 'custom_row_actions'], 10, 2);
 
             add_filter('manage_code_posts_columns', [$this, 'manage_code_posts_columns']);
-            
+
             add_action('manage_code_posts_custom_column' , [$this, 'manage_code_posts_custom_column'], 10, 2 );
 
+            add_action('admin_enqueue_scripts', [$this, 'print_scripts']);
 
         }
+
+
+        public function print_scripts()
+        {
+            
+            // "CI" assets
+            if (!$this->is_code_page()) {
+                return;
+            }
+
+            $ver = $this->get_version();
+
+            wp_enqueue_style('dcp-codemirror', plugins_url('assets/codemirror/lib/codemirror.css', __FILE__), [], $ver, 'all');
+            wp_enqueue_style('dcp-codemirror-dracula', plugins_url('assets/codemirror/theme/dracula.css', __FILE__), [], $ver, 'all');
+
+            //codemirror
+            wp_enqueue_script('dcp-codemirror', plugins_url('assets/codemirror/lib/codemirror.js', __FILE__), ['jquery'], $ver, false);
+
+            // addons
+            wp_enqueue_script('dcp-codemirror-addon-fold', plugins_url('assets/codemirror/addons/fold/xml-fold.js', __FILE__), [], $ver, false);
+            wp_enqueue_script('dcp-codemirror-addon-closebrackets', plugins_url('assets/codemirror/addons/edit/closebrackets.js', __FILE__), [], $ver, false);
+            wp_enqueue_script('dcp-codemirror-addon-matchbrackets', plugins_url('assets/codemirror/addons/edit/matchbrackets.js', __FILE__), [], $ver, false);
+            wp_enqueue_script('dcp-codemirror-addon-matchtags', plugins_url('assets/codemirror/addons/edit/matchtags.js', __FILE__), [], $ver, false);
+            wp_enqueue_script('dcp-codemirror-addon-closetag', plugins_url('assets/codemirror/addons/edit/closetag.js', __FILE__), [], $ver, false);
+            wp_enqueue_script('dcp-codemirror-addon-search', plugins_url('assets/codemirror/addons/search/match-highlighter.js', __FILE__), [], $ver, false);
+            wp_enqueue_script('dcp-codemirror-addon-fullscreen', plugins_url('assets/codemirror/addons/display/fullscreen.js', __FILE__), [], $ver, false);
+
+            //keymap
+            wp_enqueue_script('dcp-codemirror-keymap', plugins_url('assets/codemirror/keymap/sublime.js', __FILE__), [], $ver, false);
+
+            //mode
+            wp_enqueue_script('dcp-codemirror-mode-xml', plugins_url('assets/codemirror/mode/xml/xml.js', __FILE__), [], $ver, false);
+            wp_enqueue_script('dcp-codemirror-mode-js', plugins_url('assets/codemirror/mode/javascript/javascript.js', __FILE__), [], $ver, false);
+            wp_enqueue_script('dcp-codemirror-mode-css', plugins_url('assets/codemirror/mode/css/css.js', __FILE__), [], $ver, false);
+            wp_enqueue_script('dcp-codemirror-mode-htmlmixed', plugins_url('assets/codemirror/mode/htmlmixed/htmlmixed.js', __FILE__), [], $ver, false);
+            wp_enqueue_script('dcp-codemirror-mode-clike', plugins_url('assets/codemirror/mode/clike/clike.js', __FILE__), [], $ver, false);
+            wp_enqueue_script('dcp-codemirror-mode-php', plugins_url('assets/codemirror/mode/php/php.js', __FILE__), [], $ver, false);
+
+            wp_enqueue_script('dcp-code-injection', plugins_url('assets/code-editor.js', __FILE__), [], $ver, false);
+
+        }
+
 
         public function admin_head()
         {
