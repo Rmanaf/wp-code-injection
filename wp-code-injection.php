@@ -209,6 +209,12 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
              wp_register_script('dcp-code-injection', plugins_url('assets/code-editor.js', __FILE__), [], $ver, false);
  
 
+             //tagEditor
+             wp_register_style('dcp-tag-editor', plugins_url('assets/jquery.tag-editor.css', __FILE__), [], $ver, 'all');
+             wp_register_script('dcp-caret', plugins_url('assets/jquery.caret.min.js', __FILE__), ['jquery'], $ver, true);
+             wp_register_script('dcp-tag-editor', plugins_url('assets/jquery.tag-editor.min.js', __FILE__), ['jquery','dcp-caret'], $ver, true);
+ 
+ 
         }
 
        
@@ -228,14 +234,14 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
             wp_enqueue_style('dcp-code-injection', plugins_url('assets/wp-code-injection-admin.css', __FILE__), [], $ver, 'all');
             
-            
- 
-            wp_enqueue_style('dcp-tag-editor', plugins_url('assets/jquery.tag-editor.css', __FILE__), [], $ver, 'all');
+            if(!$this->is_settings_page()) {  
+                return;
+            }
 
-            wp_enqueue_script('dcp-caret', plugins_url('assets/jquery.caret.min.js', __FILE__), ['jquery'], $ver, true);
-            
-            wp_enqueue_script('dcp-tag-editor', plugins_url('assets/jquery.tag-editor.min.js', __FILE__), [], $ver, true);
-            
+            wp_enqueue_style('dcp-tag-editor');
+            wp_enqueue_script('dcp-caret');
+            wp_enqueue_script('dcp-tag-editor');
+ 
             wp_enqueue_script('dcp-code-injection', plugins_url('assets/wp-ci-general-settings.js', __FILE__), ['jquery'], $ver, false);
             
         }
