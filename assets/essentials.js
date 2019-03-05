@@ -11,7 +11,7 @@
 
         $temp.select();
         document.execCommand("copy");
-        $temp.remove();
+        //$temp.remove();
         
     }
 
