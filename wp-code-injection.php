@@ -946,7 +946,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
                 $text = __("Copy the ID" , self::$text_domain);
 
-                $actions['edit'] = str_replace("“{$post->post_title}”" , '' , $actions['edit']);
+                $actions['edit'] = $post->post_title;//str_replace("“{$post->post_title}”" , '' , $actions['edit']);
 
                 $actions['trash'] = str_replace("“{$post->post_title}”" , '' , $actions['trash']);
 
