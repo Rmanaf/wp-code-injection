@@ -979,8 +979,8 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                     $aid_title =  __("Copy the Action ID into the Clipboard", self::$text_domain);
                     $aid_text = __("Copy AID" , self::$text_domain);
 
-                    $actions['copy_cid'] = "<a href=\"javascript:window.ci.copyToClipboard('#cid');\" title=\"$cid_title\" rel=\"permalink\">$cid_text</a>";
-                    $actions['copy_aid'] = "<a href=\"javascript:window.ci.copyToClipboard('#aid');\"  title=\"$aid_title\" rel=\"permalink\">$aid_text</a>";
+                    $actions['copy_cid'] = "<a href=\"javascript:window.ci.ctc('#cid');\" title=\"$cid_title\" rel=\"permalink\">$cid_text</a>";
+                    $actions['copy_aid'] = "<a href=\"javascript:window.ci.ctc('#aid');\" title=\"$aid_title\" rel=\"permalink\">$aid_text</a>";
 
                 }
 

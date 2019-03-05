@@ -2,7 +2,7 @@
 
     window.ci = {};
 
-    window.ci.copyToClipboard = function(element) {
+    window.ci.ctc = function(element) {
 
         var text = $(element).text();
         var $temp = $(`<input type="hidden" value="${text}" />`);
