@@ -149,7 +149,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
             add_filter('dcp_shortcodes_list', [&$this, 'add_shortcode_to_list']);
 
 
-            $this->init_codes_actions();
+            $this->active_ajax_calls();
 
 
         }
@@ -328,7 +328,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
         }
 
-        private function init_codes_actions(){
+        private function active_ajax_calls(){
 
             global $wpdb;
 
@@ -348,12 +348,21 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
             {
 
                 $code_options = maybe_unserialize( $c->meta_value );
+                
+                $acn = $code_options['action_name'];
+                $allow = $code_options['allow_ajax_call'];
 
-                print_r($code_options);
+                if(!empty($acn) && $allow)
+                {
+
+                    add_action("wp_ajax_$acn");
+
+                    print_r($acn);
+
+                }
 
             }
             
-
         }
 
 
