@@ -333,7 +333,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
             global $wpdb;
 
             $querystr = "
-                SELECT $wpdb->posts.* 
+                SELECT $wpdb->posts.* , $wpdb->postmeta.*
                 FROM $wpdb->posts, $wpdb->postmeta
                 WHERE $wpdb->posts.ID = $wpdb->postmeta.post_id 
                 AND $wpdb->postmeta.meta_key = 'code_options'
