@@ -343,18 +343,16 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
             $codes = $wpdb->get_results($querystr, OBJECT);
 
-            /*
+            
             foreach($codes as $c)
             {
 
-                $code_options = maybe_unserialize( $c->copt );
+                $code_options = maybe_unserialize( $c->meta_value );
 
                 print_r($code_options);
 
-            }*/
+            }
             
-
-            print_r($codes);
 
         }
 
