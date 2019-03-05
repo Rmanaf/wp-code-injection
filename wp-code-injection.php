@@ -946,9 +946,9 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
                 $text = __("Copy the ID" , self::$text_domain);
 
-                $actions['edit'] = preg_replace('/(Edit “)(.*?)(”)/' , 'Edit' ,$actions['edit']);
+                $actions['edit'] = preg_replace('/(“)(.*?)(”)/gm' , '' , $actions['edit']);
 
-                $actions['trash'] = preg_replace('/(Move “)(.*?)(”)/' , 'Move' ,$actions['trash']);
+                $actions['trash'] = preg_replace('/(“)(.*?)(”)/gm' , '' , $actions['trash']);
 
                 $actions['copy_to_clipboard'] = "<a href=\"javascript:void(0);\" title=\"$title\" rel=\"permalink\">$text</a>";
 
