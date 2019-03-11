@@ -1,11 +1,11 @@
 ;(($) => {
     $(document).ready(() => {
-        $("pkg_add").click(() => {
-            uri = $("pkg_add").val();
-            type = $("pkg_type").val();
+        $("#pkg_add").click(() => {
+            uri = $("#pkg_uri").val();
+            type = $("#pkg_type").val();
             type_name = type == 0 ? "style" : "script";
 
-            $("pkgs_container").append(`
+            $("#pkgs_container").append(`
                 <li>
                     <span class="pkg-${type_name}">
                         ${uri}
