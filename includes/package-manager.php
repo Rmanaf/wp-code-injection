@@ -52,6 +52,7 @@
  */
 
 /**
+ * @author Arman Afzal <rman.afzal@gmail.com>
  * @package WP_Divan_Control_Panel
  * @version 2.2.8
  */
@@ -73,7 +74,7 @@ if (!class_exists('WP_Package_Manager'))
 
         /**
          * Adds the "Packages" tab into the Control panel
-         * @since 1.0.0
+         * @since 2.2.8
          */
         public function dcp_packages_tab()
         {
@@ -90,7 +91,7 @@ if (!class_exists('WP_Package_Manager'))
 
         /**
          * adds the packages menu item into the admin menu
-         * @since 1.0.0
+         * @since 2.2.8
          */
         public function admin_menu()
         {
@@ -103,6 +104,56 @@ if (!class_exists('WP_Package_Manager'))
                 [$this, 'packages_content'],
                 'dashicons-cloud'
             );
+
+        }
+
+        /**
+         * package manager template
+         * @since 2.2.8
+         */
+        public function packages_content()
+        {
+
+            $packages = get_option( 'wp_dcp_pm_packages', [] );
+
+            ?>
+
+            <ul class="packages-list">
+
+                <li>
+                    <input type="text" class="regular-text"  />
+                    <select>
+                        <option>CSS</option>
+                        <option>Javascript</option>
+                    </select>
+                    <button>Add</button>
+                </li>
+
+            <?php foreach($packages as $p): ?>
+
+               <li>
+                    <span class="<?php echo "pkg-$p->type" ?>">
+                        <input type="hidden" id="<?php echo $p->id; ?>" />
+                        <?php echo $p->uri; ?> 
+                        <i>x</i> 
+                    </span>
+                </li>
+
+            <?php
+
+            endforeach;
+
+        }
+
+
+        /**
+         * reset all settings
+         * @since 2.2.8
+         */
+        public static function reset()
+        {
+
+            delete_option( 'wp_dcp_pm_packages' );
 
         }
 

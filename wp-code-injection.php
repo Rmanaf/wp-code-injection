@@ -80,7 +80,6 @@ require_once __DIR__ . '/includes/ajax-call-handler.php';
 require_once __DIR__ . '/includes/code-type.php';
 
 
-
 if (!class_exists('WP_Code_Injection_Plugin')) {
 
     class WP_Code_Injection_Plugin
@@ -134,7 +133,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
              * initialize the ajax call handler component
              * @since 2.2.8
              */
-            $this->ajax_call_handler = new WP_AJAX_Call_Handler();
+            $this->ajax_call_handler = new WP_CI_AJAX_Call_Handler();
 
 
 
@@ -231,6 +230,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
             $this->register_scripts($ver);
 
             wp_enqueue_script('dcp-code-injection-essentials', plugins_url('assets/essentials.js', __FILE__), ['jquery'] , $ver, true);
+            
             wp_enqueue_style('dcp-code-injection', plugins_url('assets/wp-code-injection-admin.css', __FILE__), [], $ver, 'all');
 
             if($this->is_settings_page()) {  
@@ -608,7 +608,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
         }
 
         /** 
-         * Settings section 
+         * Settings fields callback 
          * @since 1.0.0
          */
         public function settings_field_cb($args)

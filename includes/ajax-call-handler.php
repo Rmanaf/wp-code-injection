@@ -56,9 +56,9 @@
  * @version 2.2.8
  */
 
-if (!class_exists('WP_AJAX_Call_Handler')) {
+if (!class_exists('WP_CI_AJAX_Call_Handler')) {
 
-    class WP_AJAX_Call_Handler
+    class WP_CI_AJAX_Call_Handler
     {
 
         public function __construct()
@@ -66,12 +66,23 @@ if (!class_exists('WP_AJAX_Call_Handler')) {
             
             $this->active_ajax_calls();
 
+            add_action('wp_enqueue_scripts', [$this , 'enqueue_ajax_scripts']);
+
         }
+
+
+        public function enqueue_ajax_scripts(){
+
+            wp_localize_script( 'ci-ajax-script', 'ci_ajax_object', ['ajax_url' => admin_url( 'admin-ajax.php' )]);
+
+        }
+
 
         private function active_ajax_calls(){
 
             global $wpdb;
 
+           
             $querystr = "
                 SELECT $wpdb->posts.ID, $wpdb->posts.post_title, $wpdb->posts.post_content, $wpdb->postmeta.meta_value
                 FROM $wpdb->posts, $wpdb->postmeta
