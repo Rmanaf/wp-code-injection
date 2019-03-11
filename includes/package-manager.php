@@ -63,8 +63,12 @@ if (!class_exists('WP_Package_Manager'))
     class WP_Package_Manager
     {
 
-        function __construct()
+        private static $text_domain;
+
+        function __construct($text_domain)
         {
+
+            self::$text_domain = $text_domain;
 
             add_action('admin_menu', [$this, 'admin_menu']);
 
@@ -97,8 +101,8 @@ if (!class_exists('WP_Package_Manager'))
         {
 
             add_menu_page(
-                __("Packages", 'code-injection'),
-                __("Packages", 'code-injection'),
+                __("Packages", self::$text_domain),
+                __("Packages", self::$text_domain),
                 'manage_options',
                 'dcp-package-manager',
                 [$this, 'packages_content'],
@@ -121,12 +125,17 @@ if (!class_exists('WP_Package_Manager'))
             <ul class="packages-list">
 
                 <li>
-                    <input type="text" class="regular-text"  />
-                    <select>
+                    <span><strong>URI: </strong><input type="text" class="regular-text" id="pkg_uri" /></span>
+                    
+                    <span>
+                      <strong>Type: </strong>
+                      <select>
                         <option>CSS</option>
                         <option>Javascript</option>
-                    </select>
-                    <button>Add</button>
+                      </select>
+                    </span>
+
+                    <button class="button"><?php _e("Add" , self::$text_domain); ?></button>
                 </li>
 
             <?php foreach($packages as $p): ?>

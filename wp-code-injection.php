@@ -126,7 +126,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
              * initialize the package manager component
              * @since 2.2.8
              */
-            $this->package_manager = new WP_Package_Manager();
+            $this->package_manager = new WP_Package_Manager(self::$text_domain);
 
 
             /**
