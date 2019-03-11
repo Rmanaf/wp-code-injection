@@ -187,7 +187,7 @@ if (!class_exists('WP_CI_Assets_Manager'))
 
             if($this->is_pm_page()){
 
-
+                wp_enqueue_script('package-manager');
 
             }
 
@@ -201,10 +201,8 @@ if (!class_exists('WP_CI_Assets_Manager'))
         {
 
             $screen = get_current_screen();
-            
-            print_r($screen->id);
 
-            return $screen->id == 'options-general';
+            return $screen->id == 'toplevel_page_dcp-package-manager';
 
         }
 
