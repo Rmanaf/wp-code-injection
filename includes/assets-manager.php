@@ -185,8 +185,28 @@ if (!class_exists('WP_CI_Assets_Manager'))
             
             }
 
+            if($this->is_pm_page()){
+
+
+
+            }
+
         }
 
+        /**
+         * checks if is in the Package manager page
+         * @since 2.2.8
+         */
+        private function is_pm_page()
+        {
+
+            $screen = get_current_screen();
+            
+            print_r($screen->id);
+
+            return $screen->id == 'options-general';
+
+        }
 
 
          /**
