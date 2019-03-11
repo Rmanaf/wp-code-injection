@@ -121,23 +121,31 @@ if (!class_exists('WP_Package_Manager'))
             $packages = get_option( 'wp_dcp_pm_packages', [] );
 
             ?>
+            <style>
+                #pkg_type{
+                    margin:0;
+                    height:auto;
+                }
+            </style>
 
-            <h2><?php _e("Packages", self::$text_domain); ?><h2>
+            <h2><?php _e("Packages", self::$text_domain); ?></h2>
 
             <ul class="packages-list">
 
                 <li>
+                
                     <span><strong>URI: </strong><input type="text" class="regular-text" id="pkg_uri" /></span>
                     
                     <span>
                       <strong>Type: </strong>
-                      <select>
+                      <select id="pkg_type">
                         <option>CSS</option>
                         <option>Javascript</option>
                       </select>
                     </span>
 
                     <button class="button"><?php _e("Add" , self::$text_domain); ?></button>
+
                 </li>
 
             <?php foreach($packages as $p): ?>
