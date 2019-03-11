@@ -79,7 +79,7 @@ if (!class_exists('WP_CI_Assets_Manager'))
 
             $this->version = $version;
 
-            add_action( 'admin_enqueue_scripts', [$this , 'register_assets']);
+            add_action( 'admin_enqueue_scripts', [$this , 'register_assets'], 40);
 
         }
 
