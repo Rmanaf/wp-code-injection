@@ -174,33 +174,6 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
         }
 
 
-
-        /**
-         * Prints admin scripts
-         * @since 1.0.0
-         */
-        public function print_scripts()
-        {
-
-            $ver = $this->get_version();
-
-            wp_enqueue_script('dcp-code-injection-essentials', plugins_url('assets/essentials.js', __FILE__), ['jquery'] , $ver, true);
-            
-            wp_enqueue_style('dcp-code-injection', plugins_url('assets/wp-code-injection-admin.css', __FILE__), [], $ver, 'all');
-
-            if($this->is_settings_page()) {  
-
-                wp_enqueue_style('dcp-tag-editor');
-
-                wp_enqueue_script('dcp-caret');
-                wp_enqueue_script('dcp-tag-editor');
-                wp_enqueue_script('dcp-code-injection', plugins_url('assets/wp-ci-general-settings.js', __FILE__), ['jquery'], $ver, true);
-            
-            }
-            
-        }
-
-
         /**
          * "Unsafe" shortcode
          * @since 2.2.6
@@ -693,31 +666,6 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
         }
 
 
-        /**
-         * checks if is in the General settings page
-         * @since 2.2.6
-         */
-        private function is_settings_page()
-        {
-
-            $screen = get_current_screen();
-
-            if(defined('DIVAN_CONTROL_PANEL'))
-            {
-
-                if(isset($_GET['page']) && isset($_GET['tab'])){
-
-                    return  $_GET['page'] == 'dcp-settings' &&  $_GET['tab'] == 'general';
-
-                }
-                
-            } 
-
-            return $screen->id == 'options-general';
-
-        }
-
-    
 
         /**
          * finds shortcode, and its parameters from the string

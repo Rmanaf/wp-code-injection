@@ -79,7 +79,8 @@ if (!class_exists('WP_CI_Assets_Manager'))
 
             $this->version = $version;
 
-            add_action( 'admin_enqueue_scripts', [$this , 'register_assets'], 40);
+            add_action( 'admin_enqueue_scripts', [$this , 'register_assets']);
+            add_action( 'admin_enqueue_scripts', [$this , 'print_scripts']);
 
         }
 
@@ -146,12 +147,67 @@ if (!class_exists('WP_CI_Assets_Manager'))
         }
 
 
-
+        /**
+         * register assets
+         * @since 2.2.8
+         */
         function register_assets()
         {
 
             $this->register_styles();
             $this->register_scripts();
+
+        }
+
+
+        /**
+         * print scripts
+         * @since 2.2.8
+         */
+        function print_scripts()
+        {
+
+            $ver = $this->version;
+
+            wp_enqueue_script('dcp-code-injection-essentials', plugins_url('assets/essentials.js', __FILE__), ['jquery'] , $ver, true);
+            
+            wp_enqueue_style('dcp-code-injection', plugins_url('assets/wp-code-injection-admin.css', __FILE__), [], $ver, 'all');
+
+            if($this->is_settings_page()) {  
+
+                wp_enqueue_style('dcp-tag-editor');
+
+                wp_enqueue_script('dcp-caret');
+                wp_enqueue_script('dcp-tag-editor');
+                wp_enqueue_script('dcp-code-injection', plugins_url('assets/wp-ci-general-settings.js', __FILE__), ['jquery'], $ver, true);
+            
+            }
+
+        }
+
+
+
+         /**
+         * checks if is in the General settings page
+         * @since 2.2.8
+         */
+        private function is_settings_page()
+        {
+
+            $screen = get_current_screen();
+
+            if(defined('DIVAN_CONTROL_PANEL'))
+            {
+
+                if(isset($_GET['page']) && isset($_GET['tab'])){
+
+                    return  $_GET['page'] == 'dcp-settings' &&  $_GET['tab'] == 'general';
+
+                }
+                
+            } 
+
+            return $screen->id == 'options-general';
 
         }
 
