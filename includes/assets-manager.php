@@ -114,7 +114,7 @@ if (!class_exists('WP_CI_Assets_Manager'))
             $ver = $this->version;
 
             // package-manager
-            wp_register_script('package-manager', plugins_url('assets/package-manager.js', $this->plugin), ['jquery'], $ver, false);
+            wp_register_script('package-manager', plugins_url('assets/package-manager.js', $this->plugin), ['jquery'], $ver, true);
 
             // codemirror
             wp_register_script('dcp-codemirror', plugins_url('assets/codemirror/lib/codemirror.js', $this->plugin), ['jquery'], $ver, false);
@@ -187,6 +187,7 @@ if (!class_exists('WP_CI_Assets_Manager'))
 
             if($this->is_pm_page()){
 
+                wp_enqueue_style('package-manager');
                 wp_enqueue_script('package-manager');
 
             }

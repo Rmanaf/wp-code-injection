@@ -121,13 +121,6 @@ if (!class_exists('WP_CI_Package_Manager'))
             $packages = get_option( 'wp_dcp_pm_packages', [] );
 
             ?>
-            <style>
-                #pkg_type{
-                    margin: 0px !important;
-                    height: inherit !important;
-                    vertical-align: unset !important;
-                }
-            </style>
 
             <h2><?php _e("Packages", self::$text_domain); ?></h2>
 
