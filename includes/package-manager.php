@@ -122,6 +122,8 @@ if (!class_exists('WP_Package_Manager'))
 
             ?>
 
+            <h2><?php _e("Packages", self::$text_domain); ?><h2>
+
             <ul class="packages-list">
 
                 <li>
