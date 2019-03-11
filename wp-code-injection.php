@@ -144,7 +144,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
              * initialize the assets manager component
              * @since 2.2.8
              */
-            $this->assets_manager = new WP_CI_Assets_Manager(self::$client_version);
+            $this->assets_manager = new WP_CI_Assets_Manager(__FILE__ , self::$client_version);
 
 
 
