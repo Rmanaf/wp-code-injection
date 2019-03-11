@@ -78,6 +78,7 @@ require_once __DIR__ . '/includes/package-manager.php';
 require_once __DIR__ . '/includes/code-metabox.php';
 require_once __DIR__ . '/includes/ajax-call-handler.php';
 require_once __DIR__ . '/includes/code-type.php';
+require_once __DIR__ . '/includes/assets-manager.php';
 
 
 if (!class_exists('WP_Code_Injection_Plugin')) {
@@ -90,12 +91,15 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
         private $package_manager;
         private $database;
         private $custom_post_type;
+        private $assets_manager;
 
         
         public static $text_domain = 'code-injection';
-        private static $role_version = '1.0.0';
 
-        public static $codemirror_bundle;
+        private static $role_version = '1.0.0';
+        
+        private static $client_version = '1.0.0';
+
 
 
         function __construct()
@@ -126,7 +130,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
              * initialize the package manager component
              * @since 2.2.8
              */
-            $this->package_manager = new WP_Package_Manager(self::$text_domain);
+            $this->package_manager = new WP_CI_Package_Manager(self::$text_domain);
 
 
             /**
@@ -134,6 +138,13 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
              * @since 2.2.8
              */
             $this->ajax_call_handler = new WP_CI_AJAX_Call_Handler();
+
+
+            /**
+             * initialize the assets manager component
+             * @since 2.2.8
+             */
+            $this->assets_manager = new WP_CI_Assets_Manager(self::$client_version);
 
 
 
@@ -155,8 +166,6 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
             add_shortcode('unsafe', [$this, 'unsafe_shortcode']);
             
             add_action('admin_init', [$this, 'admin_init']);
-            
-            add_action('admin_enqueue_scripts', [$this, 'print_scripts'] , 40);
 
             add_action('widgets_init', [$this, 'widgets_init']);    
         
@@ -165,58 +174,6 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
         }
 
 
-        private function register_scripts($ver)
-        {
-
-            self::$codemirror_bundle = [
-                'dcp-codemirror','dcp-codemirror-addon-fold','dcp-codemirror-addon-closebrackets',
-                'dcp-codemirror-addon-matchbrackets','dcp-codemirror-addon-matchtags',
-                'dcp-codemirror-addon-closetag','dcp-codemirror-addon-search',
-                'dcp-codemirror-addon-fullscreen','dcp-codemirror-keymap',
-                'dcp-codemirror-mode-xml','dcp-codemirror-mode-js',
-                'dcp-codemirror-mode-css','dcp-codemirror-mode-htmlmixed',
-                'dcp-codemirror-mode-clike', 'dcp-codemirror-mode-php'
-            ];
-
-            wp_register_style('dcp-codemirror', plugins_url('assets/codemirror/lib/codemirror.css', __FILE__), [], $ver, 'all');
-            wp_register_style('dcp-codemirror-dracula', plugins_url('assets/codemirror/theme/dracula.css', __FILE__), [], $ver, 'all');
-
-
-             //codemirror
-             wp_register_script('dcp-codemirror', plugins_url('assets/codemirror/lib/codemirror.js', __FILE__), ['jquery'], $ver, false);
-
-             // addons
-             wp_register_script('dcp-codemirror-addon-fold', plugins_url('assets/codemirror/addons/fold/xml-fold.js', __FILE__), [], $ver, false);
-             wp_register_script('dcp-codemirror-addon-closebrackets', plugins_url('assets/codemirror/addons/edit/closebrackets.js', __FILE__), [], $ver, false);
-             wp_register_script('dcp-codemirror-addon-matchbrackets', plugins_url('assets/codemirror/addons/edit/matchbrackets.js', __FILE__), [], $ver, false);
-             wp_register_script('dcp-codemirror-addon-matchtags', plugins_url('assets/codemirror/addons/edit/matchtags.js', __FILE__), [], $ver, false);
-             wp_register_script('dcp-codemirror-addon-closetag', plugins_url('assets/codemirror/addons/edit/closetag.js', __FILE__), [], $ver, false);
-             wp_register_script('dcp-codemirror-addon-search', plugins_url('assets/codemirror/addons/search/match-highlighter.js', __FILE__), [], $ver, false);
-             wp_register_script('dcp-codemirror-addon-fullscreen', plugins_url('assets/codemirror/addons/display/fullscreen.js', __FILE__), [], $ver, false);
- 
-             //keymap
-             wp_register_script('dcp-codemirror-keymap', plugins_url('assets/codemirror/keymap/sublime.js', __FILE__), [], $ver, false);
- 
-             //mode
-             wp_register_script('dcp-codemirror-mode-xml', plugins_url('assets/codemirror/mode/xml/xml.js', __FILE__), [], $ver, false);
-             wp_register_script('dcp-codemirror-mode-js', plugins_url('assets/codemirror/mode/javascript/javascript.js', __FILE__), [], $ver, false);
-             wp_register_script('dcp-codemirror-mode-css', plugins_url('assets/codemirror/mode/css/css.js', __FILE__), [], $ver, false);
-             wp_register_script('dcp-codemirror-mode-htmlmixed', plugins_url('assets/codemirror/mode/htmlmixed/htmlmixed.js', __FILE__), [], $ver, false);
-             wp_register_script('dcp-codemirror-mode-clike', plugins_url('assets/codemirror/mode/clike/clike.js', __FILE__), [], $ver, false);
-             wp_register_script('dcp-codemirror-mode-php', plugins_url('assets/codemirror/mode/php/php.js', __FILE__), [], $ver, false);
- 
-             wp_register_script('dcp-code-injection-editor', plugins_url('assets/code-editor.js', __FILE__), [], $ver, false);
- 
-
-             //tagEditor
-             wp_register_style('dcp-tag-editor', plugins_url('assets/jquery.tag-editor.css', __FILE__), [], $ver, 'all');
-             wp_register_script('dcp-caret', plugins_url('assets/jquery.caret.min.js', __FILE__), ['jquery'], $ver, false);
-             wp_register_script('dcp-tag-editor', plugins_url('assets/jquery.tag-editor.min.js', __FILE__), ['jquery','dcp-caret'], $ver, false);
- 
- 
-        }
-
-       
 
         /**
          * Prints admin scripts
@@ -226,8 +183,6 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
         {
 
             $ver = $this->get_version();
-
-            $this->register_scripts($ver);
 
             wp_enqueue_script('dcp-code-injection-essentials', plugins_url('assets/essentials.js', __FILE__), ['jquery'] , $ver, true);
             

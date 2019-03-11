@@ -104,7 +104,7 @@ if (!class_exists('WP_CI_Code_Type')) {
             wp_enqueue_style('dcp-codemirror-dracula');
 
             //codemirror
-            foreach(WP_Code_Injection_Plugin::$codemirror_bundle as $script)
+            foreach(WP_CI_Assets_Manager::$codemirror_bundle as $script)
             {
                 wp_enqueue_script($script);
             }

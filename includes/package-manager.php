@@ -57,10 +57,10 @@
  * @version 2.2.8
  */
 
-if (!class_exists('WP_Package_Manager')) 
+if (!class_exists('WP_CI_Package_Manager')) 
 {
 
-    class WP_Package_Manager
+    class WP_CI_Package_Manager
     {
 
         private static $text_domain;
