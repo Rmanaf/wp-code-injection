@@ -171,9 +171,9 @@ if (!class_exists('WP_CI_Assets_Manager'))
 
             $ver = $this->version;
 
-            wp_enqueue_script('dcp-code-injection-essentials', plugins_url('assets/essentials.js', __FILE__), ['jquery'] , $ver, true);
+            wp_enqueue_script('dcp-code-injection-essentials', plugins_url('assets/essentials.js', $this->plugin), ['jquery'] , $ver, true);
             
-            wp_enqueue_style('dcp-code-injection', plugins_url('assets/wp-code-injection-admin.css', __FILE__), [], $ver, 'all');
+            wp_enqueue_style('dcp-code-injection', plugins_url('assets/wp-code-injection-admin.css', $this->plugin), [], $ver, 'all');
 
             if($this->is_settings_page()) {  
 
@@ -181,7 +181,7 @@ if (!class_exists('WP_CI_Assets_Manager'))
 
                 wp_enqueue_script('dcp-caret');
                 wp_enqueue_script('dcp-tag-editor');
-                wp_enqueue_script('dcp-code-injection', plugins_url('assets/wp-ci-general-settings.js', __FILE__), ['jquery'], $ver, true);
+                wp_enqueue_script('dcp-code-injection', plugins_url('assets/wp-ci-general-settings.js', $this->plugin), ['jquery'], $ver, true);
             
             }
 
