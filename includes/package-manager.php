@@ -123,28 +123,29 @@ if (!class_exists('WP_Package_Manager'))
             ?>
             <style>
                 #pkg_type{
-                    margin:0;
-                    height:auto;
+                    margin: 0px !important;
+                    height: inherit !important;
+                    vertical-align: unset !important;
                 }
             </style>
 
             <h2><?php _e("Packages", self::$text_domain); ?></h2>
 
-            <ul class="packages-list">
+            <ul class="packages-list" id="pkgs_container">
 
                 <li>
-                
+
                     <span><strong>URI: </strong><input type="text" class="regular-text" id="pkg_uri" /></span>
                     
                     <span>
                       <strong>Type: </strong>
                       <select id="pkg_type">
-                        <option>CSS</option>
-                        <option>Javascript</option>
+                        <option>Style</option>
+                        <option>Script</option>
                       </select>
                     </span>
 
-                    <button class="button"><?php _e("Add" , self::$text_domain); ?></button>
+                    <button id="pkg_add" class="button"><?php _e("Add" , self::$text_domain); ?></button>
 
                 </li>
 
