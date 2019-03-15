@@ -130,16 +130,16 @@ if (!class_exists('WP_CI_Database')) {
          * Records activity into the database
          * @since 2.2.6
          */
-        public function record_activity($type = 0, $code = null, $error = 0)
+        public function record_activity($type = 0, $code = null, $error = 0, $id = null)
         {
 
             global $wpdb, $post;
 
 
-            if($code != null)
+            if($code != null && $type == 0 && $id != null)
             {
 
-                $co = WP_CI_Code_Metabox::get_code_options($code);
+                $co = WP_CI_Code_Metabox::get_code_options($id);
 
                 print_r($co);
 

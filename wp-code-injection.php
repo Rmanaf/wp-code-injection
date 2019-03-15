@@ -236,7 +236,8 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
             extract(shortcode_atts(['id' => ''], $atts));
 
-            if (empty($id)) {
+            if (empty($id)) 
+            {
 
                 $this->database->record_activity(0 , null , 2);
 
@@ -247,7 +248,8 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
             $code = get_page_by_title($id, OBJECT, 'code');
 
-            if (is_object($code)) {
+            if (is_object($code)) 
+            {
 
                 $render_shortcodes = get_option('wp_dcp_code_injection_allow_shortcode', false);
 
@@ -259,7 +261,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
                     if (isset($params['id']) && $params['id'] == $id) {
 
-                        $this->database->record_activity(0 , $id , 3);
+                        $this->database->record_activity(0 , $id , 3, $code->ID);
 
                         return;
 
@@ -271,7 +273,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
                 if ($render_shortcodes) {
 
-                    $this->database->record_activity(0 , $id, 0);
+                    $this->database->record_activity(0 , $id, 0, $code->ID);
 
                     return do_shortcode($code->post_content);
 
