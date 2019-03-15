@@ -155,11 +155,7 @@ if (!class_exists('WP_CI_Code_Type')) {
                     $cid_title = __("Copy the Code ID into the Clipboard", self::$text_domain);
                     $cid_text = __("Copy CID" , self::$text_domain);
 
-                    $aid_title =  __("Copy the Action ID into the Clipboard", self::$text_domain);
-                    $aid_text = __("Copy AID" , self::$text_domain);
-
                     $actions['copy_cid'] = "<a href=\"javascript:window.ci.ctc('#cid');\" title=\"$cid_title\" rel=\"permalink\">$cid_text</a>";
-                    $actions['copy_aid'] = "<a href=\"javascript:window.ci.ctc('#aid');\" title=\"$aid_title\" rel=\"permalink\">$aid_text</a>";
 
                 }
 
@@ -493,18 +489,6 @@ if (!class_exists('WP_CI_Code_Type')) {
                             <dt>
                             <dd>
                                 <code id='cid' style="font-size:11px;"><?php echo $code->post_title; ?></code>
-                            <dd>
-                            <dt>
-                                <strong><?php _e("Action Name") ?></strong>
-                            <dt>
-                            <dd>
-                                <?php if(!empty($code_options['action_name'])) : ?>
-                                <code id='aid' style="font-size:11px;"><?php echo $code_options['action_name']; ?></code>
-                                <?php 
-                                      else :
-                                        _e("In order to see the AID, You have to publish this Code.");
-                                      endif;
-                                ?>
                             <dd>
                         </dl>
                     <?php
