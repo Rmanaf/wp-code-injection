@@ -154,6 +154,16 @@ if (!class_exists('WP_CI_Code_Metabox')) {
 
                 }
 
+                foreach(array_keys(self::$default_values) as $key) {
+
+                    if(!isset($code_options[$key])){
+
+                        $code_options[$key] = false;
+
+                    }
+
+                }
+
                 return $code_options;
 
             }
