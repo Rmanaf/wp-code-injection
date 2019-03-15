@@ -264,7 +264,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
             }
             
 
-            $code = get_page_by_title($id, OBJECT, 'codes');
+            $code = get_page_by_title($id, OBJECT, 'code');
 
             if (is_object($code)) {
 
