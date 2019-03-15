@@ -103,9 +103,8 @@ if (!class_exists('WP_CI_Code_Metabox')) {
 
                 return [
                     'description' => '',
-                    'tracking' => false,
-                    'allow_ajax_call' => false,
-                    'action_name' =>  WP_Code_Injection_Plugin::generate_id(self::$action_prefix),
+                    'code_tracking' => true,
+                    'code_enabled' => true,
                 ];
 
             }
@@ -174,14 +173,6 @@ if (!class_exists('WP_CI_Code_Metabox')) {
 
                 }
 
-
-                if(empty($code_options['action_name']))
-                {
-
-                    $code_options['action_name'] = WP_Code_Injection_Plugin::generate_id(self::$action_prefix);
-
-                }
-
                 return $code_options;
 
             }
@@ -199,31 +190,29 @@ if (!class_exists('WP_CI_Code_Metabox')) {
 
                 ?>
 
-                <input type="hidden" id="action_name" name="action_name" value="<?php echo $action_name; ?>" />
-                
-                <p>
-                    <b><?php _e("Description" , self::$text_domain) ?></b>
-                </p>
+                <!-- 'description' section -->
+                <p><b><?php _e("Description" , self::$text_domain) ?></b></p>
+
                 <textarea rows="5" style="width:100%;" id="description" name="description"><?php echo $description; ?></textarea>
-                
+                <!-- 'description' section -->
+
+                <!-- 'tracking' section -->
                 <p>
                     <label>
-                        <input <?php checked($allow_ajax_call , true); ?> type="checkbox" class="regular-text" id="allow_ajax_call" name="allow_ajax_call" value="1" />
-                        <?php _e("Accessible through AJAX call" , self::$text_domain); ?>
-                    </label>
-                    <p class="description">
-                        <?php 
-                            if(!empty($action_name))
-                            {
-                                _e("<p>Action Name:</p><code style=\"font-size:11px;\">$action_name</code>" , self::$text_domain);
-                            }
-                            else
-                            {
-                                _e("<p>Publish code to see action name.</p>" , self::$text_domain); 
-                            }
-                        ?>
-                    </p>
+                        <input <?php checked($tracking , true); ?> type="checkbox" class="regular-text" id="code_tracking" name="code_tracking" value="1" />
+                        <?php _e("Tracking" , self::$text_domain); ?>
+                    </label>  
                 </p>
+                <!-- 'tracking' section -->
+
+                <!-- 'enable' section -->
+                <p>
+                    <label>
+                        <input <?php checked($allow_ajax_call , true); ?> type="checkbox" class="regular-text" id="code_enabled" name="code_enabled" value="1" />
+                        <?php _e("Enabled" , self::$text_domain); ?>
+                    </label>               
+                </p>
+                <!-- 'enable' section -->
 
                 <?php
 
