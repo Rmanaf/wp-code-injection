@@ -127,10 +127,6 @@ if (!class_exists('WP_CI_Code_Metabox')) {
                     if(!isset($_REQUEST[$p]))
                     {
                         
-                        $value[$p] =  self::$default_values[$p];
-
-                    } else {
-
                         $value[$p] = esc_html( $_REQUEST[$p] );
 
                     }
