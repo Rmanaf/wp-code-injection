@@ -124,7 +124,7 @@ if (!class_exists('WP_CI_Code_Metabox')) {
 
                 foreach(array_keys(self::$default_values) as $p){
 
-                    if(!isset($_REQUEST[$p]))
+                    if(isset($_REQUEST[$p]))
                     {
                         
                         $value[$p] = esc_html( $_REQUEST[$p] );
