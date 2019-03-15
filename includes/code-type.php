@@ -350,6 +350,7 @@ if (!class_exists('WP_CI_Code_Type')) {
                    'public' => false,
                    'show_ui' => true,
                    'rewrite' => false,
+                   'query_var' => true,
                    'hierarchical' => true
                 ]
             );
