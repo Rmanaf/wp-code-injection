@@ -251,6 +251,22 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
             if (is_object($code)) 
             {
 
+
+                /**
+                 * checks if code is enabled
+                 * @since 2.2.8
+                 */
+                $co = WP_CI_Code_Metabox::get_code_options($code);
+
+                if(!isset($co['code_enabled']))
+                {
+                    return;
+                }
+
+
+
+
+                
                 $render_shortcodes = get_option('wp_dcp_code_injection_allow_shortcode', false);
 
                 $nested_injections = $this->get_shortcode_by_name($code->post_content, 'inject');

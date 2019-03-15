@@ -141,9 +141,7 @@ if (!class_exists('WP_CI_Database')) {
 
                 $co = WP_CI_Code_Metabox::get_code_options($id);
 
-                print_r($co);
-
-                if($co['code_tracking'] == false)
+                if(!isset($co['code_tracking']))
                 {
                     return;
                 }
