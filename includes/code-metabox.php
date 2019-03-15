@@ -144,6 +144,14 @@ if (!class_exists('WP_CI_Code_Metabox')) {
              */
             public static function get_code_options($code)
             {
+                if(is_numeric($code))
+                {
+                    $ID = $code;
+                }
+                else
+                {
+                    $ID = $code->ID;
+                }
 
                 $code_options = get_post_meta($code->ID, 'code_options', true);
 
