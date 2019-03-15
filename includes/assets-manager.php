@@ -93,9 +93,6 @@ if (!class_exists('WP_CI_Assets_Manager'))
 
             $ver = $this->version;
 
-            // package-manager
-            wp_register_style('package-manager' , plugins_url('assets/package-manager.css', $this->plugin), [], $ver, 'all');
-
             // codemirror
             wp_register_style('dcp-codemirror', plugins_url('assets/codemirror/lib/codemirror.css', $this->plugin), [], $ver, 'all');       
             wp_register_style('dcp-codemirror-dracula', plugins_url('assets/codemirror/theme/dracula.css', $this->plugin), [], $ver, 'all');
@@ -112,9 +109,6 @@ if (!class_exists('WP_CI_Assets_Manager'))
         {
 
             $ver = $this->version;
-
-            // package-manager
-            wp_register_script('package-manager', plugins_url('assets/package-manager.js', $this->plugin), ['jquery'], $ver, true);
 
             // codemirror
             wp_register_script('dcp-codemirror', plugins_url('assets/codemirror/lib/codemirror.js', $this->plugin), ['jquery'], $ver, false);
@@ -184,26 +178,6 @@ if (!class_exists('WP_CI_Assets_Manager'))
                 wp_enqueue_script('dcp-code-injection', plugins_url('assets/wp-ci-general-settings.js', $this->plugin), ['jquery'], $ver, true);
             
             }
-
-            if($this->is_pm_page()){
-
-                wp_enqueue_style('package-manager');
-                wp_enqueue_script('package-manager');
-
-            }
-
-        }
-
-        /**
-         * checks if is in the Package manager page
-         * @since 2.2.8
-         */
-        private function is_pm_page()
-        {
-
-            $screen = get_current_screen();
-
-            return $screen->id == 'toplevel_page_dcp-package-manager';
 
         }
 

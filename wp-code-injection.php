@@ -88,7 +88,6 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
         private $ajax_call_handler;
         private $code_meta_box;
-        private $package_manager;
         private $database;
         private $custom_post_type;
         private $assets_manager;
@@ -124,13 +123,6 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
              * @since 2.2.8
              */
             $this->code_meta_box = new WP_CI_Code_Metabox();
-
-
-            /**
-             * initialize the package manager component
-             * @since 2.2.8
-             */
-            $this->package_manager = new WP_CI_Package_Manager(self::$text_domain);
 
 
             /**
