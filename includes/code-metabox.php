@@ -153,7 +153,7 @@ if (!class_exists('WP_CI_Code_Metabox')) {
                     $ID = $code->ID;
                 }
 
-                $code_options = get_post_meta($code->ID, 'code_options', true);
+                $code_options = get_post_meta($ID, 'code_options', true);
 
                 if(!is_array($code_options) || empty($code_options))
                 {
