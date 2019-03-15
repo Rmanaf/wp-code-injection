@@ -76,9 +76,9 @@ if (!class_exists('WP_CI_Code_Metabox')) {
 
                 self::$text_domain = $text_domain;
 
-                add_action('add_meta_boxes',       [$this, 'add_meta_box']);
+                add_action('add_meta_boxes',  [$this, 'add_meta_box']);
 
-                add_action('save_post',            [$this, 'save_post']);
+                add_action('save_post',  [$this, 'save_post']);
 
             }
 
@@ -126,7 +126,7 @@ if (!class_exists('WP_CI_Code_Metabox')) {
 
                     if(!isset($_REQUEST[$p]))
                     {
-                        echo $p;
+                        
                         $value[$p] =  self::$default_values[$p];
 
                     } else {
@@ -184,7 +184,7 @@ if (!class_exists('WP_CI_Code_Metabox')) {
                 <!-- 'tracking' section -->
                 <p>
                     <label>
-                        <input <?php checked($code_tracking , true); ?> type="checkbox" class="regular-text" id="code_tracking" name="code_tracking" value="1" />
+                        <input <?php checked($code_tracking , true); ?> type="checkbox" id="code_tracking" name="code_tracking" value="1" />
                         <?php _e("Tracking" , self::$text_domain); ?>
                     </label>  
                 </p>
@@ -193,7 +193,7 @@ if (!class_exists('WP_CI_Code_Metabox')) {
                 <!-- 'enable' section -->
                 <p>
                     <label>
-                        <input <?php checked($code_enabled , true); ?> type="checkbox" class="regular-text" id="code_enabled" name="code_enabled" value="1" />
+                        <input <?php checked($code_enabled , true); ?> type="checkbox" id="code_enabled" name="code_enabled" value="1" />
                         <?php _e("Enabled" , self::$text_domain); ?>
                     </label>               
                 </p>
