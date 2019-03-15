@@ -87,7 +87,7 @@ if (!class_exists('WP_CI_Code_Metabox')) {
 
                 add_meta_box(
                     'code_options_metabox',
-                    __('Options', self::$text_domain),
+                    __('Code Options', self::$text_domain),
                     [$this, 'code_options_meta_box_cb'],
                     'code',
                     'side'
@@ -199,7 +199,7 @@ if (!class_exists('WP_CI_Code_Metabox')) {
                 <!-- 'tracking' section -->
                 <p>
                     <label>
-                        <input <?php checked($tracking , true); ?> type="checkbox" class="regular-text" id="code_tracking" name="code_tracking" value="1" />
+                        <input <?php checked($code_tracking , true); ?> type="checkbox" class="regular-text" id="code_tracking" name="code_tracking" value="1" />
                         <?php _e("Tracking" , self::$text_domain); ?>
                     </label>  
                 </p>
@@ -208,7 +208,7 @@ if (!class_exists('WP_CI_Code_Metabox')) {
                 <!-- 'enable' section -->
                 <p>
                     <label>
-                        <input <?php checked($allow_ajax_call , true); ?> type="checkbox" class="regular-text" id="code_enabled" name="code_enabled" value="1" />
+                        <input <?php checked($code_enabled , true); ?> type="checkbox" class="regular-text" id="code_enabled" name="code_enabled" value="1" />
                         <?php _e("Enabled" , self::$text_domain); ?>
                     </label>               
                 </p>
