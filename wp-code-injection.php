@@ -88,8 +88,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
         private $database;
         private $custom_post_type;
         private $assets_manager;
-
-        
+      
         public static $text_domain = 'code-injection';
 
         private static $role_version = '1.0.0';
@@ -119,8 +118,10 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
              * initialize the meta box component
              * @since 2.2.8
              */
-            $this->code_meta_box = new WP_CI_Code_Metabox();
+            $this->code_meta_box = new WP_CI_Code_Metabox(self::$text_domain);
 
+
+            
             /**
              * initialize the assets manager component
              * @since 2.2.8
