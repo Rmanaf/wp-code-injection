@@ -469,7 +469,7 @@ if (!class_exists('WP_CI_Code_Type')) {
                  
                     ?>
                         <p style="text-align: justify;">
-                            <?php echo $code_options['description']; ?>  —  <strong><?php echo ucwords($status); ?></strong>
+                            <?php echo $code_options['code_description']; ?>  —  <strong><?php echo ucwords($status); ?></strong>
                         </p>
                         
                         <?php 
