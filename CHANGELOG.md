@@ -3,10 +3,7 @@
 ### **v2.2.8**
 > Feb 28, 2019 
 - [Fix] Assets Error
-- [Fix] Changing global <code>$post</code> value
 - [Feature] Codes Category
-- [Feature] Codes Tags
-- [Feature] Ajax call action
 ---
 ### **v2.2.7**
 > Feb 28, 2019 

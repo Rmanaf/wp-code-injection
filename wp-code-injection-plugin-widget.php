@@ -102,7 +102,7 @@ if (!class_exists('Wp_Code_Injection_Plugin_Widget')) {
             }
 
             $query = new WP_Query([
-                'post_type' => 'codes',
+                'post_type' => 'code',
                 'post_status' => 'publish',
                 'posts_per_page' => -1
             ]);
