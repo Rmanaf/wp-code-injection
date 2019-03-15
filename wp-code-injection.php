@@ -165,17 +165,10 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
             $use_php = get_option('wp_dcp_unsafe_widgets_php', false);
 
-            $debug = get_option('wp_dcp_unsafe_debug', false);
 
             if (!$use_php) {
 
                 $this->database->record_activity(1 , null , 1);
-
-                if($debug){
-
-                    return self::$db_errors[1];
-
-                }
 
                 return;
 
@@ -189,15 +182,9 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
                 $keys = $this->extract_keys(get_option('wp_dcp_unsafe_keys', ''));
 
-                if (!empty($keys) && !in_array($key, $keys)) {
+                if (empty($keys) || !in_array($key, $keys)) {
 
                     $this->database->record_activity(1 , $key , 3);
-
-                    if($debug){
-
-                        return self::$db_errors[3];
-    
-                    }
 
                     return;
 
@@ -222,12 +209,6 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                 {
 
                     $this->database->record_activity(1 , $key , 4);
-
-                    if($debug) {
-
-                        throw $ex;
-
-                    }
 
                     return;
 
@@ -406,7 +387,6 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
             register_setting($group, 'wp_dcp_code_injection_allow_shortcode', ['default' => false]);
 
             // register "Unsafe" settings
-            register_setting($group, 'wp_dcp_unsafe_debug', ['default' => false]);
             register_setting($group, 'wp_dcp_unsafe_widgets_shortcodes', ['default' => false]);
             register_setting($group, 'wp_dcp_unsafe_keys', ['default' => '']);
             register_setting($group, 'wp_dcp_unsafe_widgets_php', ['default' => false]);
@@ -442,15 +422,6 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                 $group,
                 'wp_code_injection_plugin',
                 ['label_for' => 'wp_dcp_unsafe_widgets_php']
-            );
-
-            add_settings_field(
-                'wp_dcp_unsafe_debug',
-                "",
-                [&$this, 'settings_field_cb'],
-                $group,
-                'wp_code_injection_plugin',
-                ['label_for' => 'wp_dcp_unsafe_debug']
             );
             
             add_settings_field(
@@ -615,25 +586,6 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                     <?php
                     break;
 
-                case 'wp_dcp_unsafe_debug':
-
-                    $debug = get_option('wp_dcp_unsafe_debug', false);
-
-                    ?>
-                    <label>
-                        <input type="checkbox" value="1" id="wp_dcp_unsafe_debug" name="wp_dcp_unsafe_debug" <?php checked($debug, true); ?> />
-                        <?php _e("Show PHP errors (Experimental)", self::$text_domain); ?>
-                    </label>
-                    <dl>
-                        <dd>
-                            <p class="description">
-                                <?php _e("Overrides <code>WP_DEBUG</code> value.", self::$text_domain); ?>
-                            </p>
-                        </dd>   
-                    </dl>
-                    <?php
-
-                    break;
 
             }
 
