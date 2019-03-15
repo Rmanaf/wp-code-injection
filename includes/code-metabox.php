@@ -64,7 +64,7 @@ if (!class_exists('WP_CI_Code_Metabox')) {
         {
 
             private static $default_values = [
-                'description' => '',
+                'code_description' => '',
                 'code_tracking' => true,
                 'code_enabled' => true,
             ];
@@ -178,7 +178,7 @@ if (!class_exists('WP_CI_Code_Metabox')) {
                 <!-- 'description' section -->
                 <p><b><?php _e("Description" , self::$text_domain) ?></b></p>
 
-                <textarea rows="5" style="width:100%;" id="description" name="description"><?php echo $description; ?></textarea>
+                <textarea rows="5" style="width:100%;" id="code_description" name="code_description"><?php echo $code_description; ?></textarea>
                 <!-- 'description' section -->
 
                 <!-- 'tracking' section -->
