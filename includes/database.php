@@ -61,7 +61,7 @@ if (!class_exists('WP_CI_Database')) {
     class WP_CI_Database
     {
 
-        public static $table_activities_name = 'dcp_code_injection_activities';
+        public static $table_activities_name = 'dcp_ci_activities';
 
         private static $db_errors = [
             '',                                   // 0 no error
@@ -73,7 +73,7 @@ if (!class_exists('WP_CI_Database')) {
 
         private static $db_shortcodes_types = ['HTML', 'PHP'];
 
-        private static $db_version  = '0.9.0';
+        private static $db_version  = '1.0.0';
 
         function __construct()
         {
@@ -133,6 +133,20 @@ if (!class_exists('WP_CI_Database')) {
         {
 
             global $wpdb, $post;
+
+
+            if($code != null)
+            {
+
+                $co = WP_CI_Code_Metabox::get_code_options($code);
+
+                if(!$co['code_tracking']){
+                    return;
+                }
+
+            }
+
+            echo 'Recorded!';
 
             /**
              * type 0 for HTML, CSS and, javascript
