@@ -147,6 +147,18 @@ if (!class_exists('WP_CI_Database')) {
 
             }
 
+            
+
+            $ip =  $this->get_ip_address();
+
+            if($ip === null){
+
+                return;
+
+            }
+
+
+
             /**
              * type 0 for HTML, CSS and, javascript
              * type 1 for PHP
@@ -155,7 +167,7 @@ if (!class_exists('WP_CI_Database')) {
                 self::$table_activities_name,
                 [
                     'time'  => current_time('mysql' , 1),
-                    'ip'    => $this->get_ip_address(),
+                    'ip'    => $ip,
                     'post'  => isset($post->ID) && is_single() ? $post->ID : null,
                     'blog'  => get_current_blog_id(),
                     'user'  => get_current_user_id(),
