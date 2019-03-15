@@ -53,14 +53,12 @@
 
 /**
  * @package WP_Divan_Control_Panel
- * @version 2.2.8
+ * @version 2.2.9
  */
 
 if (!defined('WP_UNINSTALL_PLUGIN')) {
     die;
 }
-
-require_once __DIR__ . '/includes/package-manager.php';
 
 
 // "CI" options
@@ -84,7 +82,3 @@ if (empty(get_option('wp_dcp_unsafe_keys', ''))) {
     delete_option('wp_dcp_unsafe_keys');
 
 }
-
-
-// "Package Manager" options
-WP_Package_Manager::reset();

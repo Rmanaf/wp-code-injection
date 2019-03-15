@@ -52,8 +52,9 @@
  */
 
 /**
+ * @author Arman Afzal <rman.afzal@gmail.com>
  * @package WP_Divan_Control_Panel
- * @version 2.2.8
+ * @version 2.2.9
  */
 
 if (!class_exists('Wp_Code_Injection_Plugin_Widget')) {
