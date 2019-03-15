@@ -154,6 +154,8 @@ if (!class_exists('WP_CI_Code_Metabox')) {
 
                 $code_options = get_post_meta($ID, 'code_options', true);
 
+                print_r($code_options);
+
                 if(!is_array($code_options) || empty($code_options))
                 {
 
