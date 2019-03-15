@@ -63,14 +63,18 @@ if (!class_exists('WP_CI_Code_Metabox')) {
         class WP_CI_Code_Metabox
         {
 
-            private static $action_prefix = 'action-';
+            private static $default_values = [
+                'description' => '',
+                'code_tracking' => true,
+                'code_enabled' => true,
+            ];
 
             private static $text_domain;
 
-            function __construct()
+            function __construct($text_domain)
             {
 
-                self::$text_domain = WP_Code_Injection_Plugin::$text_domain;
+                self::$text_domain = $text_domain;
 
                 add_action('add_meta_boxes',       [$this, 'add_meta_box']);
 
@@ -95,21 +99,6 @@ if (!class_exists('WP_CI_Code_Metabox')) {
             }
 
             /**
-             * returns the code options default values
-             * @since 2.2.8
-             */
-            public static function get_default_values($code_id)
-            {
-
-                return [
-                    'description' => '',
-                    'code_tracking' => true,
-                    'code_enabled' => true,
-                ];
-
-            }
-
-            /**
              * handle the code options
              * @since 2.2.8
              */
@@ -131,16 +120,14 @@ if (!class_exists('WP_CI_Code_Metabox')) {
                     return;
                 }
 
-                $params = self::get_default_values($id);
-
                 $value = [];
 
-                foreach(array_keys($params) as $p){
+                foreach(array_keys(self::$default_values) as $p){
 
                     if(!isset($_REQUEST[$p]))
                     {
 
-                        $value[$p] =  $params[$p];
+                        $value[$p] =  self::$default_values[$p];
 
                     } else {
 
@@ -162,14 +149,12 @@ if (!class_exists('WP_CI_Code_Metabox')) {
             public static function get_code_options($code)
             {
 
-                $defaults = self::get_default_values($code);
-
                 $code_options = get_post_meta($code->ID, 'code_options', true);
 
                 if(!is_array($code_options) || empty($code_options))
                 {
 
-                    $code_options = $defaults;
+                    $code_options = self::$default_values;
 
                 }
 
