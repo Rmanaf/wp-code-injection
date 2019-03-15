@@ -165,7 +165,6 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
             $use_php = get_option('wp_dcp_unsafe_widgets_php', false);
 
-
             if (!$use_php) {
 
                 $this->database->record_activity(1 , null , 1);

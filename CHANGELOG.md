@@ -1,7 +1,7 @@
 
 ## Changelog
 ### **v2.2.8**
-> Feb 28, 2019 
+> Mar 15, 2019 
 - [Fix] Assets Error
 - [Feature] Codes Category
 ---
