@@ -73,7 +73,7 @@ if (!class_exists('WP_CI_Database')) {
 
         private static $db_shortcodes_types = ['HTML', 'PHP'];
 
-        private static $db_version  = '1.0.0';
+        private static $db_version  = '0.9.0';
 
         function __construct()
         {
