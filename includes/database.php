@@ -143,7 +143,6 @@ if (!class_exists('WP_CI_Database')) {
 
                 if($co['code_tracking'] === false)
                 {
-                    echo 'ignored';
                     return;
                 }
 
@@ -155,7 +154,7 @@ if (!class_exists('WP_CI_Database')) {
 
             if($ip === null){
 
-                return;
+                //return;
 
             }
 
