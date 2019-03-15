@@ -73,7 +73,7 @@ if (!class_exists('WP_CI_Database')) {
 
         private static $db_shortcodes_types = ['HTML', 'PHP'];
 
-        private static $db_version  = '1.0.0';
+        private static $db_version  = '0.9.0';
 
         function __construct()
         {
@@ -107,7 +107,7 @@ if (!class_exists('WP_CI_Database')) {
                 id mediumint(9) NOT NULL AUTO_INCREMENT,
                 blog smallint,
                 time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
-                ip tinytext NOT NULL,
+                ip tinytext,
                 post smallint,
                 user smallint,
                 code tinytext,
