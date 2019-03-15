@@ -75,7 +75,6 @@ require_once __DIR__ . '/wp-code-injection-plugin-widget.php';
 require_once __DIR__ . '/includes/database.php';
 require_once __DIR__ . '/includes/calendar-heatmap.php';
 require_once __DIR__ . '/includes/code-metabox.php';
-require_once __DIR__ . '/includes/ajax-call-handler.php';
 require_once __DIR__ . '/includes/code-type.php';
 require_once __DIR__ . '/includes/assets-manager.php';
 
@@ -85,7 +84,6 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
     class WP_Code_Injection_Plugin
     {
 
-        private $ajax_call_handler;
         private $code_meta_box;
         private $database;
         private $custom_post_type;
@@ -122,14 +120,6 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
              * @since 2.2.8
              */
             $this->code_meta_box = new WP_CI_Code_Metabox();
-
-
-            /**
-             * initialize the ajax call handler component
-             * @since 2.2.8
-             */
-            $this->ajax_call_handler = new WP_CI_AJAX_Call_Handler();
-
 
             /**
              * initialize the assets manager component
