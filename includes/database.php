@@ -141,13 +141,15 @@ if (!class_exists('WP_CI_Database')) {
 
                 $co = WP_CI_Code_Metabox::get_code_options($code);
 
-                if(!$co['code_tracking']){
+                if(!$co['code_tracking'])
+                {
+                    echo 'ignored';
                     return;
                 }
 
             }
 
-            
+
 
             $ip =  $this->get_ip_address();
 
