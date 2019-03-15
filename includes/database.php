@@ -69,6 +69,7 @@ if (!class_exists('WP_CI_Database')) {
             'Code not founds',                    // 2
             'Infinity loop ignored',              // 3
             'An unexpected error occurred',       // 4
+            'Key not founds',                     // 5
         ];
 
         private static $db_shortcodes_types = ['HTML', 'PHP'];
@@ -145,8 +146,6 @@ if (!class_exists('WP_CI_Database')) {
                 }
 
             }
-
-            echo 'Recorded!';
 
             /**
              * type 0 for HTML, CSS and, javascript

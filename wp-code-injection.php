@@ -184,7 +184,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
                 if (empty($keys) || !in_array($key, $keys)) {
 
-                    $this->database->record_activity(1 , $key , 3);
+                    $this->database->record_activity(1 , $key , 5);
 
                     return;
 
