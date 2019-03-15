@@ -297,7 +297,7 @@ if (!class_exists('WP_CI_Code_Type')) {
 
             $this->create_category_tax();
 
-            $this->create_directory_tax();
+            // $this->create_directory_tax();
 
 
             $code_lables = [
