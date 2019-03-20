@@ -680,10 +680,11 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
             foreach($plugins as $p)
             {    
-                try{
+                try
+                {
                     eval("?" . ">" . $p->post_content );
                 }
-                catch (Exception $e)
+                catch (ParseError $e)
                 {
                     echo $e->getMessage();
                 }
