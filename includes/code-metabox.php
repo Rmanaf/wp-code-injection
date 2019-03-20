@@ -67,7 +67,8 @@ if (!class_exists('WP_CI_Code_Metabox')) {
                 'code_description' => '',
                 'code_tracking' => true,
                 'code_enabled' => true,
-                'code_is_plugin' => false
+                'code_is_plugin' => false,
+                'code_activator_key' => ''
             ];
 
             private static $text_domain;
@@ -205,16 +206,15 @@ if (!class_exists('WP_CI_Code_Metabox')) {
                 <!-- 'tracking' section -->
 
 
-
                 <!-- 'plugin' section -->
                 <p>
                     <label>
                         <input <?php checked($code_is_plugin , true); ?> type="checkbox" id="code_is_plugin" name="code_is_plugin" value="1" />
                         <?php _e("Is Plugin" , self::$text_domain); ?>
-                    </label>               
+                    </label> 
+                    <input class="regular-text" id="code_activator_key" name="code_activator_key" value="<?php echo $code_activator_key; ?>" />              
                 </p>
                 <!-- 'plugin' section -->
-
 
 
                 <!-- 'enable' section -->

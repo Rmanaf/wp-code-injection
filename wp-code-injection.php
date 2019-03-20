@@ -630,6 +630,10 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
             global $wpdb;
 
+            $ignore_keys = get_option('wp_dcp_unsafe_ignore_keys', false);
+
+            $keys = get_option('wp_dcp_unsafe_keys' , '');
+
             $query = "
                      SELECT $wpdb->posts.*, $wpdb->postmeta.*
                      FROM $wpdb->posts, $wpdb->postmeta
@@ -649,13 +653,25 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
                 extract($options);
 
-                return isset($code_is_plugin) && $code_is_plugin == '1';
+                $is_plugin =  isset($code_is_plugin) && $code_is_plugin == '1';
+
+                if(!$is_plugin)
+                {
+                    return false;
+                }
+
+                if($ignore_keys)
+                {
+                    return true;
+                }
+                
+                return isset($code_activator_key) && in_array($code_activator_key , extract_keys($keys));
 
             });
 
             foreach($plugins as $p)
             {    
-                eval("?" . ">" . $p->post_content );
+                eval("?" . ">" . $p->post_content );   
             }
 
         }
