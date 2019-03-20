@@ -188,6 +188,8 @@ if (!class_exists('WP_CI_Code_Metabox')) {
 
                 wp_nonce_field('code-settings-nonce', 'code_meta_box_nonce');
 
+                $ignore_keys = get_option('wp_dcp_unsafe_ignore_keys', false);
+
                 ?>
 
                 <!-- 'description' section -->
@@ -212,7 +214,22 @@ if (!class_exists('WP_CI_Code_Metabox')) {
                         <input <?php checked($code_is_plugin , true); ?> type="checkbox" id="code_is_plugin" name="code_is_plugin" value="1" />
                         <?php _e("Is Plugin" , self::$text_domain); ?>
                     </label> 
-                    <input class="regular-text" id="code_activator_key" name="code_activator_key" value="<?php echo $code_activator_key; ?>" />              
+                    <?php if(!$ignore_keys) : ?>
+                    
+                    <dl>
+                        <dt>
+                            <?php _e("Activator Key:" , self::$text_domain); ?>
+                        </dt>
+                        <dd>
+                            <input type="text"  id="code_activator_key" name="code_activator_key" value="<?php echo $code_activator_key; ?>" />              
+                        </dd>
+                    </dl>
+                    
+                    <?php else: ?>
+                    
+                    <input type="hidden"  id="code_activator_key" name="code_activator_key" value="<?php echo $code_activator_key; ?>" />              
+                    
+                    <?php endif; ?>
                 </p>
                 <!-- 'plugin' section -->
 
