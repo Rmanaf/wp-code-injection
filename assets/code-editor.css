@@ -1,5 +1,6 @@
 input.apple-switch:focus
 {
+    border: inherit;
     box-shadow: inherit;
 }
 
@@ -57,5 +58,4 @@ input.apple-switch {
    input.apple-switch:focus
 {
     outline: inherit;
-    border: inherit;
 }
