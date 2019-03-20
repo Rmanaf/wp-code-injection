@@ -1,7 +1,7 @@
 input.apple-switch:focus
 {
     border: 1px solid #4e9bd1;
-    box-shadow: inherit;
+    box-shadow: inset 20px 0 0 0 #4e9bd1;
 }
 
 input.apple-switch {
