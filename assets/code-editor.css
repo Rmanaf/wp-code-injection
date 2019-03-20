@@ -1,3 +1,10 @@
+input.apple-switch:focus
+{
+    outline: inherit;
+    border: inherit;
+    box-shadow: inherit;
+}
+
 input.apple-switch {
     position: relative;
     appearance: none; 
@@ -43,7 +50,4 @@ input.apple-switch {
        content:"";
    }
 
-   input.apple-switch:focus{
-       outline: none !important;
-       border: 1px solid #D9DADC;
-   }
+   
