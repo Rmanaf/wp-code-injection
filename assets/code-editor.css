@@ -1,3 +1,8 @@
+
+input.apple-switch:focus{
+    box-shadow:unset; 
+}
+
 input.apple-switch {
     position: relative;
     appearance: none; 
@@ -24,9 +29,9 @@ input.apple-switch {
     width: 26px; height: 26px;
     background-color: transparent;
     border-radius: 50%; 
+
     box-shadow: 2px 4px 6px rgba(0,0,0,0.2);
    
-    
     transition: all 200ms linear;
     -webkit-transition: all 200ms linear;
     -moz-transition: all 200ms linear;
