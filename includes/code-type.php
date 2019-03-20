@@ -104,7 +104,7 @@ if (!class_exists('WP_CI_Code_Type')) {
 
             wp_enqueue_style('dcp-codemirror');
             wp_enqueue_style('dcp-codemirror-dracula');
-            wp_enqueue_style('code-editor');
+            wp_enqueue_style('custom-code-editor');
 
             //codemirror
             foreach(WP_CI_Assets_Manager::$codemirror_bundle as $script)
