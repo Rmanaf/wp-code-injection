@@ -151,7 +151,11 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
             add_action('widgets_init', [$this, 'widgets_init']);    
         
+            add_action('plugins_loaded', [$this, 'load_extra_plugins'] );
+            
             add_filter('dcp_shortcodes_list', [&$this, 'add_shortcode_to_list']);
+
+
 
         }
 
@@ -615,6 +619,49 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
             register_widget('Wp_Code_Injection_Plugin_Widget');
 
         }
+
+
+        /**
+         * loads codes as plugin
+         * @since 2.2.9
+         */
+        public function load_extra_plugins()
+        {
+
+            global $wpdb;
+
+            $query = "
+                     SELECT $wpdb->posts.*, $wpdb->postmeta.*
+                     FROM $wpdb->posts, $wpdb->postmeta
+                     WHERE $wpdb->posts.ID = $wpdb->postmeta.post_id 
+                     AND $wpdb->postmeta.meta_key = 'code_options' 
+                     AND $wpdb->posts.post_status = 'publish' 
+                     AND $wpdb->posts.post_type = 'code'
+                     AND $wpdb->posts.post_date < NOW()
+                     ORDER BY $wpdb->posts.post_date DESC
+                     ";
+
+            $codes = $wpdb->get_results($query, OBJECT);
+
+            $plugins = array_filter($codes , function($element) {
+
+                $options = maybe_unserialize($element->meta_value);
+
+                extract($options);
+
+                return isset($code_is_plugin) && $code_is_plugin == '1';
+
+            });
+
+            foreach($plugins as $p)
+            {
+                
+                do_shortcode( $p->post_content );
+
+            }
+
+        }
+
 
 
 

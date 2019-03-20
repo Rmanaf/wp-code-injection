@@ -204,6 +204,19 @@ if (!class_exists('WP_CI_Code_Metabox')) {
                 </p>
                 <!-- 'tracking' section -->
 
+
+
+                <!-- 'plugin' section -->
+                <p>
+                    <label>
+                        <input <?php checked($code_is_plugin , true); ?> type="checkbox" id="code_is_plugin" name="code_is_plugin" value="1" />
+                        <?php _e("Is Plugin" , self::$text_domain); ?>
+                    </label>               
+                </p>
+                <!-- 'plugin' section -->
+
+
+
                 <!-- 'enable' section -->
                 <p>
                     <label>
@@ -212,15 +225,6 @@ if (!class_exists('WP_CI_Code_Metabox')) {
                     </label>               
                 </p>
                 <!-- 'enable' section -->
-
-                <!-- 'plugin' section -->
-                <p>
-                    <label>
-                        <input <?php checked($code_is_plugin , false); ?> type="checkbox" id="code_is_plugin" name="code_is_plugin" value="1" />
-                        <?php _e("As Plugin" , self::$text_domain); ?>
-                    </label>               
-                </p>
-                <!-- 'plugin' section -->
 
 
                 <?php
