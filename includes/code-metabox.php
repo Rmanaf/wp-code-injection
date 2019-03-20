@@ -215,20 +215,10 @@ if (!class_exists('WP_CI_Code_Metabox')) {
                         <?php _e("Is Plugin" , self::$text_domain); ?>
                     </label> 
                     <?php if(!$ignore_keys) : ?>
-                    
-                    <dl>
-                        <dt>
-                            <?php _e("Activator Key:" , self::$text_domain); ?>
-                        </dt>
-                        <dd>
-                            <input type="text"  id="code_activator_key" name="code_activator_key" value="<?php echo $code_activator_key; ?>" />              
-                        </dd>
-                    </dl>
-                    
+                    <p><strong><?php _e("Activator Key:" , self::$text_domain); ?></strong></p>
+                    <input type="text"  id="code_activator_key" name="code_activator_key" value="<?php echo $code_activator_key; ?>" />              
                     <?php else: ?>
-                    
                     <input type="hidden"  id="code_activator_key" name="code_activator_key" value="<?php echo $code_activator_key; ?>" />              
-                    
                     <?php endif; ?>
                 </p>
                 <!-- 'plugin' section -->
