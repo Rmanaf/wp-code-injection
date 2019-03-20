@@ -14,7 +14,7 @@ input.apple-switch {
     border: 1px solid #D9DADC;
     border-radius: 50px; 
 
-    box-shadow: inset -20px 0 0 0 #ffffff;
+    box-shadow: inset -20px 0 0 0 #4e9bd1;
 
     transition: box-shadow 200ms linear;
     -webkit-transition: box-shadow 200ms linear;
