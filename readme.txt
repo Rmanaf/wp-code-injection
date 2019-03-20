@@ -2,9 +2,9 @@
 Contributors: rmanaf
 Tags: code, snippets, injection
 Requires at least: 4.5.0
-Tested up to: 5.0.3
+Tested up to: 5.1.1
 Requires PHP: 5.2.4
-Stable tag: 2.2.8
+Stable tag: 2.2.9
 License: Apache License, Version 2.0
 License URI: http://www.apache.org/licenses/LICENSE-2.0
 
