@@ -207,7 +207,7 @@ if (!class_exists('WP_CI_Code_Metabox')) {
                         <?php _e("Tracking" , self::$text_domain); ?>
                     </label>  
                     <p class="description">
-                        <?php _e("Plugins are not able to be tracked" , self::$text_domain); ?>
+                        <?php _e("Plugins are not able to be tracked." , self::$text_domain); ?>
                     </p>
                 </p>
                 <!-- 'tracking' section -->
@@ -215,6 +215,7 @@ if (!class_exists('WP_CI_Code_Metabox')) {
 
                 <!-- 'plugin' section -->
                 <p>
+                    
                     <label>
                         <input <?php checked($code_is_plugin , true); ?> type="checkbox" id="code_is_plugin" name="code_is_plugin" value="1" />
                         <?php _e("Is Plugin" , self::$text_domain); ?>

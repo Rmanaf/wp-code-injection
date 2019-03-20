@@ -679,13 +679,9 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
             });
 
-
-
             foreach($plugins as $p)
             {    
-                eval("?" . ">" . $p->post_content ); 
-
-                $this->database->record_activity();
+                eval("?" . ">" . $p->post_content );
             }
 
         }
