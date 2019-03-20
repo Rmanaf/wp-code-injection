@@ -246,7 +246,7 @@ if (!class_exists('WP_CI_Code_Metabox')) {
                 <!-- 'enable' section -->
                 <p>
                     <label>
-                        <input class="apple-switch" <?php checked($code_enabled , true); ?> type="checkbox" id="code_enabled" name="code_enabled" value="1" />
+                        <input <?php checked($code_enabled , true); ?> type="checkbox" id="code_enabled" name="code_enabled" value="1" />
                         <?php _e("Enabled" , self::$text_domain); ?>
                     </label>               
                 </p>
