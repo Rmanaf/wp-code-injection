@@ -41,8 +41,8 @@ input.apple-switch {
    }
 
    input.apple-switch:checked {
-    border-color: #4ED164;
-    box-shadow: inset 20px 0 0 0 #4ED164;
+    border-color: #4e9bd1;
+    box-shadow: inset 20px 0 0 0 #4e9bd1;
    }
 
    input.apple-switch:checked:after {
@@ -57,4 +57,5 @@ input.apple-switch {
    input.apple-switch:focus
 {
     outline: inherit;
+    border: inherit;
 }
