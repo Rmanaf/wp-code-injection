@@ -1,9 +1,4 @@
-input.apple-switch:focus
-{
-    outline: inherit;
-    border: inherit;
-    box-shadow: inherit;
-}
+
 
 input.apple-switch {
     position: relative;
@@ -17,11 +12,11 @@ input.apple-switch {
 
     box-shadow: inset -20px 0 0 0 #ffffff;
 
-    transition: box-shadow 200ms ease-out;
-    -webkit-transition: box-shadow 200ms ease-out;
-    -moz-transition: box-shadow 200ms ease-out;
-    -ms-transition: box-shadow 200ms ease-out;
-    -o-transition: box-shadow 200ms ease-out;
+    transition: box-shadow 200ms linear;
+    -webkit-transition: box-shadow 200ms linear;
+    -moz-transition: box-shadow 200ms linear;
+    -ms-transition: box-shadow 200ms linear;
+    -o-transition: box-shadow 200ms linear;
    }
 
    input.apple-switch:after {
@@ -50,4 +45,9 @@ input.apple-switch {
        content:"";
    }
 
-   
+   input.apple-switch:focus
+{
+    outline: inherit;
+    border: inherit;
+    box-shadow: inherit;
+}
