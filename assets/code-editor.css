@@ -28,7 +28,7 @@ input.apple-switch {
    }
 
    input.apple-switch:checked:before {
-       content:none;
+       content:"";
    }
 
    input.apple-switch:focus{
