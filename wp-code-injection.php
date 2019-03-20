@@ -647,7 +647,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
             $codes = $wpdb->get_results($query, OBJECT);
 
-            $plugins = array_filter($codes , function($element) {
+            $plugins = array_filter($codes , function($element) use ($ignore_keys, $keys) {
 
                 $options = maybe_unserialize($element->meta_value);
 
