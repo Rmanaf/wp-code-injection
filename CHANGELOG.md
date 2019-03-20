@@ -1,6 +1,6 @@
 
 ## Changelog
-### **v2.2.9**
+### **v2.3.0**
 > Mar 20, 2019 
 - [Feature] Code as plugin
 ---

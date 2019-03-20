@@ -53,7 +53,6 @@
  /**
  * @author Arman Afzal <rman.afzal@gmail.com>
  * @package WP_Divan_Control_Panel
- * @version 2.2.9
  */
 
 if (!class_exists('WP_CI_Assets_Manager')) 
