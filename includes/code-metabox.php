@@ -190,6 +190,8 @@ if (!class_exists('WP_CI_Code_Metabox')) {
 
                 $ignore_keys = get_option('wp_dcp_unsafe_ignore_keys', false);
 
+                $use_php = get_option('wp_dcp_unsafe_widgets_php', false);
+
                 ?>
 
                 <!-- 'description' section -->
@@ -204,6 +206,9 @@ if (!class_exists('WP_CI_Code_Metabox')) {
                         <input <?php checked($code_tracking , true); ?> type="checkbox" id="code_tracking" name="code_tracking" value="1" />
                         <?php _e("Tracking" , self::$text_domain); ?>
                     </label>  
+                    <p class="description">
+                        <?php _e("Plugins are not able to be tracked" , self::$text_domain); ?>
+                    </p>
                 </p>
                 <!-- 'tracking' section -->
 
@@ -214,12 +219,27 @@ if (!class_exists('WP_CI_Code_Metabox')) {
                         <input <?php checked($code_is_plugin , true); ?> type="checkbox" id="code_is_plugin" name="code_is_plugin" value="1" />
                         <?php _e("Is Plugin" , self::$text_domain); ?>
                     </label> 
-                    <?php if(!$ignore_keys) : ?>
-                    <p><strong><?php _e("Activator Key:" , self::$text_domain); ?></strong></p>
-                    <input type="text"  id="code_activator_key" name="code_activator_key" value="<?php echo $code_activator_key; ?>" />              
-                    <?php else: ?>
-                    <input type="hidden"  id="code_activator_key" name="code_activator_key" value="<?php echo $code_activator_key; ?>" />              
+
+                    <?php if(!$use_php) : ?>
+                    
+                    <p class="description">
+                        <?php _e("Running PHP codes has disabled by the administrator." , self::$text_domain); ?>
+                    </p>
+
                     <?php endif; ?>
+
+                    <?php if(!$ignore_keys) : ?>
+                    
+                    <p><strong><?php _e("Activator Key:" , self::$text_domain); ?></strong></p>
+  
+                    <input type="text" style="width:100%;"  id="code_activator_key" name="code_activator_key" value="<?php echo $code_activator_key; ?>" />              
+                    
+                    <?php else: ?>
+                    
+                    <input type="hidden"  id="code_activator_key" name="code_activator_key" value="<?php echo $code_activator_key; ?>" />              
+                    
+                    <?php endif; ?>
+
                 </p>
                 <!-- 'plugin' section -->
 

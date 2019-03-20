@@ -632,6 +632,13 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
             $instance = $this;
 
+            $use_php = get_option('wp_dcp_unsafe_widgets_php', false);
+
+            if(!$use_php)
+            {
+                return;
+            }
+
             $ignore_keys = get_option('wp_dcp_unsafe_ignore_keys', false);
 
             $keys = get_option('wp_dcp_unsafe_keys' , '');
@@ -649,6 +656,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
             $codes = $wpdb->get_results($query, OBJECT);
 
+
             $plugins = array_filter($codes , function($element) use ($instance, $ignore_keys, $keys) {
 
                 $options = maybe_unserialize($element->meta_value);
@@ -657,7 +665,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
                 $is_plugin =  isset($code_is_plugin) && $code_is_plugin == '1';
 
-                if(!$is_plugin)
+                if(!$is_plugin || $code_enabled == false)
                 {
                     return false;
                 }
@@ -675,7 +683,9 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
             foreach($plugins as $p)
             {    
-                eval("?" . ">" . $p->post_content );   
+                eval("?" . ">" . $p->post_content ); 
+
+                $this->database->record_activity();
             }
 
         }
