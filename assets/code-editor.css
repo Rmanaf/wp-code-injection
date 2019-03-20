@@ -1,4 +1,7 @@
-
+input.apple-switch:focus
+{
+    box-shadow: inherit;
+}
 
 input.apple-switch {
     position: relative;
@@ -49,5 +52,4 @@ input.apple-switch {
 {
     outline: inherit;
     border: inherit;
-    box-shadow: inherit;
 }
