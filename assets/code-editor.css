@@ -26,3 +26,11 @@ input.apple-switch {
     left: 20px;
     box-shadow: -2px 4px 3px rgba(0,0,0,0.05);
    }
+
+   input.apple-switch:checked:before {
+       content:none;
+   }
+
+   input.apple-switch:focus{
+       outline: none;
+   }
