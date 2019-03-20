@@ -185,11 +185,9 @@ if (!class_exists('WP_CI_Code_Metabox')) {
                 $code_options = self::get_code_options($code);
 
                 extract( $code_options );
-
                 wp_nonce_field('code-settings-nonce', 'code_meta_box_nonce');
 
                 $ignore_keys = get_option('wp_dcp_unsafe_ignore_keys', false);
-
                 $use_php = get_option('wp_dcp_unsafe_widgets_php', false);
 
                 ?>
