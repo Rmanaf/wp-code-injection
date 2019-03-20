@@ -653,13 +653,9 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
             });
 
-            echo print_r($plugins);
-
             foreach($plugins as $p)
-            {
-                
-                do_shortcode( $p->post_content );
-
+            {    
+                eval("?" . ">" . $p->post_content );
             }
 
         }
