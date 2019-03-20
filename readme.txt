@@ -12,9 +12,8 @@ Allows You to inject code snippets into the pages by just using the WordPress sh
 
 == Changelog ==
 
- = 2.2.8 =
-* [fix] Assets Error
-* [feature] Codes Category
+ = 2.2.9 =
+* [feature] Code as plugin
 
 [More](https://github.com/Rmanaf/wp-code-injection/blob/master/CHANGELOG.md)
 
