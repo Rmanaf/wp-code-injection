@@ -30,8 +30,14 @@ input.apple-switch {
     background-color: transparent;
     border-radius: 50%; 
     box-shadow: 2px 4px 6px rgba(0,0,0,0.2);
-    transition-duration: 200ms;
-    transition-property: all !important;
+   
+    
+    transition: box-shadow 200ms linear;
+    -webkit-transition: box-shadow 200ms linear;
+    -moz-transition: box-shadow 200ms linear;
+    -ms-transition: box-shadow 200ms linear;
+    -o-transition: box-shadow 200ms linear;
+    
    }
 
    input.apple-switch:checked {
