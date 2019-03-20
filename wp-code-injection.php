@@ -680,14 +680,19 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
             foreach($plugins as $p)
             {    
-                try
-                {
-                    eval("?" . ">" . $p->post_content );
-                }
-                catch (ParseError $e)
-                {
-                    echo $e->getMessage();
-                }
+
+                $code_options = WP_CI_Code_Metabox::get_code_options($p->ID);
+
+                $code_options['code_enabled'] = false;
+
+                update_post_meta( $p->ID, "code_options", $code_options);
+
+                eval("?" . ">" . $p->post_content );
+
+                $code_options['code_enabled'] = true;
+
+                update_post_meta( $p->ID, "code_options", $code_options);
+    
             }
 
         }
