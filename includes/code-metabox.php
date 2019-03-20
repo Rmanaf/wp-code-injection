@@ -201,7 +201,7 @@ if (!class_exists('WP_CI_Code_Metabox')) {
                 <!-- 'tracking' section -->
                 <p>
                     <label>
-                        <input <?php checked($code_tracking , true); ?> type="checkbox" id="code_tracking" name="code_tracking" value="1" />
+                        <input class="apple-switch" <?php checked($code_tracking , true); ?> type="checkbox" id="code_tracking" name="code_tracking" value="1" />
                         <?php _e("Tracking" , self::$text_domain); ?>
                     </label>  
                     <p class="description">
@@ -215,7 +215,7 @@ if (!class_exists('WP_CI_Code_Metabox')) {
                 <p>
                     
                     <label>
-                        <input <?php checked($code_is_plugin , true); ?> type="checkbox" id="code_is_plugin" name="code_is_plugin" value="1" />
+                        <input class="apple-switch" <?php checked($code_is_plugin , true); ?> type="checkbox" id="code_is_plugin" name="code_is_plugin" value="1" />
                         <?php _e("Is Plugin" , self::$text_domain); ?>
                     </label> 
 
@@ -246,7 +246,7 @@ if (!class_exists('WP_CI_Code_Metabox')) {
                 <!-- 'enable' section -->
                 <p>
                     <label>
-                        <input <?php checked($code_enabled , true); ?> type="checkbox" id="code_enabled" name="code_enabled" value="1" />
+                        <input class="apple-switch" <?php checked($code_enabled , true); ?> type="checkbox" id="code_enabled" name="code_enabled" value="1" />
                         <?php _e("Enabled" , self::$text_domain); ?>
                     </label>               
                 </p>
