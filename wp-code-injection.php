@@ -630,6 +630,8 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
             global $wpdb;
 
+            $instance = $this;
+
             $ignore_keys = get_option('wp_dcp_unsafe_ignore_keys', false);
 
             $keys = get_option('wp_dcp_unsafe_keys' , '');
@@ -647,7 +649,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
             $codes = $wpdb->get_results($query, OBJECT);
 
-            $plugins = array_filter($codes , function($element) use ($ignore_keys, $keys) {
+            $plugins = array_filter($codes , function($element) use ($instance, $ignore_keys, $keys) {
 
                 $options = maybe_unserialize($element->meta_value);
 
@@ -665,9 +667,11 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                     return true;
                 }
                 
-                return isset($code_activator_key) && in_array($code_activator_key , extract_keys($keys));
+                return isset($code_activator_key) && in_array($code_activator_key , $instance->extract_keys($keys));
 
             });
+
+
 
             foreach($plugins as $p)
             {    
