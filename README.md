@@ -1,5 +1,5 @@
 # Wordpress Code Injection Plugin
-> Current Version [2.3.0](https://github.com/Rmanaf/wp-code-injection) - [Change logs](https://github.com/Rmanaf/wp-code-injection/blob/master/CHANGELOG.md)
+> Current Version [2.3.1](https://github.com/Rmanaf/wp-code-injection) - [Change logs](https://github.com/Rmanaf/wp-code-injection/blob/master/CHANGELOG.md)
 
 Allows You to inject code snippets into the pages by just using the Wordpress shortcode
 

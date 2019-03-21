@@ -1,5 +1,9 @@
 
 ## Changelog
+### **v2.3.1**
+> Mar 21, 2019 
+- [Fix] Copy CID
+---
 ### **v2.3.0**
 > Mar 20, 2019 
 - [Feature] Code as plugin
