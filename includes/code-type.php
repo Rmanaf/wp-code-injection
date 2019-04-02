@@ -143,6 +143,10 @@ if (!class_exists('WP_CI_Code_Type')) {
             
             <script src="<?php echo plugins_url('assets/code-editor.js', $this->plugin); ?>"></script>
 
+            <script>
+                delete define;
+            </script>
+
             <?php
 
         }
