@@ -89,8 +89,6 @@ if (!class_exists('WP_CI_Code_Type')) {
 
             add_action('manage_code_posts_custom_column' , [$this, 'manage_code_posts_custom_column'], 10, 2 );
 
-            add_action('wp_head', [$this, 'print_scripts']);
-
             add_action('restrict_manage_posts',  [$this, 'filter_codes_by_taxonomies'] , 10, 2);
 
         }
@@ -123,9 +121,9 @@ if (!class_exists('WP_CI_Code_Type')) {
         public function print_scripts()
         {
 
-            //if (!$this->is_code_page()) {
-            //    return;
-            //}
+            if (!$this->is_code_page()) {
+               return;
+            }
 
             //$this->unload_all_jquery();
 
@@ -134,11 +132,9 @@ if (!class_exists('WP_CI_Code_Type')) {
             ?>
 
             <script>
-
                 var require = { paths: { 
                     'vs': '<?php echo plugins_url( 'assets/monaco-editor/vs', $this->plugin ) ?>'
                 }};
-
             </script>
 
             <script src="<?php echo plugins_url('assets/monaco-editor/vs/loader.js', $this->plugin); ?>"></script>
@@ -192,6 +188,8 @@ if (!class_exists('WP_CI_Code_Type')) {
             $this->hide_post_title_input();
 
             $this->remove_mediabuttons();
+
+            $this->print_scripts();
 
         }
 
