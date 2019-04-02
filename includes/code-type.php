@@ -103,6 +103,8 @@ if (!class_exists('WP_CI_Code_Type')) {
                 return;
             }
 
+            wp_enqueue_script('dcp-monaco-editor-loader');
+
             ?>
 
             <script>
@@ -121,7 +123,7 @@ if (!class_exists('WP_CI_Code_Type')) {
             wp_enqueue_style('custom-code-editor');
 
             
-            wp_enqueue_script('dcp-monaco-editor-loader');
+            
             wp_enqueue_script('dcp-monaco-editor-nls');
             wp_enqueue_script('dcp-monaco-editor');
             wp_enqueue_script('dcp-code-injection-editor');
