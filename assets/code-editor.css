@@ -5,8 +5,7 @@
 
 .dcp-ci-toolbar {
     background-color: #1e1e1e!important;
-    border: none;
-    border-bottom: 1px solid #383838;
+    border-bottom: 1px solid #383838 !important;
 }
 
 .dcp-ci-toolbar > button{
@@ -21,7 +20,7 @@
     bottom: 0;
     z-index: 9999;
     padding-top: 30px;
-    padding-bottom: 40px;
+    padding-bottom: 35px;
     box-sizing: border-box;
 }
 
