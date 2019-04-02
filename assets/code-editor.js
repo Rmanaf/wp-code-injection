@@ -17,7 +17,7 @@
                 matchTags: true,
                 autoCloseTags: true,
                 lint: true,
-                mode: "javascript",
+                mode: "css",
                 theme: 'dracula',
                 keyMap: 'sublime',
                 viewportMargin: Infinity,
