@@ -26,10 +26,12 @@
     function init() {
 
         parent = document.getElementById('postdivrich');
+        
+        hide(['.quicktags-toolbar', '#wp-content-editor-tools', '#post-status-info', '.wp-editor-area', '#wp-content-wrap']);
 
         var textarea = document.querySelector('.wp-editor-area');
 
-        var toolbar = createElement('div', 'dcp-ci-toolbar');
+        var toolbar = createElement('div', 'quicktags-toolbar', 'dcp-ci-toolbar');
         var container = createElement('div', 'dcp-ci-editor');
         var fullscreen = createElement('button', 'full-screen','ed_button','qt-dfw');
 
@@ -37,8 +39,7 @@
         parent.insertBefore(toolbar, parent.firstChild);
         toolbar.appendChild(fullscreen);
 
-        hide(['.quicktags-toolbar', '#wp-content-editor-tools', '#post-status-info', '.wp-editor-area', '#wp-content-wrap']);
-
+      
         require(['vs/editor/editor.main'], () => {
             editor = monaco.editor.create(container, {
                 value: textarea.textContent,
@@ -60,7 +61,7 @@
     function createElement(t, ...className) {
         var res = document.createElement(t);
         addClass(res, className);
-        return r;
+        return res;
     }
 
     function toggleFullScreen() {
