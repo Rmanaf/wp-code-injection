@@ -24,8 +24,10 @@
 
         var textarea = document.querySelector('.wp-editor-area');
         var parent = document.getElementById('postdivrich');
+        var toolbar =  document.createElement('DIV');
         var container = document.createElement('DIV');
 
+        toolbar.classList.add('dcp-ci-toolbar');
         container.classList.add('dcp-ci-editor');
 
         parent.insertBefore(container, parent.firstChild);
@@ -34,7 +36,7 @@
 
         require(['vs/editor/editor.main'], function() { 
             var editor = monaco.editor.create(container , {
-                value: textarea.innerHTML,
+                value: textarea.textContent,
                 theme: 'vs-dark',
                 language: 'php'
             });

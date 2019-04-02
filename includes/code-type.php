@@ -117,6 +117,7 @@ if (!class_exists('WP_CI_Code_Type')) {
             foreach($jquery_ui as $script){
                 wp_deregister_script($script);
             }
+            
         }
 
         public function print_scripts()
