@@ -123,17 +123,15 @@ if (!class_exists('WP_CI_Code_Type')) {
         public function print_scripts()
         {
 
-            if (!$this->is_code_page()) {
-                return;
-            }
+            //if (!$this->is_code_page()) {
+            //    return;
+            //}
 
             //$this->unload_all_jquery();
 
             $ver = WP_Code_Injection_Plugin::get_version();
 
             ?>
-
-            <link href="" >
 
             <script>
 
