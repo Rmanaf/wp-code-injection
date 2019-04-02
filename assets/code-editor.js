@@ -16,7 +16,7 @@
 
     function hide(el){
         el.forEach(element => {
-            document.querySelector(element).style.display = 'none';
+            document.querySelector(element).style.display = 'none!important';
         });
     }
 
@@ -24,10 +24,18 @@
 
         console.log('init');
 
+        var textarea = document.querySelector('.wp-editor-area');
+
+        var parent = document.getElementById('postdivrich');
+
+        var container = document.createElement('DIV');
+
+        parent.insertBefore(container, parent.firstChild);
+
         hide(['.quicktags-toolbar','#wp-content-editor-tools','#post-status-info']);
 
         require(['vs/editor/editor.main'], function() { 
-            var editor = monaco.editor.create(document.querySelector('.wp-editor-area') , {
+            var editor = monaco.editor.create(container , {
                 language: 'php'
             });
         });
