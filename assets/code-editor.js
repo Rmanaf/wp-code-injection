@@ -16,7 +16,7 @@
                 matchBrackets: true,
                 matchTags: true,
                 autoCloseTags: true,
-                mode: "application/x-httpd-php",
+                mode: "php",
                 theme: 'dracula',
                 keyMap: 'sublime',
                 viewportMargin: Infinity,
