@@ -6,6 +6,36 @@
     border-bottom: 1px solid #414141;
 }
 
+.dcp-ci-toolbar .full-screen {
+    vertical-align: middle;
+    box-sizing: border-box;
+    display: inline-block;
+    border: .1em solid currentColor;
+    width: 1em;
+    height: 1em;
+    position: relative;
+  }
+
+.dcp-ci-toolbar  .full-screen:before, .full-screen:after {
+    content: '';
+    background: #04233D;
+    position: absolute;
+  }
+
+.dcp-ci-toolbar .full-screen:before {
+    width: .333em;
+    height: 1em;
+    left: .233em;
+    top: -.1em;
+  }
+
+.dcp-ci-toolbar .full-screen:after {
+    width: 1em;
+    height: .333em;
+    top: .233em;
+    left: -.1em;
+  }
+
 .dcp-ci-editor {
     height: 100%;
 }
@@ -17,8 +47,8 @@
     right: 0;
     bottom: 0;
     z-index: 9999;
-    padding-top:30px;
-    padding-bottom: 30px;
+    padding-top: 30px;
+    padding-bottom: 40px;
     box-sizing: border-box;
 }
 
