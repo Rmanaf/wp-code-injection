@@ -29,13 +29,9 @@
 
         var textarea = document.querySelector('.wp-editor-area');
 
-        var toolbar = document.createElement('DIV');
-        var container = document.createElement('DIV');
-        var fullscreen = document.createElement('button');
-
-        addClass(toolbar , 'dcp-ci-toolbar');
-        addClass(container ,'dcp-ci-editor' );
-        addClass(fullscreen , 'full-screen');
+        var toolbar = createElement('div', 'dcp-ci-toolbar');
+        var container = createElement('div', 'dcp-ci-editor');
+        var fullscreen = createElement('div', 'full-screen');
 
         parent.insertBefore(container, parent.firstChild);
         parent.insertBefore(toolbar, parent.firstChild);
@@ -61,11 +57,17 @@
 
     }
 
+    function createElement(t, className) {
+        var res = document.createElement(t);
+        addClass(res, className);
+        return r;
+    }
+
     function toggleFullScreen() {
-        if(hasClass(parent , 'fullscreen')){
-            removeClass(parent , 'fullscreen');
-        }else{
-            addClass(parent , 'fullscreen');
+        if (hasClass(parent, 'fullscreen') === true) {
+            removeClass(parent, 'fullscreen');
+        } else {
+            addClass(parent, 'fullscreen');
         }
         editor.layout();
     }
