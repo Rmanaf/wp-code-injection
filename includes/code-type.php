@@ -109,14 +109,6 @@ if (!class_exists('WP_CI_Code_Type')) {
 
             <script>
 
-                var temp = define.jquery;
-
-                console.log(define.jquery);
-
-                delete define.jquery;
-
-                console.log(define.jquery);
-
                 var require = { paths: { 
                     'vs': '<?php echo plugins_url( 'assets/monaco-editor/vs', $this->plugin ) ?>'
                 }};
@@ -131,9 +123,23 @@ if (!class_exists('WP_CI_Code_Type')) {
             wp_enqueue_style('custom-code-editor');
 
             
-            
             wp_enqueue_script('dcp-monaco-editor-nls');
             wp_enqueue_script('dcp-monaco-editor');
+
+            ?>
+
+            <script>
+
+                require(['vs/editor/editor.main'], function() { 
+                    var editor = monaco.editor.create(document.querySelector('.wp-editor-area') , {
+                        language: 'php'
+                    });
+                });
+                
+            </script>
+
+            <?php
+
             wp_enqueue_script('dcp-code-injection-editor');
 
         }
