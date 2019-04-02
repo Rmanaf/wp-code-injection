@@ -127,7 +127,7 @@ if (!class_exists('WP_CI_Code_Type')) {
                 return;
             }
 
-            //$this->unload_all_jquery();
+            $this->unload_all_jquery();
 
             ?>
 
