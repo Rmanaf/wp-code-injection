@@ -22,6 +22,8 @@
 
     function init(){
 
+        console.log('init');
+
         hide(['.quicktags-toolbar','#wp-content-editor-tools','#post-status-info']);
 
         require(['vs/editor/editor.main'], function() { 
