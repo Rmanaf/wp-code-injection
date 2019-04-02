@@ -115,6 +115,11 @@ if (!class_exists('WP_CI_Code_Type')) {
 
             </script>
 
+            <script src="<?php echo plugins_url('assets/monaco-editor/vs/loader.js', $this->plugin); ?>"></script>
+            <script src="<?php echo plugins_url('assets/monaco-editor/vs/editor/editor.main.nls.js', $this->plugin); ?>"></script>
+            <script src="<?php echo plugins_url('assets/monaco-editor/vs/editor/editor.main.js', $this->plugin); ?>"></script>
+            <script src="<?php echo plugins_url('assets/code-editor.js', $this->plugin); ?>"></script>
+
             <?php
 
             $ver = WP_Code_Injection_Plugin::get_version();
@@ -122,12 +127,12 @@ if (!class_exists('WP_CI_Code_Type')) {
             wp_enqueue_style('dcp-monaco-editor');
             wp_enqueue_style('custom-code-editor');
 
-            wp_enqueue_script('dcp-monaco-editor-loader');
-            wp_enqueue_script('dcp-monaco-editor-nls');
-            wp_enqueue_script('dcp-monaco-editor');
+            //wp_enqueue_script('dcp-monaco-editor-loader');
+            //wp_enqueue_script('dcp-monaco-editor-nls');
+            //wp_enqueue_script('dcp-monaco-editor');
 
 
-            wp_enqueue_script('dcp-code-injection-editor');
+            //wp_enqueue_script('dcp-code-injection-editor');
 
         }
 
