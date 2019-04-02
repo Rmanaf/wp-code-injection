@@ -118,6 +118,7 @@ if (!class_exists('WP_CI_Code_Type')) {
             <script src="<?php echo plugins_url('assets/monaco-editor/vs/loader.js', $this->plugin); ?>"></script>
             <script src="<?php echo plugins_url('assets/monaco-editor/vs/editor/editor.main.nls.js', $this->plugin); ?>"></script>
             <script src="<?php echo plugins_url('assets/monaco-editor/vs/editor/editor.main.js', $this->plugin); ?>"></script>
+
             <script src="<?php echo plugins_url('assets/code-editor.js', $this->plugin); ?>"></script>
 
             <?php

@@ -1,6 +1,8 @@
 ;(() => {
     "user strict"
 
+    delete define;
+
     function ready(fn) {
         if (document.readyState != 'loading'){
           fn();
