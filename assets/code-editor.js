@@ -16,12 +16,12 @@
                 matchBrackets: true,
                 matchTags: true,
                 autoCloseTags: true,
-                mode: "html",
+                lint: true,
+                mode: "javascript",
                 theme: 'dracula',
                 keyMap: 'sublime',
                 viewportMargin: Infinity,
-                gutters: ["CodeMirror-lint-markers"],
-                lint: true
+                gutters: ["CodeMirror-lint-markers"]
             })
 
         });
