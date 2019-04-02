@@ -30,6 +30,8 @@
 
         var container = document.createElement('DIV');
 
+        container.classList.add('dcp-ci-editor');
+
         parent.insertBefore(container, parent.firstChild);
 
         hide(['.quicktags-toolbar','#wp-content-editor-tools','#post-status-info']);

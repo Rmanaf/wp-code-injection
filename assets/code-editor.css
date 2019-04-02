@@ -1,4 +1,8 @@
 
+.dcp-ci-editor {
+    min-height: 600px;
+}
+
 input.apple-switch:focus{
     box-shadow:unset; 
 }
