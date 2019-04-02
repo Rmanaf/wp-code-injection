@@ -31,7 +31,7 @@
 
         var toolbar = document.createElement('DIV');
         var container = document.createElement('DIV');
-        var fullscreen = document.createElement('DIV');
+        var fullscreen = document.createElement('BUTTUN');
 
         addClass(toolbar , 'dcp-ci-toolbar');
         addClass(container ,'dcp-ci-editor' );
