@@ -31,9 +31,9 @@
 
         var textarea = document.querySelector('.wp-editor-area');
 
-        var toolbar = createElement('div', 'quicktags-toolbar' , 'dcp-ci-toolbar');
+        var toolbar = createElement('div', ['quicktags-toolbar' , 'dcp-ci-toolbar']);
         var container = createElement('div', 'dcp-ci-editor');
-        var fullscreen = createElement('button', 'full-screen','ed_button','qt-dfw');
+        var fullscreen = createElement('button', ['full-screen','ed_button','qt-dfw']);
 
         parent.insertBefore(container, parent.firstChild);
         parent.insertBefore(toolbar, parent.firstChild);
