@@ -31,7 +31,7 @@
 
         var toolbar = createElement('div', 'dcp-ci-toolbar');
         var container = createElement('div', 'dcp-ci-editor');
-        var fullscreen = createElement('div', 'full-screen');
+        var fullscreen = createElement('button', 'full-screen','ed_button','qt-dfw');
 
         parent.insertBefore(container, parent.firstChild);
         parent.insertBefore(toolbar, parent.firstChild);
@@ -57,10 +57,10 @@
 
     }
 
-    function createElement(t, className) {
+    function createElement(t, ...className) {
         var res = document.createElement(t);
         addClass(res, className);
-        return r;
+        return res;
     }
 
     function toggleFullScreen() {
