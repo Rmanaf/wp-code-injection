@@ -75,4 +75,7 @@ input.apple-switch {
         #postdivrich.fullscreen {
             padding-top: 46px;
         }
+        .quicktags-toolbar {
+            min-height: 35px;
+        }
     }
