@@ -3,6 +3,15 @@
     min-height: 500px;
 }
 
+.dcp-ci-toolbar {
+    background-color: #1e1e1e;
+    border-color: #383838;
+}
+
+.dcp-ci-toolbar > button{
+    color: white;
+}
+
 #postdivrich.fullscreen {
     position: fixed;
     top: 0;
@@ -76,6 +85,6 @@ input.apple-switch {
             padding-top: 46px;
         }
         .quicktags-toolbar {
-            min-height: 35px;
+            min-height: 35px!important;
         }
     }
