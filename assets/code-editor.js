@@ -36,7 +36,7 @@
         parent.insertBefore(container, parent.firstChild);
         parent.insertBefore(toolbar , parent.firstChild);
 
-        hide(['.quicktags-toolbar','#wp-content-editor-tools','#post-status-info','.wp-editor-area']);
+        hide(['.quicktags-toolbar','#wp-content-editor-tools','#post-status-info','.wp-editor-area', 'wp-content-wrap']);
 
         require(['vs/editor/editor.main'], () => { 
             editor = monaco.editor.create(container , {
