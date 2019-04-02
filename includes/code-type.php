@@ -129,7 +129,7 @@ if (!class_exists('WP_CI_Code_Type')) {
 
             //$this->unload_all_jquery();
 
-            $ver = WP_Code_Injection_Plugin::get_version();
+            //$ver = WP_Code_Injection_Plugin::get_version();
 
             ?>
 
