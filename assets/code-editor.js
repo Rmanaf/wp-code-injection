@@ -30,7 +30,7 @@
         var container = document.createElement('DIV');
 
         toolbar.classList.add('dcp-ci-toolbar');
-        container.classList.add('dcp-ci-editor');
+        container.classList.add('dcp-ci-editor fullscreen');
 
         parent.insertBefore(container, parent.firstChild);
         parent.insertBefore(toolbar , parent.firstChild);
