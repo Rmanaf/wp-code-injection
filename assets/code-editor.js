@@ -1,4 +1,4 @@
-; (($) => {
+; (() => {
     "user strict"
 
     var editor = null;
@@ -69,13 +69,11 @@
         e.preventDefault();
 
         var fs = 'fullscreen';
-        
-        var p = $(parent);
 
-        if (p.hasClass(fs)) {
-            p.removeClass(fs);
+        if (hasClass(parent , fs)) {
+            removeClass(parent , fs);
         } else {
-            p.addClass(fs);
+            addClass(parent ,fs);
         }
 
         editor.layout();
@@ -113,4 +111,4 @@
     ready(init);
 
 
-})(jQuery);
+})();
