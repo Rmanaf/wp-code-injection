@@ -1,6 +1,8 @@
 ;(() => {
     "user strict"
 
+    var editor = null;
+
     function ready(fn) {
         if (document.readyState != 'loading'){
           fn();
@@ -31,11 +33,12 @@
         container.classList.add('dcp-ci-editor');
 
         parent.insertBefore(container, parent.firstChild);
+        parent.insertBefore(toolbar , parent.firstChild);
 
         hide(['.quicktags-toolbar','#wp-content-editor-tools','#post-status-info','.wp-editor-area']);
 
-        require(['vs/editor/editor.main'], function() { 
-            var editor = monaco.editor.create(container , {
+        require(['vs/editor/editor.main'], () => { 
+            editor = monaco.editor.create(container , {
                 value: textarea.textContent,
                 theme: 'vs-dark',
                 language: 'php'
@@ -45,5 +48,11 @@
     }
 
     ready(init);
+
+    window.onresize = () => {
+        if(editor){
+            editor.layout();
+        }
+    }
 
 })();
