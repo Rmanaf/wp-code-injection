@@ -4,8 +4,9 @@
 }
 
 .dcp-ci-toolbar {
-    background-color: #1e1e1e;
-    border-color: #383838;
+    background-color: #1e1e1e!important;
+    border: none;
+    border-bottom: 1px solid #383838;
 }
 
 .dcp-ci-toolbar > button{
