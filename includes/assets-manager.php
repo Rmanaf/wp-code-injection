@@ -64,19 +64,6 @@ if (!class_exists('WP_CI_Assets_Manager'))
         private $version;
         private $plugin;
 
-        public static $codemirror_bundle = [
-            'dcp-codemirror', 'dcp-codemirror-addon-php-parser' ,'dcp-codemirror-addon-fold','dcp-codemirror-addon-closebrackets',
-            'dcp-codemirror-addon-matchbrackets','dcp-codemirror-addon-matchtags',
-            'dcp-codemirror-addon-closetag','dcp-codemirror-addon-search',
-            'dcp-codemirror-addon-fullscreen','dcp-codemirror-keymap',
-            'dcp-codemirror-addon-jshint','dcp-codemirror-addon-jsonlint','dcp-codemirror-addon-csslint',
-            'dcp-codemirror-addon-lint','dcp-codemirror-addon-javascript-lint','dcp-codemirror-addon-json-lint',
-            'dcp-codemirror-addon-css-lint',
-            'dcp-codemirror-mode-xml','dcp-codemirror-mode-js',
-            'dcp-codemirror-mode-css','dcp-codemirror-mode-htmlmixed',
-            'dcp-codemirror-mode-clike', 'dcp-codemirror-mode-php'
-        ];
-
         function __construct($plugin , $version)
         {
 
@@ -95,17 +82,12 @@ if (!class_exists('WP_CI_Assets_Manager'))
 
             $ver = $this->version;
 
-            // codemirror
-            wp_register_style('dcp-codemirror', plugins_url('assets/codemirror/lib/codemirror.css', $this->plugin), [], $ver, 'all');       
-            wp_register_style('dcp-codemirror-dracula', plugins_url('assets/codemirror/theme/dracula.css', $this->plugin), [], $ver, 'all');
-
-            // codemirror > addons
-            wp_register_style('dcp-codemirror-addon-lint', plugins_url('assets/codemirror/addons/lint/lint.css', $this->plugin), [], $ver, 'all');
-
+            // monaco editor
+            wp_register_style('dcp-monaco-editor', plugins_url('assets/monaco-editor/vs/editor/editor.main.css', $this->plugin), [], $ver, 'all');
+            
             // tagEditor
             wp_register_style('dcp-tag-editor', plugins_url('assets/jquery.tag-editor.css', $this->plugin), [], $ver, 'all');
-            
-            
+              
             wp_register_style('custom-code-editor', plugins_url('assets/code-editor.css', $this->plugin), [], $ver, 'all');
             
 
@@ -118,41 +100,8 @@ if (!class_exists('WP_CI_Assets_Manager'))
 
             $ver = $this->version;
 
-            // codemirror
-            wp_register_script('dcp-codemirror', plugins_url('assets/codemirror/lib/codemirror.js', $this->plugin), ['jquery'], $ver, false);
-
-            // codemirror > addons
-            wp_register_script('dcp-codemirror-addon-fold', plugins_url('assets/codemirror/addons/fold/xml-fold.js', $this->plugin), [], $ver, false);
-            wp_register_script('dcp-codemirror-addon-closebrackets', plugins_url('assets/codemirror/addons/edit/closebrackets.js', $this->plugin), [], $ver, false);
-            wp_register_script('dcp-codemirror-addon-matchbrackets', plugins_url('assets/codemirror/addons/edit/matchbrackets.js', $this->plugin), [], $ver, false);
-            wp_register_script('dcp-codemirror-addon-matchtags', plugins_url('assets/codemirror/addons/edit/matchtags.js', $this->plugin), [], $ver, false);
-            wp_register_script('dcp-codemirror-addon-closetag', plugins_url('assets/codemirror/addons/edit/closetag.js', $this->plugin), [], $ver, false);
-            wp_register_script('dcp-codemirror-addon-search', plugins_url('assets/codemirror/addons/search/match-highlighter.js', $this->plugin), [], $ver, false);
-            wp_register_script('dcp-codemirror-addon-fullscreen', plugins_url('assets/codemirror/addons/display/fullscreen.js', $this->plugin), [], $ver, false);
-
-            
-            wp_register_script('dcp-codemirror-addon-jshint', 'https://unpkg.com/jshint@latest/dist/jshint.js');
-            wp_register_script('dcp-codemirror-addon-jsonlint', 'https://unpkg.com/jsonlint@latest/web/jsonlint.js');
-            wp_register_script('dcp-codemirror-addon-csslint', 'https://unpkg.com/csslint@latest/dist/csslint.js'); 
-            wp_register_script('dcp-codemirror-addon-php-parser', plugins_url('assets/codemirror/addons/lint/php-parser.min.js', $this->plugin), [], $ver, false);
-            wp_register_script('dcp-codemirror-addon-lint', plugins_url('assets/codemirror/addons/lint/lint.js', $this->plugin), [], $ver, false);
-            wp_register_script('dcp-codemirror-addon-javascript-lint', plugins_url('assets/codemirror/addons/lint/javascript-lint.js', $this->plugin), [], $ver, false);
-            wp_register_script('dcp-codemirror-addon-json-lint', plugins_url('assets/codemirror/addons/lint/json-lint.js', $this->plugin), [], $ver, false);
-            wp_register_script('dcp-codemirror-addon-css-lint', plugins_url('assets/codemirror/addons/lint/css-lint.js', $this->plugin), [], $ver, false);
-
-
-
-            
-            // codemirror > keymap
-            wp_register_script('dcp-codemirror-keymap', plugins_url('assets/codemirror/keymap/sublime.js', $this->plugin), [], $ver, false);
-
-            // codemirror > mode
-            wp_register_script('dcp-codemirror-mode-xml', plugins_url('assets/codemirror/mode/xml/xml.js', $this->plugin), [], $ver, false);
-            wp_register_script('dcp-codemirror-mode-js', plugins_url('assets/codemirror/mode/javascript/javascript.js', $this->plugin), [], $ver, false);
-            wp_register_script('dcp-codemirror-mode-css', plugins_url('assets/codemirror/mode/css/css.js', $this->plugin), [], $ver, false);
-            wp_register_script('dcp-codemirror-mode-htmlmixed', plugins_url('assets/codemirror/mode/htmlmixed/htmlmixed.js', $this->plugin), [], $ver, false);
-            wp_register_script('dcp-codemirror-mode-clike', plugins_url('assets/codemirror/mode/clike/clike.js', $this->plugin), [], $ver, false);
-            wp_register_script('dcp-codemirror-mode-php', plugins_url('assets/codemirror/mode/php/php.js', $this->plugin), [], $ver, false);
+            // monaco-editor
+            wp_register_script('dcp-monaco-editor', plugins_url('assets/monaco-editor/vs/editor/editor.main.js', $this->plugin), [], $ver, false);
 
             // tagEditor
             wp_register_script('dcp-caret', plugins_url('assets/jquery.caret.min.js', $this->plugin), ['jquery'], $ver, false);
