@@ -16,7 +16,7 @@
 
     function hide(el){
         el.forEach(element => {
-            document.querySelector(el).style.display = 'none';
+            document.querySelector(element).style.display = 'none';
         });
     }
 
@@ -33,7 +33,6 @@
         });
 
     }
-    
 
     ready(init);
 
