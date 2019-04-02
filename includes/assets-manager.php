@@ -71,7 +71,10 @@ if (!class_exists('WP_CI_Assets_Manager'))
             'dcp-codemirror-addon-fullscreen','dcp-codemirror-keymap',
             'dcp-codemirror-mode-xml','dcp-codemirror-mode-js',
             'dcp-codemirror-mode-css','dcp-codemirror-mode-htmlmixed',
-            'dcp-codemirror-mode-clike', 'dcp-codemirror-mode-php'
+            'dcp-codemirror-mode-clike', 'dcp-codemirror-mode-php',
+            'dcp-codemirror-addon-jshint','dcp-codemirror-addon-jsonlint','dcp-codemirror-addon-csslint',
+            'dcp-codemirror-addon-lint','dcp-codemirror-addon-javascript-lint','dcp-codemirror-addon-json-lint',
+            'dcp-codemirror-addon-css-lint'
         ];
 
         function __construct($plugin , $version)
@@ -95,6 +98,9 @@ if (!class_exists('WP_CI_Assets_Manager'))
             // codemirror
             wp_register_style('dcp-codemirror', plugins_url('assets/codemirror/lib/codemirror.css', $this->plugin), [], $ver, 'all');       
             wp_register_style('dcp-codemirror-dracula', plugins_url('assets/codemirror/theme/dracula.css', $this->plugin), [], $ver, 'all');
+
+            // codemirror > addons
+            wp_register_style('dcp-codemirror-addon-lint', plugins_url('assets/codemirror/addons/lint/lint.css', $this->plugin), [], $ver, 'all');
 
             // tagEditor
             wp_register_style('dcp-tag-editor', plugins_url('assets/jquery.tag-editor.css', $this->plugin), [], $ver, 'all');
@@ -124,6 +130,18 @@ if (!class_exists('WP_CI_Assets_Manager'))
             wp_register_script('dcp-codemirror-addon-search', plugins_url('assets/codemirror/addons/search/match-highlighter.js', $this->plugin), [], $ver, false);
             wp_register_script('dcp-codemirror-addon-fullscreen', plugins_url('assets/codemirror/addons/display/fullscreen.js', $this->plugin), [], $ver, false);
 
+            
+            wp_register_script('dcp-codemirror-addon-jshint', 'https://unpkg.com/jshint@latest/dist/jshint.js');
+            wp_register_script('dcp-codemirror-addon-jsonlint', 'https://unpkg.com/jsonlint@latest/web/jsonlint.js');
+            wp_register_script('dcp-codemirror-addon-csslint', 'https://unpkg.com/csslint@latest/dist/csslint.js'); 
+            wp_register_script('dcp-codemirror-addon-lint', plugins_url('assets/codemirror/addons/lint/lint.js', $this->plugin), [], $ver, false);
+            wp_register_script('dcp-codemirror-addon-javascript-lint', plugins_url('assets/codemirror/addons/lint/javascript-lint.js', $this->plugin), [], $ver, false);
+            wp_register_script('dcp-codemirror-addon-json-lint', plugins_url('assets/codemirror/addons/lint/json-lint.js', $this->plugin), [], $ver, false);
+            wp_register_script('dcp-codemirror-addon-css-lint', plugins_url('assets/codemirror/addons/lint/css-lint.js', $this->plugin), [], $ver, false);
+
+
+
+            
             // codemirror > keymap
             wp_register_script('dcp-codemirror-keymap', plugins_url('assets/codemirror/keymap/sublime.js', $this->plugin), [], $ver, false);
 

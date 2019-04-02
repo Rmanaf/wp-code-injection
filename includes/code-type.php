@@ -102,7 +102,8 @@ if (!class_exists('WP_CI_Code_Type')) {
             $ver = WP_Code_Injection_Plugin::get_version();
 
             wp_enqueue_style('dcp-codemirror');
-            wp_enqueue_style('dcp-codemirror-dracula');
+            wp_enqueue_style('dcp-codemirror-dracula');      
+            wp_enqueue_style('dcp-codemirror-addon-lint');
             wp_enqueue_style('custom-code-editor');
 
             //codemirror

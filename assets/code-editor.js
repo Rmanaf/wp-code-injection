@@ -19,7 +19,9 @@
                 mode: "application/x-httpd-php",
                 theme: 'dracula',
                 keyMap: 'sublime',
-                viewportMargin: Infinity
+                viewportMargin: Infinity,
+                gutters: ["CodeMirror-lint-markers"],
+                lint: true
             })
 
         });
