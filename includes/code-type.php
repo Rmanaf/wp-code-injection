@@ -108,7 +108,7 @@ if (!class_exists('WP_CI_Code_Type')) {
             <script>
 
                 require.config({ paths: { 
-                    'vs': <?php echo plugins_url( 'assets/monaco-editor/vs', $this->plugin ) ?>
+                    'vs': '<?php echo plugins_url( 'assets/monaco-editor/vs', $this->plugin ) ?>'
                 }});
 
             </script>
