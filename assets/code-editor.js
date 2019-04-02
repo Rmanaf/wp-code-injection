@@ -67,6 +67,7 @@
         }else{
             addClass(parent , 'fullscreen');
         }
+        editor.layout();
     }
 
     function hasClass(el, className) {

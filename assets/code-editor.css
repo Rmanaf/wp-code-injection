@@ -38,6 +38,7 @@
 
 .dcp-ci-editor {
     height: 100%;
+    min-height: 500px;
 }
 
 #postdivrich.fullscreen {
