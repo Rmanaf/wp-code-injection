@@ -89,7 +89,7 @@ if (!class_exists('WP_CI_Code_Type')) {
 
             add_action('manage_code_posts_custom_column' , [$this, 'manage_code_posts_custom_column'], 10, 2 );
 
-            add_action('admin_enqueue_scripts', [$this, 'print_scripts']);
+            add_action('wp_head', [$this, 'print_scripts']);
 
             add_action('restrict_manage_posts',  [$this, 'filter_codes_by_taxonomies'] , 10, 2);
 
@@ -127,9 +127,13 @@ if (!class_exists('WP_CI_Code_Type')) {
                 return;
             }
 
-            $this->unload_all_jquery();
+            //$this->unload_all_jquery();
+
+            $ver = WP_Code_Injection_Plugin::get_version();
 
             ?>
+
+            <link href="" >
 
             <script>
 
@@ -146,18 +150,6 @@ if (!class_exists('WP_CI_Code_Type')) {
             <script src="<?php echo plugins_url('assets/code-editor.js', $this->plugin); ?>"></script>
 
             <?php
-
-            $ver = WP_Code_Injection_Plugin::get_version();
-
-            wp_enqueue_style('dcp-monaco-editor');
-            wp_enqueue_style('custom-code-editor');
-
-            //wp_enqueue_script('dcp-monaco-editor-loader');
-            //wp_enqueue_script('dcp-monaco-editor-nls');
-            //wp_enqueue_script('dcp-monaco-editor');
-
-
-            //wp_enqueue_script('dcp-code-injection-editor');
 
         }
 
