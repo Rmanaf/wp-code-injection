@@ -10,9 +10,11 @@
 
     });
 
+    var e = $('.wp-editor-area').first()[0];
+
     require(['vs/editor/editor.main'], function() { 
         var editor = monaco.editor.create(e, {
-            value: $('.wp-editor-area').val(),
+            value: $(e).val(),
             language: 'php'
         });
     });
