@@ -62,12 +62,16 @@ if (!class_exists('WP_CI_Code_Type')) {
     class WP_CI_Code_Type
     {
 
+        private $plugin;
+
         private static $text_domain;
 
         private static $not_ready_states = ['private', 'draft', 'trash', 'pending'];
 
-        function __construct()
+        function __construct($plugin)
         {
+
+            $this->plugin = $plugin;
 
             self::$text_domain = WP_Code_Injection_Plugin::$text_domain;
 
@@ -107,8 +111,8 @@ if (!class_exists('WP_CI_Code_Type')) {
             wp_enqueue_script( 'dcp-monaco-editor-handler');
             wp_localize_script( 'dcp-monaco-editor-handler', 'require', [ 
                 'paths' => [ 
-                    'vs' => '../node_modules/monaco-editor/min/vs' 
-                ] 
+                    'vs' => plugins_url( 'assets/monaco-editor/vs', $this->plugin )
+                ]
             ]);
 
             wp_enqueue_script('dcp-monaco-editor-loader');

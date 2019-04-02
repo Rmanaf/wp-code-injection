@@ -2,19 +2,19 @@
 
     $(document).ready(() => {
 
-        $('.quicktags-toolbar').remove();
+        $('.quicktags-toolbar').hide();
 
-        $('#wp-content-editor-tools').remove();
+        $('#wp-content-editor-tools').hide();
 
-        $('#post-status-info').remove();
+        $('#post-status-info').hide();
 
-        $('.wp-editor-area').each((i, e) => {
-            var editor = monaco.editor.create(e, {
-                value: $(e).val(),
-                language: 'php'
-            });
+    });
+
+    require(['vs/editor/editor.main'], function() { 
+        var editor = monaco.editor.create(e, {
+            value: $('.wp-editor-area').val(),
+            language: 'php'
         });
-
-    })
+    });
 
 })(jQuery);
