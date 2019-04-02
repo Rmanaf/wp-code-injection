@@ -16,7 +16,7 @@
                 matchBrackets: true,
                 matchTags: true,
                 autoCloseTags: true,
-                mode: "php",
+                mode: "html",
                 theme: 'dracula',
                 keyMap: 'sublime',
                 viewportMargin: Infinity,
