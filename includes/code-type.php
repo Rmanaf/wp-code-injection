@@ -103,18 +103,24 @@ if (!class_exists('WP_CI_Code_Type')) {
                 return;
             }
 
+            ?>
+
+            <script>
+
+                require.config({ paths: { 
+                    'vs': <?php echo plugins_url( 'assets/monaco-editor/vs', $this->plugin ) ?>
+                }});
+
+            </script>
+
+            <?php
+
             $ver = WP_Code_Injection_Plugin::get_version();
 
             wp_enqueue_style('dcp-monaco-editor');
             wp_enqueue_style('custom-code-editor');
 
-            wp_enqueue_script( 'dcp-monaco-editor-handler');
-            wp_localize_script( 'dcp-monaco-editor-handler', 'require', [ 
-                'paths' => [ 
-                    'vs' => plugins_url( 'assets/monaco-editor/vs', $this->plugin )
-                ]
-            ]);
-
+            
             wp_enqueue_script('dcp-monaco-editor-loader');
             wp_enqueue_script('dcp-monaco-editor-nls');
             wp_enqueue_script('dcp-monaco-editor');
