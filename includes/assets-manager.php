@@ -68,9 +68,9 @@ if (!class_exists('WP_CI_Assets_Manager'))
         {
 
             $this->version = $version;
+
             $this->plugin = $plugin;
 
-            add_action( 'admin_enqueue_scripts', [$this , 'register_assets']);
             add_action( 'admin_enqueue_scripts', [$this , 'print_scripts']);
 
         }
@@ -120,7 +120,7 @@ if (!class_exists('WP_CI_Assets_Manager'))
          * register assets
          * @since 2.2.8
          */
-        function register_assets()
+        private function register_assets()
         {
 
             $this->register_styles();
@@ -137,6 +137,8 @@ if (!class_exists('WP_CI_Assets_Manager'))
         {
 
             $ver = $this->version;
+
+            $this->register_assets();
 
             wp_enqueue_script('dcp-code-injection-essentials', plugins_url('assets/essentials.js', $this->plugin), ['jquery'] , $ver, true);
             
