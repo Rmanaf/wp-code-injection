@@ -48,7 +48,7 @@
             });
         });
 
-        toolbar.onclick = toggleFullScreen;
+        fullscreen.onclick = toggleFullScreen;
 
         window.onresize = () => {
             if (editor) {
@@ -87,6 +87,7 @@
 
     function removeClass(el, className) {
         if (el.classList) {
+            console.log(className)
             el.classList.remove(className);
         } else {
             el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
