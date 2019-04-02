@@ -79,6 +79,8 @@ if (!class_exists('WP_CI_Code_Type')) {
 
             add_action('admin_head', [$this, 'admin_head']);
 
+            add_action( 'admin_footer',  [$this, 'print_scripts']);
+
             add_filter('title_save_pre', [$this, 'auto_generate_post_title']);
 
             add_filter('user_can_richedit', [$this, 'disable_wysiwyg']);
@@ -131,6 +133,8 @@ if (!class_exists('WP_CI_Code_Type')) {
 
             ?>
 
+            <link href="<?php echo plugins_url('assets/monaco-editor/vs/editor/editor.main.css', $this->plugin); ?>" />
+
             <script>
                 var require = { paths: { 
                     'vs': '<?php echo plugins_url( 'assets/monaco-editor/vs', $this->plugin ) ?>'
@@ -142,10 +146,6 @@ if (!class_exists('WP_CI_Code_Type')) {
             <script src="<?php echo plugins_url('assets/monaco-editor/vs/editor/editor.main.js', $this->plugin); ?>"></script>
             
             <script src="<?php echo plugins_url('assets/code-editor.js', $this->plugin); ?>"></script>
-
-            <script>
-                delete define;
-            </script>
 
             <?php
 
@@ -192,8 +192,6 @@ if (!class_exists('WP_CI_Code_Type')) {
             $this->hide_post_title_input();
 
             $this->remove_mediabuttons();
-
-            $this->print_scripts();
 
         }
 
