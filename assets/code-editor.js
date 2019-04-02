@@ -1,15 +1,38 @@
+;(() => {
+    "user strict"
 
+    function ready(fn) {
+        if (document.readyState != 'loading'){
+          fn();
+        } else if (document.addEventListener) {
+          document.addEventListener('DOMContentLoaded', fn);
+        } else {
+          document.attachEvent('onreadystatechange', function() {
+            if (document.readyState != 'loading')
+              fn();
+          });
+        }
+    }
 
-; (($) => {
+    function hide(el){
+        el.forEach(element => {
+            document.querySelector(el).style.display = 'none';
+        });
+    }
 
-    $(document).ready(() => {
+    function init(){
 
-        $('.quicktags-toolbar').hide();
+        hide(['.quicktags-toolbar','#wp-content-editor-tools','#post-status-info']);
 
-        $('#wp-content-editor-tools').hide();
+        require(['vs/editor/editor.main'], function() { 
+            var editor = monaco.editor.create(document.querySelector('.wp-editor-area') , {
+                language: 'php'
+            });
+        });
 
-        $('#post-status-info').hide();
+    }
+    
 
-    });
+    ready(init);
 
-})(jQuery);
+})();
