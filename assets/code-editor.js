@@ -60,7 +60,7 @@
 
     function createElement(t, ...className) {
         var res = document.createElement(t);
-        addClass(res, className);
+        addClass(res, ...className);
         return res;
     }
 
