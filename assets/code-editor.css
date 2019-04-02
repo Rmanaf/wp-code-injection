@@ -18,6 +18,8 @@
     bottom: 0;
     z-index: 9999;
     padding-top:30px;
+    padding-bottom: 30px;
+    box-sizing: border-box;
 }
 
 input.apple-switch:focus{
