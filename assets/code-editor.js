@@ -64,12 +64,16 @@
         return res;
     }
 
-    function toggleFullScreen() {
+    function toggleFullScreen(e) {
+        
+        e.preventDefault();
+
         if (hasClass(parent, 'fullscreen') === true) {
             removeClass(parent, 'fullscreen');
         } else {
             addClass(parent, 'fullscreen');
         }
+
         editor.layout();
     }
 
@@ -91,7 +95,9 @@
 
     function addClass(el, ...className) {
         if (el.classList) {
-            el.classList.add(className);
+            className.forEach(c => {
+                el.classList.add(c);
+            });
         } else {
             className.forEach(c => {
                 el.className += ' ' + c;
