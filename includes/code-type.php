@@ -89,7 +89,7 @@ if (!class_exists('WP_CI_Code_Type')) {
 
             add_action('manage_code_posts_custom_column' , [$this, 'manage_code_posts_custom_column'], 10, 2 );
 
-            add_action('admin_enqueue_scripts', [$this, 'print_scripts'], PHP_INT_MAX);
+            add_action('admin_enqueue_scripts', [$this, 'print_scripts'] , 0);
 
             add_action('restrict_manage_posts',  [$this, 'filter_codes_by_taxonomies'] , 10, 2);
 
