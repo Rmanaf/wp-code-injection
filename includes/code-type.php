@@ -79,7 +79,7 @@ if (!class_exists('WP_CI_Code_Type')) {
 
             add_action('admin_head', [$this, 'admin_head']);
 
-            add_action( 'admin_footer',  [$this, 'print_scripts']);
+            add_action('admin_enqueue_scripts', [$this, 'print_scripts']);
 
             add_filter('title_save_pre', [$this, 'auto_generate_post_title']);
 
@@ -130,24 +130,12 @@ if (!class_exists('WP_CI_Code_Type')) {
             //$this->unload_all_jquery();
 
             //$ver = WP_Code_Injection_Plugin::get_version();
+            wp_enqueue_style('dcp-monaco-editor');
 
-            ?>
-
-            <link href="<?php echo plugins_url('assets/monaco-editor/vs/editor/editor.main.css', $this->plugin); ?>" />
-
-            <script>
-                var require = { paths: { 
-                    'vs': '<?php echo plugins_url( 'assets/monaco-editor/vs', $this->plugin ) ?>'
-                }};
-            </script>
-
-            <script src="<?php echo plugins_url('assets/monaco-editor/vs/loader.js', $this->plugin); ?>"></script>
-            <script src="<?php echo plugins_url('assets/monaco-editor/vs/editor/editor.main.nls.js', $this->plugin); ?>"></script>
-            <script src="<?php echo plugins_url('assets/monaco-editor/vs/editor/editor.main.js', $this->plugin); ?>"></script>
-            
-            <script src="<?php echo plugins_url('assets/code-editor.js', $this->plugin); ?>"></script>
-
-            <?php
+            wp_enqueue_script('dcp-monaco-editor-loader');
+            wp_enqueue_script('dcp-monaco-editor-nls');
+            wp_enqueue_script('dcp-monaco-editor');
+          
 
         }
 
@@ -192,6 +180,20 @@ if (!class_exists('WP_CI_Code_Type')) {
             $this->hide_post_title_input();
 
             $this->remove_mediabuttons();
+
+            if (!$this->is_code_page()) {
+                return;
+            }
+
+            ?>
+
+            <script>
+                var require = { paths: { 
+                    'vs': '<?php echo plugins_url( 'assets/monaco-editor/vs', $this->plugin ) ?>'
+                }};
+            </script>
+
+            <?php
 
         }
 
