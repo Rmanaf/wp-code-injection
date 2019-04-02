@@ -103,7 +103,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
              * initialize custom post type
              * @since 2.2.8
              */
-            $this->custom_post_type = new WP_CI_Code_Type();
+            $this->custom_post_type = new WP_CI_Code_Type(__FILE__);
 
 
             /**
