@@ -69,3 +69,10 @@ input.apple-switch {
    input.apple-switch:checked:before {
        content:"";
    }
+
+
+   @media screen and (max-width: 782px){
+        #postdivrich.fullscreen {
+            padding-top: 46px;
+        }
+    }

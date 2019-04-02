@@ -86,8 +86,8 @@
     }
 
     function removeClass(el, className) {
+        console.log(className);
         if (el.classList) {
-            console.log(className)
             el.classList.remove(className);
         } else {
             el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
