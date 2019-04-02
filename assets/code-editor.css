@@ -10,7 +10,7 @@
     min-height: 500px;
 }
 
-.postdivrich.fullscreen {
+#postdivrich.fullscreen {
     position: fixed;
     top: 50;
     left: 0;
