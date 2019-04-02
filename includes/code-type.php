@@ -95,6 +95,29 @@ if (!class_exists('WP_CI_Code_Type')) {
 
         }
 
+        private function unload_all_jquery() {
+            //wp_enqueue_script("jquery");
+            $jquery_ui = array(
+                "jquery-ui-widget",
+                "jquery-ui-mouse",
+                "jquery-ui-accordion",
+                "jquery-ui-autocomplete",
+                "jquery-ui-slider",
+                "jquery-ui-tabs",   
+                "jquery-ui-draggable",
+                "jquery-ui-droppable",
+                "jquery-ui-selectable",
+                "jquery-ui-position",
+                "jquery-ui-datepicker",
+                "jquery-ui-resizable",
+                "jquery-ui-dialog",
+                "jquery-ui-button"
+            );
+        
+            foreach($jquery_ui as $script){
+                wp_deregister_script($script);
+            }
+        }
 
         public function print_scripts()
         {
@@ -103,7 +126,7 @@ if (!class_exists('WP_CI_Code_Type')) {
                 return;
             }
 
-           
+            $this->unload_all_jquery();
 
             ?>
 
@@ -116,9 +139,6 @@ if (!class_exists('WP_CI_Code_Type')) {
             </script>
 
             <script src="<?php echo plugins_url('assets/monaco-editor/vs/loader.js', $this->plugin); ?>"></script>
-            <script>
-                delete define;
-            </script>
             <script src="<?php echo plugins_url('assets/monaco-editor/vs/editor/editor.main.nls.js', $this->plugin); ?>"></script>
             <script src="<?php echo plugins_url('assets/monaco-editor/vs/editor/editor.main.js', $this->plugin); ?>"></script>
             
