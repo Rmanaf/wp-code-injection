@@ -17,9 +17,9 @@
         }
     }
 
-    function hide(el) {
-        el.forEach(element => {
-            document.querySelector(element).style.display = 'none';
+    function hide(...selectors) {
+        selectors.forEach(s => {
+            document.querySelector(s).style.display = 'none';
         });
     }
 
@@ -27,11 +27,11 @@
 
         parent = document.getElementById('postdivrich');
         
-        hide(['.quicktags-toolbar', '#wp-content-editor-tools', '#post-status-info', '.wp-editor-area', '#wp-content-wrap']);
+        //hide('.quicktags-toolbar', '#wp-content-editor-tools', '#post-status-info', '.wp-editor-area', '#wp-content-wrap');
 
         var textarea = document.querySelector('.wp-editor-area');
 
-        var toolbar = createElement('div', 'quicktags-toolbar', 'dcp-ci-toolbar');
+        var toolbar = createElement('div', 'quicktags-toolbar' , 'dcp-ci-toolbar');
         var container = createElement('div', 'dcp-ci-editor');
         var fullscreen = createElement('button', 'full-screen','ed_button','qt-dfw');
 
