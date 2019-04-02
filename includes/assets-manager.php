@@ -65,16 +65,16 @@ if (!class_exists('WP_CI_Assets_Manager'))
         private $plugin;
 
         public static $codemirror_bundle = [
-            'dcp-codemirror','dcp-codemirror-addon-fold','dcp-codemirror-addon-closebrackets',
+            'dcp-codemirror', 'dcp-codemirror-addon-php-parser' ,'dcp-codemirror-addon-fold','dcp-codemirror-addon-closebrackets',
             'dcp-codemirror-addon-matchbrackets','dcp-codemirror-addon-matchtags',
             'dcp-codemirror-addon-closetag','dcp-codemirror-addon-search',
             'dcp-codemirror-addon-fullscreen','dcp-codemirror-keymap',
-            'dcp-codemirror-mode-xml','dcp-codemirror-mode-js',
-            'dcp-codemirror-mode-css','dcp-codemirror-mode-htmlmixed',
-            'dcp-codemirror-mode-clike', 'dcp-codemirror-mode-php',
             'dcp-codemirror-addon-jshint','dcp-codemirror-addon-jsonlint','dcp-codemirror-addon-csslint',
             'dcp-codemirror-addon-lint','dcp-codemirror-addon-javascript-lint','dcp-codemirror-addon-json-lint',
-            'dcp-codemirror-addon-css-lint'
+            'dcp-codemirror-addon-css-lint',
+            'dcp-codemirror-mode-xml','dcp-codemirror-mode-js',
+            'dcp-codemirror-mode-css','dcp-codemirror-mode-htmlmixed',
+            'dcp-codemirror-mode-clike', 'dcp-codemirror-mode-php'
         ];
 
         function __construct($plugin , $version)
@@ -134,6 +134,7 @@ if (!class_exists('WP_CI_Assets_Manager'))
             wp_register_script('dcp-codemirror-addon-jshint', 'https://unpkg.com/jshint@latest/dist/jshint.js');
             wp_register_script('dcp-codemirror-addon-jsonlint', 'https://unpkg.com/jsonlint@latest/web/jsonlint.js');
             wp_register_script('dcp-codemirror-addon-csslint', 'https://unpkg.com/csslint@latest/dist/csslint.js'); 
+            wp_register_script('dcp-codemirror-addon-php-parser', plugins_url('assets/codemirror/addons/lint/php-parser.min.js', $this->plugin), [], $ver, false);
             wp_register_script('dcp-codemirror-addon-lint', plugins_url('assets/codemirror/addons/lint/lint.js', $this->plugin), [], $ver, false);
             wp_register_script('dcp-codemirror-addon-javascript-lint', plugins_url('assets/codemirror/addons/lint/javascript-lint.js', $this->plugin), [], $ver, false);
             wp_register_script('dcp-codemirror-addon-json-lint', plugins_url('assets/codemirror/addons/lint/json-lint.js', $this->plugin), [], $ver, false);
