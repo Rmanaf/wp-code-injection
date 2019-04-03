@@ -67,9 +67,7 @@
                     return;
                 }
 
-                window.onbeforeunload = () => {
-                    return;
-                };
+                window.onunload = window.onbeforeunload = null;
 
                 document.forms.post.submit();
 
