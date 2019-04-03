@@ -69,8 +69,7 @@
 
                 window.onbeforeunload = (e) =>
                 {
-                    e.preventDefault();
-                    return false;
+                    return "Wait a minute !!!";
                 };
 
                 document.forms.post.submit();
