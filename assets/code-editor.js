@@ -5,6 +5,13 @@
 
     $(document).ready(() => {
 
+        $('.quicktags-toolbar').hide();
+        $('.wp-editor-area').hide();
+        $('#wp-content-editor-tools').hide();
+        $('#post-status-info').remove();
+        $('#wp-content-wrap').hide();
+
+
         parent = $('#postdivrich');
 
         textarea = $('.wp-editor-area');
@@ -27,13 +34,6 @@
             });
 
 
-        $('.quicktags-toolbar').hide();
-        $('.wp-editor-area').hide();
-        $('#wp-content-editor-tools').hide();
-        $('#post-status-info').hide();
-        $('#wp-content-wrap').hide();
-
-
         require(['vs/editor/editor.main'], () => {
             editor = monaco.editor.create(container[0], {
                 value: textarea.text(),
@@ -41,7 +41,6 @@
                 language: 'php'
             });
         });
-
 
         $(window).on( 'resize' , () => {
             if (editor) {
