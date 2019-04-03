@@ -1,7 +1,9 @@
 ; (($) => {
     "user strict"
-    var parent, editor, textarea, toolbar, fullscreen;
+    var parent, editor, textarea, toolbar, fullscreen, code;
     $(document).ready(() => {
+
+        
 
         // fix jquery ui conflict
         $('body').removeClass('wp-core-ui');
@@ -40,6 +42,8 @@
                 editor.layout();
             });
 
+        // store initial value
+        code = textarea.text();
 
         require([ 'vs/editor/editor.main' ], () => {
 
@@ -56,12 +60,25 @@
             });
 
             editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S, () => {
+
+                // prevent submission if the code has no changes
+                if(textarea.text() === code)
+                {
+                    return;
+                }
+
+                window.onbeforeunload = () => {
+                    return;
+                };
+
                 document.forms.post.submit();
+
             });
 
             editor.addCommand(monaco.KeyMod.Alt | monaco.KeyMod.Shift | monaco.KeyCode.KEY_F, () => {
-                console.log("formatting");
+                
                 editor.getAction('editor.action.format').run();
+
             });
 
         });
