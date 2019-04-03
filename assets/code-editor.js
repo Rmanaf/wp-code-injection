@@ -1,45 +1,39 @@
-; (() => {
+; (($) => {
     "user strict"
 
-    var editor = null;
-    var parent = null;
+    var parent, editor, textarea, toolbar, fullscreen;
 
-    function ready(fn) {
-        if (document.readyState != 'loading') {
-            fn();
-        } else if (document.addEventListener) {
-            document.addEventListener('DOMContentLoaded', fn);
-        } else {
-            document.attachEvent('onreadystatechange', function () {
-                if (document.readyState != 'loading')
-                    fn();
-            });
-        }
-    }
+    $(document).ready(() => {
 
-    function hide(...selectors) {
-        selectors.forEach(s => {
-            document.querySelector(s).style.display = 'none';
-        });
-    }
+        parent = $('#postdivrich');
 
-    function init() {
+        textarea = $('.wp-editor-area');
 
-        parent = document.getElementById('postdivrich');
+        toolbar = $('<div>')
+            .addClass('quicktags-toolbar dcp-ci-toolbar')
+            .appendTo(parent);
+
+        container = $('<div>')
+            .addClass('dcp-ci-editor')
+            .appendTo(parent);
         
-        hide('.quicktags-toolbar', '#wp-content-editor-tools', '#post-status-info', '.wp-editor-area', '#wp-content-wrap');
+        fullscreen = $('<div>')
+            .addClass('full-screen ed_button qt-dfw')
+            .appendTo(toolbar)
+            .click((e)=>{
+                e.preventDefault();
+                parent.toggleClass('fullscreen');
+                editor.layout();
+            });
 
-        var textarea = document.querySelector('.wp-editor-area');
 
-        var toolbar = createElement('div', 'quicktags-toolbar' , 'dcp-ci-toolbar');
-        var container = createElement('div', 'dcp-ci-editor');
-        var fullscreen = createElement('button', 'full-screen','ed_button', 'qt-dfw');
+        $('.quicktags-toolbar').hide();
+        $('.wp-editor-area').hide();
+        $('#wp-content-editor-tools').hide();
+        $('#post-status-info').hide();
+        $('#wp-content-wrap').hide();
 
-        parent.insertBefore(container, parent.firstChild);
-        parent.insertBefore(toolbar, parent.firstChild);
-        toolbar.appendChild(fullscreen);
 
-      
         require(['vs/editor/editor.main'], () => {
             editor = monaco.editor.create(container, {
                 value: textarea.textContent,
@@ -48,67 +42,12 @@
             });
         });
 
-        fullscreen.onclick = toggleFullScreen;
-
-        window.onresize = () => {
+        $(window).on( 'resize' , () => {
             if (editor) {
                 editor.layout();
             }
-        }
+        });
 
-    }
+    });
 
-    function createElement(t, ...className) {
-        var res = document.createElement(t);
-        addClass(res, ...className);
-        return res;
-    }
-
-    function toggleFullScreen(e) {
-        
-        e.preventDefault();
-
-        var fs = 'fullscreen';
-
-        if (hasClass(parent , fs)) {
-            removeClass(parent , fs);
-        } else {
-            addClass(parent ,fs);
-        }
-
-        editor.layout();
-    }
-
-    function hasClass(el, className) {
-        if (el.classList) {
-            el.classList.contains(className);
-        } else {
-            new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
-        }
-    }
-
-    function removeClass(el, className) {
-        console.log(className);
-        if (el.classList) {
-            el.classList.remove(className);
-        } else {
-            el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
-        }
-    }
-
-    function addClass(el, ...className) {
-        if (el.classList) {
-            className.forEach(c => {
-                el.classList.add(c);
-            });
-        } else {
-            className.forEach(c => {
-                el.className += ' ' + c;
-            });
-        }
-    }
-
-    ready(init);
-
-
-})();
+})(jQuery);
