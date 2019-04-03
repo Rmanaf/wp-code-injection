@@ -51,7 +51,8 @@
         require([
             'js/jquery.hotkeys'
         ] , () => {
-            $(document).bind('ctrl+f' , (e) => {
+            console.log("loaded");
+            $(document).bind('keydown', 'alt+shift+f' , (e) => {
                 e.preventDefault();
                 console.log("formatting");
                 editor.getAction('editor.action.format').run();
