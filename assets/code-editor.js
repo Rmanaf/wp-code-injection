@@ -7,7 +7,7 @@
         $('body').removeClass('wp-core-ui');
 
         $('.postbox-container').each((i,e) => {
-            $(this).addClass("wp-core-ui");
+            $(e).addClass("wp-core-ui");
         })
 
         // hide unneeded elements
@@ -45,7 +45,7 @@
             'vs/editor/editor.main.nls' , 
             'vs/editor/editor.main'
         ], () => {
-            
+
             // create editor
             editor = monaco.editor.create(container[0], {
                 value: textarea.text(),
