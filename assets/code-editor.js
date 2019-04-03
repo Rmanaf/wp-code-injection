@@ -45,15 +45,19 @@
             'vs/editor/editor.main.nls' , 
             'vs/editor/editor.main'
         ], () => {
+            
+            // create editor
             editor = monaco.editor.create(container[0], {
                 value: textarea.text(),
                 theme: 'vs-dark',
                 language: 'php'
             });
+
+            // update code
             editor.getModel().onDidChangeContent((event) => {
-                console.log( editor.getModel().getValue());
-                //textarea.text()
+                textarea.text(editor.getModel().getValue());
             });
+
         });
 
         require([
