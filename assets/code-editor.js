@@ -1,12 +1,16 @@
 ; (($) => {
     "user strict"
-
     var parent, editor, textarea, toolbar, fullscreen;
-
     $(document).ready(() => {
 
+        // fix jquery ui conflict
         $('body').removeClass('wp-core-ui');
 
+        $('.postbox-container').each((i,e) => {
+            $(this).addClass("wp-core-ui");
+        })
+
+        // hide unneeded elements
         $('.quicktags-toolbar').hide();
         $('.wp-editor-area').hide();
         $('#wp-content-editor-tools').hide();
@@ -14,7 +18,7 @@
 
         $('#post-status-info').remove();
 
-
+        // create new elements
         parent = $('#postdivrich');
 
         textarea = $('.wp-editor-area');
@@ -45,6 +49,10 @@
                 value: textarea.text(),
                 theme: 'vs-dark',
                 language: 'php'
+            });
+            editor.model.onDidChangeContent((event) => {
+                console.log(editor.model);
+                //textarea.text()
             });
         });
 

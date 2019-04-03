@@ -95,30 +95,6 @@ if (!class_exists('WP_CI_Code_Type')) {
 
         }
 
-        private function unload_all_jquery() {
-            //wp_enqueue_script("jquery");
-            $jquery_ui = array(
-                "jquery-ui-widget",
-                "jquery-ui-mouse",
-                "jquery-ui-accordion",
-                "jquery-ui-autocomplete",
-                "jquery-ui-slider",
-                "jquery-ui-tabs",   
-                "jquery-ui-draggable",
-                "jquery-ui-droppable",
-                "jquery-ui-selectable",
-                "jquery-ui-position",
-                "jquery-ui-datepicker",
-                "jquery-ui-resizable",
-                "jquery-ui-dialog",
-                "jquery-ui-button"
-            );
-        
-            foreach($jquery_ui as $script){
-                wp_deregister_script($script);
-            }
-            
-        }
 
         public function print_scripts()
         {
@@ -127,9 +103,6 @@ if (!class_exists('WP_CI_Code_Type')) {
                return;
             }
 
-            //$this->unload_all_jquery();
-
-            //$ver = WP_Code_Injection_Plugin::get_version();
             wp_enqueue_style('dcp-monaco-editor');
             wp_enqueue_style('dcp-custom-code-editor');
 
