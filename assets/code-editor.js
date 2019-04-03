@@ -34,7 +34,10 @@
             });
 
 
-        require(['vs/editor/editor.main'], () => {
+        require([
+            'vs/editor/editor.main.nls' , 
+            'vs/editor/editor.main'
+        ], () => {
             editor = monaco.editor.create(container[0], {
                 value: textarea.text(),
                 theme: 'vs-dark',
