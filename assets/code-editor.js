@@ -45,17 +45,19 @@
             });
         });
 
+        require([
+            'js/jquery.hotkeys'
+        ] , () => {
+            $(document).bind('ctrl+f' , () => {
+                console.log("formatting");
+                editor.getAction('editor.action.format').run();
+            });
+        });
+
         $(window).on( 'resize' , () => {
             if (editor) {
                 editor.layout();
             }
-        });
-
-        require(['js/jquery.hotkeys'] , () => {
-            $(document).bind('Alt+Shift+f' , () => {
-                console.log("formatting");
-                editor.getAction('editor.action.format').run();
-            });
         });
 
     });
