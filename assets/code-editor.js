@@ -75,8 +75,8 @@
 
             editor.addCommand(monaco.KeyMod.Alt | monaco.KeyMod.Shift | monaco.KeyCode.KEY_F, () => {
                 
-                editor.getAction('editor.action.format').run();
-
+                // TODO: add auto format
+                
             });
 
         });
