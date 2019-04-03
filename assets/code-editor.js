@@ -5,12 +5,15 @@
 
     $(document).ready(() => {
 
+        $(body).removeClass('.wp-core-ui');
+        
         $('.quicktags-toolbar').hide();
         $('.wp-editor-area').hide();
         $('#wp-content-editor-tools').hide();
         $('#wp-content-wrap').hide();
 
         $('#post-status-info').remove();
+
 
         parent = $('#postdivrich');
 
@@ -48,7 +51,8 @@
         require([
             'js/jquery.hotkeys'
         ] , () => {
-            $(document).bind('ctrl+f' , () => {
+            $(document).bind('ctrl+f' , (e) => {
+                e.preventDefault();
                 console.log("formatting");
                 editor.getAction('editor.action.format').run();
             });
