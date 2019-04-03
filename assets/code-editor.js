@@ -5,7 +5,7 @@
 
     $(document).ready(() => {
 
-        $('body').removeClass('.wp-core-ui');
+        $('body').removeClass('wp-core-ui');
 
         $('.quicktags-toolbar').hide();
         $('.wp-editor-area').hide();
