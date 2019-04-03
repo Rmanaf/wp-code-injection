@@ -50,8 +50,8 @@
                 theme: 'vs-dark',
                 language: 'php'
             });
-            editor.model.onDidChangeContent((event) => {
-                console.log(editor.model);
+            editor.getModel().onDidChangeContent((event) => {
+                console.log( editor.getModel().getValue());
                 //textarea.text()
             });
         });
