@@ -102,7 +102,9 @@ if (!class_exists('WP_CI_Assets_Manager'))
 
             // monaco-editor
             wp_register_script('dcp-monaco-editor-loader', plugins_url('assets/monaco-editor/vs/loader.js', $this->plugin), ['jquery'], $ver, true);
-
+            wp_register_script('dcp-monaco-editor-nls', plugins_url('assets/monaco-editor/vs/editor/editor.main.nls.js', $this->plugin), ['jquery'], $ver, true);
+            wp_register_script('dcp-monaco-editor', plugins_url('assets/monaco-editor/vs/editor/editor.main.js', $this->plugin), ['jquery'], $ver, true);
+            
             // tagEditor
             wp_register_script('dcp-caret', plugins_url('assets/jquery.caret.min.js', $this->plugin), ['jquery'], $ver, false);
             wp_register_script('dcp-tag-editor', plugins_url('assets/jquery.tag-editor.min.js', $this->plugin), ['jquery','dcp-caret'], $ver, false);

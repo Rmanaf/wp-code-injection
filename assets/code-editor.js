@@ -41,10 +41,7 @@
             });
 
 
-        require([
-            'vs/editor/editor.main.nls' , 
-            'vs/editor/editor.main'
-        ], () => {
+        require([ 'vs/editor/editor.main' ], () => {
 
             // create editor
             editor = monaco.editor.create(container[0], {
@@ -58,17 +55,15 @@
                 textarea.text(editor.getModel().getValue());
             });
 
-        });
+            editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S, () => {
+                document.forms.post.submit();
+            });
 
-        require([
-            'js/jquery.hotkeys'
-        ] , () => {
-            console.log("loaded");
-            $(document).bind('keydown', 'alt+shift+f' , (e) => {
-                e.preventDefault();
+            editor.addCommand(monaco.KeyMod.Alt | monaco.KeyMod.Shift | monaco.KeyCode.KEY_F, () => {
                 console.log("formatting");
                 editor.getAction('editor.action.format').run();
             });
+
         });
 
         $(window).on( 'resize' , () => {
