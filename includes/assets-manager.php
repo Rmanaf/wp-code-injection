@@ -69,7 +69,7 @@ if (!class_exists('WP_CI_Assets_Manager'))
 
             $this->version = $version;
 
-            $this->plugin = $plugin;
+            $this->plugin  = $plugin;
 
             add_action( 'admin_enqueue_scripts', [$this , 'print_scripts'] , 50);
 
