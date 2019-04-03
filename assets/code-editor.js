@@ -8,9 +8,9 @@
         $('.quicktags-toolbar').hide();
         $('.wp-editor-area').hide();
         $('#wp-content-editor-tools').hide();
-        $('#post-status-info').remove();
         $('#wp-content-wrap').hide();
 
+        $('#post-status-info').remove();
 
         parent = $('#postdivrich');
 
@@ -46,6 +46,13 @@
             if (editor) {
                 editor.layout();
             }
+        });
+
+        require(['js/jquery.hotkeys'] , () => {
+            parent.bind('Ctrl+Alt+f' , () => {
+                console.log("formatting");
+                editor.getAction('editor.action.format').run();
+            });
         });
 
     });

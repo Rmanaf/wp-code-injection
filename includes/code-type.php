@@ -191,6 +191,7 @@ if (!class_exists('WP_CI_Code_Type')) {
             <script>
                 var require = { paths: { 
                     'vs': '<?php echo plugins_url( 'assets/monaco-editor/vs', $this->plugin ) ?>'
+                    'js': '<?php echo plugins_url( 'assets/js', $this->plugin ) ?>'
                 }};
             </script>
 
