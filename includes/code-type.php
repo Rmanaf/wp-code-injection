@@ -79,7 +79,7 @@ if (!class_exists('WP_CI_Code_Type')) {
 
             add_action('admin_head', [$this, 'admin_head']);
 
-            add_action('admin_enqueue_scripts', [$this, 'print_scripts']);
+            add_action('admin_print_scripts', [$this, 'print_scripts']);
 
             add_filter('title_save_pre', [$this, 'auto_generate_post_title']);
 
