@@ -49,7 +49,7 @@
         });
 
         require(['js/jquery.hotkeys'] , () => {
-            parent.bind('Ctrl+Alt+f' , () => {
+            $(document).bind('Alt+Shift+f' , () => {
                 console.log("formatting");
                 editor.getAction('editor.action.format').run();
             });
