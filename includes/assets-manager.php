@@ -88,7 +88,7 @@ if (!class_exists('WP_CI_Assets_Manager'))
             // tagEditor
             wp_register_style('dcp-tag-editor', plugins_url('assets/jquery.tag-editor.css', $this->plugin), [], $ver, 'all');
               
-            wp_register_style('custom-code-editor', plugins_url('assets/code-editor.css', $this->plugin), [], $ver, 'all');
+            wp_register_style('dcp-custom-code-editor', plugins_url('assets/code-editor.css', $this->plugin), [], $ver, 'all');
             
 
         }
