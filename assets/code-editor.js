@@ -35,12 +35,13 @@
 
 
         require(['vs/editor/editor.main'], () => {
-            editor = monaco.editor.create(container, {
-                value: textarea.textContent,
+            editor = monaco.editor.create(container[0], {
+                value: textarea.text(),
                 theme: 'vs-dark',
                 language: 'php'
             });
         });
+
 
         $(window).on( 'resize' , () => {
             if (editor) {
