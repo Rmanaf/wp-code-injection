@@ -67,12 +67,7 @@
                     return;
                 }
 
-                window.onbeforeunload = (e) =>
-                {
-                    return "Wait a minute !!!";
-                };
-
-                document.forms.post.submit();
+                $('#publish').trigger('click');
 
             });
 
