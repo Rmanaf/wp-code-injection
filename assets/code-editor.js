@@ -67,8 +67,11 @@
                     return;
                 }
 
-                delete window.onunload;
-                delete window.onbeforeunload;
+                window.onbeforeunload = (e) =>
+                {
+                    e.preventDefault();
+                    return false;
+                };
 
                 document.forms.post.submit();
 
