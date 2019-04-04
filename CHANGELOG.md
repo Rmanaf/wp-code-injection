@@ -1,5 +1,10 @@
 
 ## Changelog
+### **v2.4.0**
+> Apr 4, 2019
+- [Feature] Editor Fullscreen Button
+- The editor library changed to monaco-editor
+- LICENSE updated
 ### **v2.3.1**
 > Mar 21, 2019 
 - [Fix] Copy CID
