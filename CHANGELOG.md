@@ -2,7 +2,7 @@
 ## Changelog
 ### **v2.4.0**
 > Apr 4, 2019
-- [Feature] Editor Fullscreen Button
+- [Feature] The editor fullscreen button
 - The editor library changed to monaco-editor
 - LICENSE updated
 ### **v2.3.1**
