@@ -7,7 +7,7 @@
 - LICENSE updated
 ### **v2.3.1**
 > Mar 21, 2019 
-- [Fix] Copy CID
+- [Fix] Copy CID bug
 ---
 ### **v2.3.0**
 > Mar 20, 2019 

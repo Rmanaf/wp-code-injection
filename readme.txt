@@ -17,7 +17,7 @@ Allows You to inject code snippets into the pages by just using the WordPress sh
 * The editor library has changed to monaco-editor
 
 = 2.3.1 =
-* [fix] Copy CID
+* [fix] Copy CID bug
 
 = 2.3.0 =
 * [feature] Code as plugin
