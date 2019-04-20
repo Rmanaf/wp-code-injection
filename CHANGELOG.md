@@ -1,5 +1,9 @@
 
 ## Changelog
+### **v2.4.1**
+> Apr 20, 2019
+- [Fix] Disabled code error
+---
 ### **v2.4.0**
 > Apr 10, 2019
 - [Feature] The editor fullscreen button

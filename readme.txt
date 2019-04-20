@@ -12,6 +12,9 @@ Allows You to inject code snippets into the pages by just using the WordPress sh
 
 == Changelog ==
 
+= 2.4.1 =
+* [fix] Disabled code error
+
 = 2.4.0 =
 * [feature] The editor fullscreen button
 * The editor library has changed to monaco-editor
@@ -26,4 +29,4 @@ Allows You to inject code snippets into the pages by just using the WordPress sh
 
 == Screenshots ==
 
-1. Injection shortcode sample
+1. The Code Editor

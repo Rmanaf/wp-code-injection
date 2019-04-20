@@ -626,6 +626,11 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
                 $is_plugin =  isset($code_is_plugin) && $code_is_plugin == '1';
 
+                if(!isset($code_enabled))
+                {
+                   $code_enabled = false; 
+                }
+
                 if(!$is_plugin || $code_enabled == false)
                 {
                     return false;
