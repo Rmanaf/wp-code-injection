@@ -54,7 +54,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
         private static $role_version = '1.0.0';
 
-        private static $client_version = '2.4.0';
+        private static $client_version = '2.4.1';
 
 
         function __construct()
