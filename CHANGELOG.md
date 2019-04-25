@@ -1,7 +1,7 @@
 
 ## Changelog
 ### **v2.4.1**
-> Apr 20, 2019
+> Apr 26, 2019
 - [Fix] Disabled code error
 ---
 ### **v2.4.0**
