@@ -1,21 +1,8 @@
 <?php
 
 /**
- * Apache License, Version 2.0
- * 
- * Copyright (C) 2018 Arman Afzal <arman.afzal@gmail.com>
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * MIT License <https://github.com/Rmanaf/wp-code-injection/blob/master/LICENSE>
+ * Copyright (c) 2020 Arman Afzal <rman.afzal@gmail.com>
  */
 
 if (!class_exists('WP_CI_Code_Metabox')) {
@@ -28,43 +15,45 @@ if (!class_exists('WP_CI_Code_Metabox')) {
                 'code_tracking' => true,
                 'code_enabled' => true,
                 'code_is_plugin' => false,
-                'code_activator_key' => ''
+                'code_activator_key' => '',
+                'code_is_template' => false
             ];
 
             private static $text_domain;
 
-            function __construct($text_domain)
+            /**
+             * @since 2.4.2
+             */
+            static function init($text_domain)
             {
-
                 self::$text_domain = $text_domain;
-
-                add_action('add_meta_boxes',  [$this, 'add_meta_box']);
-
-                add_action('save_post',  [$this, 'save_post']);
+                add_action('add_meta_boxes',  'WP_CI_Code_Metabox::add_meta_box');
+                add_action('save_post',  'WP_CI_Code_Metabox::save_post');
 
             }
 
+
             /**
-             * adds the options meta box
              * @since 2.2.8
              */
-            public function add_meta_box()
+            static function add_meta_box()
             {
 
                 add_meta_box(
                     'code_options_metabox',
                     __('Code Options', self::$text_domain),
-                    [$this, 'code_options_meta_box_cb'],
+                    'WP_CI_Code_Metabox::code_options_meta_box_cb',
                     'code',
                     'side'
                 );
+
             }
 
+
             /**
-             * handle the code options
              * @since 2.2.8
              */
-            public function save_post($id)
+            static function save_post($id)
             {
 
                 if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
@@ -77,7 +66,7 @@ if (!class_exists('WP_CI_Code_Metabox')) {
                     return;
                 }
 
-                if (!current_user_can('edit_post'))
+                if (!current_user_can('edit_post' , $id))
                 {
                     return;
                 }
@@ -101,10 +90,9 @@ if (!class_exists('WP_CI_Code_Metabox')) {
 
 
             /**
-             * returns the code options
              * @since 2.2.8
              */
-            public static function get_code_options($code)
+            static function get_code_options($code)
             {
                 
                 $ID = $code;
@@ -138,8 +126,10 @@ if (!class_exists('WP_CI_Code_Metabox')) {
             }
 
 
-
-            public function code_options_meta_box_cb($code)
+            /**
+             * @since 2.2.8
+             */
+            static function code_options_meta_box_cb($code)
             {
 
                 $code_options = self::get_code_options($code);
@@ -164,9 +154,15 @@ if (!class_exists('WP_CI_Code_Metabox')) {
                         <input <?php checked($code_tracking , true); ?> type="checkbox" id="code_tracking" name="code_tracking" value="1" />
                         <?php _e("Tracking" , self::$text_domain); ?>
                     </label>  
+
+                    <?php if($code_is_plugin): ?>
+
                     <p class="description">
-                        <?php _e("Plugins are not able to be tracked." , self::$text_domain); ?>
+                        <?php _e("<span class=\"dashicons dashicons-info\"></span> Plugins are not able to be tracked." , self::$text_domain); ?>
                     </p>
+
+                    <?php endif; ?>
+
                 </p>
                 <!-- 'tracking' section -->
 
@@ -182,7 +178,15 @@ if (!class_exists('WP_CI_Code_Metabox')) {
                     <?php if(!$use_php) : ?>
                     
                     <p class="description">
-                        <?php _e("Running PHP codes has disabled by the administrator." , self::$text_domain); ?>
+                        <?php _e("<span class=\"dashicons dashicons-info\"></span> Running PHP codes has disabled by the administrator." , self::$text_domain); ?>
+                    </p>
+
+                    <?php endif; ?>
+
+                    <?php if($code_is_plugin): ?>
+
+                    <p class="description">
+                        <?php _e("<span class=\"dashicons dashicons-info\"></span> The <code>[inject]</code> shortcode ignores the code that is marked as plugin." , self::$text_domain); ?>
                     </p>
 
                     <?php endif; ?>
@@ -201,6 +205,7 @@ if (!class_exists('WP_CI_Code_Metabox')) {
 
                 </p>
                 <!-- 'plugin' section -->
+
 
 
                 <!-- 'enable' section -->

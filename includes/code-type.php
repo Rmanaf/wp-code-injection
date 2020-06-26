@@ -1,21 +1,8 @@
 <?php
 
 /**
- * Apache License, Version 2.0
- * 
- * Copyright (C) 2018 Arman Afzal <arman.afzal@gmail.com>
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * MIT License <https://github.com/Rmanaf/wp-code-injection/blob/master/LICENSE>
+ * Copyright (c) 2020 Arman Afzal <rman.afzal@gmail.com>
  */
 
 if (!class_exists('WP_CI_Code_Type')) {
@@ -23,110 +10,118 @@ if (!class_exists('WP_CI_Code_Type')) {
     class WP_CI_Code_Type
     {
 
-        private $plugin;
+        private static $plugin;
 
         private static $text_domain;
 
         private static $not_ready_states = ['private', 'draft', 'trash', 'pending'];
 
-        function __construct($plugin)
+
+        /**
+         * @since 2.4.2
+         */
+        static function init($plugin)
         {
 
-            $this->plugin = $plugin;
+            self::$plugin = $plugin;
 
             self::$text_domain = WP_Code_Injection_Plugin::$text_domain;
 
-            add_action('init', [$this, 'create_posttype']);
+            add_action('init', 'WP_CI_Code_Type::create_posttype');
 
-            add_action('admin_head', [$this, 'admin_head']);
+            add_action('admin_head', 'WP_CI_Code_Type::admin_head');
 
-            add_action('admin_enqueue_scripts', [$this, 'print_scripts'] , 51);
+            add_action('admin_enqueue_scripts', 'WP_CI_Code_Type::print_scripts', 51);
 
-            add_filter('title_save_pre', [$this, 'auto_generate_post_title']);
+            add_filter('title_save_pre', 'WP_CI_Code_Type::auto_generate_post_title');
 
-            add_filter('user_can_richedit', [$this, 'disable_wysiwyg']);
+            add_filter('user_can_richedit', 'WP_CI_Code_Type::disable_wysiwyg');
 
-            add_filter('post_row_actions', [$this, 'custom_row_actions'], 10, 2);
+            add_filter('post_row_actions', 'WP_CI_Code_Type::custom_row_actions', 10, 2);
 
-            add_filter('manage_code_posts_columns', [$this, 'manage_code_posts_columns']);
+            add_filter('manage_code_posts_columns', 'WP_CI_Code_Type::manage_code_posts_columns');
 
-            add_action('manage_code_posts_custom_column' , [$this, 'manage_code_posts_custom_column'], 10, 2 );
+            add_action('manage_code_posts_custom_column', 'WP_CI_Code_Type::manage_code_posts_custom_column', 10, 2);
 
-            add_action('restrict_manage_posts',  [$this, 'filter_codes_by_taxonomies'] , 10, 2);
+            add_action('restrict_manage_posts',  'WP_CI_Code_Type::filter_codes_by_taxonomies', 10, 2);
 
         }
 
 
+        /**
+         * @since 2.2.8
+         */
         public function print_scripts()
         {
 
-            if (!$this->is_code_page()) {
-               return;
+            if (!self::is_code_page()) {
+                return;
             }
 
-            wp_enqueue_style('dcp-monaco-editor');
-            wp_enqueue_style('dcp-custom-code-editor');
-
-            wp_enqueue_script('dcp-monaco-editor-loader');
-            wp_enqueue_script('dcp-monaco-editor-nls');
-            wp_enqueue_script('dcp-monaco-editor');
-            wp_enqueue_script('dcp-code-injection-editor');
-
+            WP_CI_Asset_Manager::enqueue_editor_scripts();
         }
 
 
-        public function filter_codes_by_taxonomies( $post_type, $which ) {
+        /**
+         * @since 2.2.8
+         */
+        static function filter_codes_by_taxonomies($post_type, $which)
+        {
 
-            if ( 'code' !== $post_type )
+            if ('code' !== $post_type)
                 return;
-        
+
             $taxonomies = ['code_category'];
-        
-            foreach ( $taxonomies as $taxonomy_slug ) {
-        
+
+            foreach ($taxonomies as $taxonomy_slug) {
+
                 // Retrieve taxonomy data
-                $taxonomy_obj = get_taxonomy( $taxonomy_slug );
+                $taxonomy_obj = get_taxonomy($taxonomy_slug);
                 $taxonomy_name = $taxonomy_obj->labels->name;
-        
+
                 // Retrieve taxonomy terms
-                $terms = get_terms( $taxonomy_slug );
-        
+                $terms = get_terms($taxonomy_slug);
+
                 // Display filter HTML
                 echo "<select name='{$taxonomy_slug}' id='{$taxonomy_slug}' class='postform'>";
-                echo '<option value="">' . sprintf( esc_html__( 'Show All %s', self::$text_domain ), $taxonomy_name ) . '</option>';
-                foreach ( $terms as $term ) {
+                echo '<option value="">' . sprintf(esc_html__('Show All %s', self::$text_domain), $taxonomy_name) . '</option>';
+                foreach ($terms as $term) {
                     printf(
                         '<option value="%1$s" %2$s>%3$s (%4$s)</option>',
                         $term->slug,
-                        ( ( isset( $_GET[$taxonomy_slug] ) && ( $_GET[$taxonomy_slug] == $term->slug ) ) ? ' selected="selected"' : '' ),
+                        ((isset($_GET[$taxonomy_slug]) && ($_GET[$taxonomy_slug] == $term->slug)) ? ' selected="selected"' : ''),
                         $term->name,
                         $term->count
                     );
                 }
                 echo '</select>';
             }
-        
         }
 
 
-        public function admin_head()
+        /**
+         * @since 2.2.8
+         */
+        static function admin_head()
         {
 
-            $this->hide_post_title_input();
+            self::hide_post_title_input();
 
-            $this->remove_mediabuttons();
+            self::remove_mediabuttons();
 
-            if (!$this->is_code_page()) {
+            if (!self::is_code_page()) {
                 return;
             }
 
-            ?>
+?>
 
             <script>
-                var require = { paths: { 
-                    'vs': '<?php echo plugins_url( 'assets/monaco-editor/vs', $this->plugin ) ?>',
-                    'js': '<?php echo plugins_url( 'assets/js', $this->plugin ) ?>'
-                }};
+                var require = {
+                    paths: {
+                        'vs': '<?php echo plugins_url('assets/monaco-editor/vs', self::$plugin) ?>',
+                        'js': '<?php echo plugins_url('assets/js', self::$plugin) ?>'
+                    }
+                };
             </script>
 
             <?php
@@ -134,122 +129,123 @@ if (!class_exists('WP_CI_Code_Type')) {
         }
 
         /**
-         * Disable quick edit button
-         * @since 1.0.0
+         * @since 2.2.8
          */
-        public function custom_row_actions($actions, $post)
+        static function custom_row_actions($actions, $post)
         {
 
             if (isset($_GET['post_type']) && $_GET['post_type'] == 'code') {
-                
+
                 unset($actions['inline hide-if-no-js']);
 
                 $status = get_post_status($post);
 
-                $needles = [$post->post_title, '”' , '“'];
+                $needles = [$post->post_title, '”', '“'];
 
-                if(isset($actions['edit']))
-                {
-                    $actions['edit'] = str_replace($needles , '' , $actions['edit']);
+                if (isset($actions['edit'])) {
+                    $actions['edit'] = str_replace($needles, '', $actions['edit']);
                 }
 
-                if(isset($actions['trash']))
-                {
-                    $actions['trash'] = str_replace($needles , '' , $actions['trash']);
+                if (isset($actions['trash'])) {
+                    $actions['trash'] = str_replace($needles, '', $actions['trash']);
                 }
 
 
-                if(!in_array($status , self::$not_ready_states))
-                {
+                if (!in_array($status, self::$not_ready_states)) {
 
                     $cid_title = __("Copy the Code ID into the Clipboard", self::$text_domain);
-                    $cid_text = __("Copy CID" , self::$text_domain);
+                    $cid_text = __("Copy CID", self::$text_domain);
 
                     $actions['copy_cid'] = "<a href=\"javascript:window.ci.ctc('#cid-$post->ID');\" title=\"$cid_title\" rel=\"permalink\">$cid_text</a>";
-
                 }
-
             }
 
             return $actions;
-
         }
 
         /**
-         * Generate title
-         * @since 1.0.0
+         * @since 2.2.8
          */
-        public function auto_generate_post_title($title)
+        static function auto_generate_post_title($title)
         {
 
             global $post;
 
+            if (wp_is_post_autosave($post)) {
+                return $title;
+            }
+
+            if (wp_is_post_revision($post)) {
+                return $title;
+            }
+
+
             if (isset($post->ID)) {
 
-                if (empty($_POST['post_title']) && 'code' == get_post_type($post->ID)) {
+                if (empty($_POST['post_title'])) {
 
-                    $title = WP_Code_Injection_Plugin::generate_id('code-');
+                    if (!empty($title)) {
+                        return $title;
+                    }
 
+                    if ('code' == get_post_type($post->ID)) {
+                        return WP_Code_Injection_Plugin::generate_id('code-');
+                    }
                 }
             }
 
             return $title;
-
         }
 
 
         /**
-         * Disable visual editor
-         * @since 1.0.0
+         * @since 2.2.8
          */
-        public function disable_wysiwyg($default)
+        static function disable_wysiwyg($default)
         {
 
-            if ($this->is_code_page()) {
+            if (self::is_code_page()) {
                 return false;
             }
 
             return $default;
-
         }
 
         /**
-         * Hide post title input
-         * @since 1.0.0
+         * @since 2.2.8
          */
-        public function hide_post_title_input()
+        private static function hide_post_title_input()
         {
 
-            if ($this->is_code_page()) :
+            if (self::is_code_page()) :
             ?>
-                <style>#titlediv{display:none;}</style>
-            <?php
+                <style>
+                    #titlediv {
+                        display: none;
+                    }
+                </style>
+                <?php
             endif;
-
         }
 
 
         /**
-         * disable media button
-         * @since 1.0.0
+         * @since 2.2.8
          */
-        private function remove_mediabuttons()
+        private static function remove_mediabuttons()
         {
 
-            if ($this->is_code_page()) {
+            if (self::is_code_page()) {
 
                 remove_action('media_buttons', 'media_buttons');
-
             }
-
         }
 
 
-         /**
-         * Checks if is in post edit page
-         * @since 1.0.0
+        /**
+         * @since 2.2.8
          */
-        private function is_edit_page($new_edit = null)
+        private static function is_edit_page($new_edit = null)
         {
 
             global $pagenow;
@@ -264,51 +260,41 @@ if (!class_exists('WP_CI_Code_Type')) {
                 return in_array($pagenow, array('post-new.php'));
             else
                 return in_array($pagenow, array('post.php', 'post-new.php'));
-
         }
 
 
         /**
-         * Checks if is in code edit/new page
-         * @since 1.0.0
+         * @since 2.2.8
          */
-        private function is_code_page()
+        private static function is_code_page()
         {
 
-            if ($this->is_edit_page('new')) {
+            if (self::is_edit_page('new')) {
                 if (isset($_GET['post_type']) && $_GET['post_type'] == 'code') {
                     return true;
                 }
             }
 
-            if ($this->is_edit_page('edit')) {
+            if (self::is_edit_page('edit')) {
 
                 global $post;
 
                 if ('code' == get_post_type($post)) {
                     return true;
                 }
-
             }
 
             return false;
-
         }
-        
-
 
 
         /**
-         * create code post type
-         * @since 1.0.0
+         * @since 2.2.8
          */
-        public function create_posttype()
+        static function create_posttype()
         {
 
-            $this->create_category_tax();
-
-            // $this->create_directory_tax();
-
+            self::create_category_tax();
 
             $code_lables = [
                 'name' => __('Codes', self::$text_domain),
@@ -335,138 +321,99 @@ if (!class_exists('WP_CI_Code_Type')) {
                     'exclude_from_search' => true,
                     'publicly_queryable' => false,
                     'supports' => ['author', 'revisions', 'title', 'editor'],
-                    'taxonomies' => ['directory'],
-                    'capability_type' => ['code','codes'],
+                    'capability_type' => ['code', 'codes'],
                     'can_export' => true,
                     'map_meta_cap' => true
                 ]
             );
-
-
         }
-        
-        
+
+
         /**
-         * create category taxonomy
          * @since 2.2.8
          */
-        private function create_category_tax(){
+        private static function create_category_tax()
+        {
 
-            register_taxonomy( 
-                'code_category', 
-                'code', 
+            register_taxonomy(
+                'code_category',
+                'code',
                 [
-                   'show_admin_column' => true,
-                   'public' => false,
-                   'show_ui' => true,
-                   'rewrite' => false,
-                   'hierarchical' => true
-                ]
-            );
-
-        }
-
-         /**
-         * create directory taxonomy
-         * @since 2.2.8
-         */
-        private function create_directory_tax(){
-
-            $lables = [
-                'name' => __('Directories' , self::$text_domain),
-                'menu_name' => __('Directories' , self::$text_domain),
-                'singular_name' => __('Directory', self::$text_domain),
-                'add_new_item' => __('Add New Directory', self::$text_domain),
-                'edit_item' => __('Edit Directory', self::$text_domain),
-                'new_item_name' => __('New Directory Name', self::$text_domain),
-                'parent_item' => __('Parent Directory', self::$text_domain),
-                'parent_item_colon' => __('Parent Directory:', self::$text_domain),
-                'search_items ' => __('Search Directories', self::$text_domain),
-                'not_found' => __('No directories found', self::$text_domain),
-                'all_items' => __('All Directories', self::$text_domain),
-                'popular_items' => __('Popular Directories', self::$text_domain),
-                'choose_from_most_used' => __('Choose from the most used directories', self::$text_domain),
-                'add_or_remove_items' => __('Add or remove directories', self::$text_domain),
-                'back_to_items' => __('← Back to directories', self::$text_domain)
-            ];
-
-            register_taxonomy( 
-                'directory', 
-                'code', 
-                [
-                   'labels' => $lables,
-                   'show_admin_column' => true,
-                   'public' => false,
+                    'show_admin_column' => true,
+                    'public' => false,
                     'show_ui' => true,
                     'rewrite' => false,
-                   'hierarchical' => true
+                    'hierarchical' => true
                 ]
             );
-
         }
 
 
-         /**
-         * Rename header of title column to ID
-         * @since 1.0.0
+        /**
+         * @since 2.2.8
          */
-        public function manage_code_posts_columns($columns)
+        static function manage_code_posts_columns($columns)
         {
 
             $columns = [];
 
-            $columns['id'] = __("Code" , self::$text_domain);
+            $columns['id'] = __("Code", self::$text_domain);
             $columns['statistics'] = __("Hits", self::$text_domain) . " — " . WP_CI_Calendar_Heatmap::map();
             $columns['info'] = __("Info", self::$text_domain);
 
             return $columns;
-
         }
 
-        public function manage_code_posts_custom_column( $column, $post_id ){
 
-            switch ( $column ) {
+
+        /**
+         * @since 2.2.8
+         */
+        static function manage_code_posts_custom_column($column, $post_id)
+        {
+
+            switch ($column) {
                 case 'info':
 
                     $code = get_post($post_id);
 
-                    $categories = get_the_terms( $code, 'code_category' );
+                    $categories = get_the_terms($code, 'code_category');
 
-                    ?>
+                ?>
 
                     <dl>
 
-                        <?php if(is_array($categories) && count($categories) > 0) : ?>
+                        <?php if (is_array($categories) && count($categories) > 0) : ?>
                             <dt>
                                 <strong><?php _e("Categories") ?></strong>
                             <dt>
                             <dd>
-                                <?php 
-                                    foreach($categories as $c){
-                                        echo "<span>$c->name<span>,";
-                                    }
+                                <?php
+                                foreach ($categories as $c) {
+                                    echo "<span>$c->name<span>,";
+                                }
                                 ?>
                             <dd>
-                        <?php endif; ?>
+                            <?php endif; ?>
 
-                        <dt>
-                            <strong><?php _e("Author") ?></strong>
-                        <dt>
-                        <dd>
-                            <?php  
-                                echo esc_html(get_the_author_meta('display_name' , $code->post_author) . 
-                                " — <" . get_the_author_meta('user_email' , $code->post_author) . ">"); 
-                            ?>
-                        <dd>
-                        <dt>
-                            <strong><?php _e("Date") ?></strong>
-                        <dt>
-                        <dd>
-                            <?php echo date_i18n( 'F j, Y - g:i a' , strtotime($code->post_modified) ); ?>
-                        <dd>
+                            <dt>
+                                <strong><?php _e("Author") ?></strong>
+                            <dt>
+                            <dd>
+                                <?php
+                                echo esc_html(get_the_author_meta('display_name', $code->post_author) .
+                                    " — <" . get_the_author_meta('user_email', $code->post_author) . ">");
+                                ?>
+                            <dd>
+                            <dt>
+                                <strong><?php _e("Date") ?></strong>
+                            <dt>
+                            <dd>
+                                <?php echo date_i18n('F j, Y - g:i a', strtotime($code->post_modified)); ?>
+                            <dd>
                     </dl>
 
-                    <?php
+                <?php
 
                     break;
                 case 'id':
@@ -474,57 +421,50 @@ if (!class_exists('WP_CI_Code_Type')) {
                     $code = get_post($post_id);
 
                     $status = get_post_status($post_id);
-                    
-                    $code_options = WP_CI_Code_Metabox::get_code_options($code);
-                 
-                    ?>
-                        <p style="text-align: justify;">
-                            <?php echo $code_options['code_description']; ?>  —  <strong><?php echo ucwords($status); ?></strong>
-                        </p>
-                        
-                        <?php 
-                            /**
-                             * prevents the showing of the code IDs in the following states
-                             * private, draft, trash, pending
-                             */
-                            if(in_array($status , self::$not_ready_states)) 
-                            {
-                                break;
-                            } 
-                        ?>
 
-                        <dl>
-                            <dt>
-                                <strong><?php _e("Code ID") ?></strong>
-                            <dt>
-                            <dd>
-                                <code id="<?php echo "cid-$code->ID"; ?>" style="font-size:11px;"><?php echo $code->post_title; ?></code>
-                            <dd>
-                        </dl>
+                    $code_options = WP_CI_Code_Metabox::get_code_options($code);
+
+                ?>
+                    <p style="text-align: justify;">
+                        <?php echo $code_options['code_description']; ?> — <strong><?php echo ucwords($status); ?></strong>
+                    </p>
+
                     <?php
+                    if (in_array($status, self::$not_ready_states)) {
+                        break;
+                    }
+                    ?>
+
+                    <dl>
+                        <dt>
+                            <strong><?php _e("Code ID") ?></strong>
+                        <dt>
+                        <dd>
+                            <code id="<?php echo "cid-$code->ID"; ?>" style="font-size:11px;"><?php echo $code->post_title; ?></code>
+                        <dd>
+                    </dl>
+<?php
 
                     break;
 
                 case 'statistics':
 
                     // get GMT
-                    $cdate = current_time( 'mysql' , 1 );
+                    $cdate = current_time('mysql', 1);
 
                     // start from 6 days ago
                     $start = new DateTime($cdate);
-                    $start->sub(new DateInterval('P6D')); 
+                    $start->sub(new DateInterval('P6D'));
 
                     // today
                     $end = new DateTime($cdate);
-                    
+
                     $heatmap = new WP_CI_Calendar_Heatmap();
-                    $heatmap->load(WP_CI_Database::$table_activities_name , $post_id, $start, $end);
+                    $heatmap->load(WP_CI_Database::$table_activities_name, $post_id, $start, $end);
                     $heatmap->render();
 
-                break;
+                    break;
             }
         }
-
     }
-
 }

@@ -1,21 +1,8 @@
 <?php
 
 /**
- * Apache License, Version 2.0
- * 
- * Copyright (C) 2018 Arman Afzal <arman.afzal@gmail.com>
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * MIT License <https://github.com/Rmanaf/wp-code-injection/blob/master/LICENSE>
+ * Copyright (c) 2020 Arman Afzal <rman.afzal@gmail.com>
  */
 
 if (!class_exists('WP_CI_Database')) {
@@ -46,7 +33,6 @@ if (!class_exists('WP_CI_Database')) {
         }
 
          /**
-         * Checks database
          * @since 2.2.6
          */
         private function check_db()
@@ -89,7 +75,6 @@ if (!class_exists('WP_CI_Database')) {
 
 
          /**
-         * Records activity into the database
          * @since 2.2.6
          */
         public function record_activity($type = 0, $code = null, $error = 0, $id = null)
@@ -145,7 +130,6 @@ if (!class_exists('WP_CI_Database')) {
         }
 
         /**
-         * Returns client IP address
          * @since 1.0.0
          */
         public function get_ip_address()

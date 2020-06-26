@@ -1,21 +1,8 @@
 <?php
 
 /**
- * Apache License, Version 2.0
- * 
- * Copyright (C) 2018 Arman Afzal <arman.afzal@gmail.com>
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * MIT License <https://github.com/Rmanaf/wp-code-injection/blob/master/LICENSE>
+ * Copyright (c) 2020 Arman Afzal <rman.afzal@gmail.com>
  */
 
 if (!class_exists('WP_CI_Calendar_Heatmap')) {
@@ -26,10 +13,9 @@ if (!class_exists('WP_CI_Calendar_Heatmap')) {
         public $data = [];
         private $dowmap = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
-        function __construct()
-        {
-        }
-
+        /**
+         * @since 2.2.6
+         */
         public function load($table_name, $id, $start, $end){
 
             global $wpdb;
@@ -55,7 +41,10 @@ if (!class_exists('WP_CI_Calendar_Heatmap')) {
 
         }
 
-        public function render(){
+        /**
+         * @since 2.2.6
+         */
+        function render(){
 
             $max = 10;
 
@@ -129,7 +118,11 @@ if (!class_exists('WP_CI_Calendar_Heatmap')) {
 
         }
 
-        public static function map(){
+
+        /**
+         * @since 2.2.6
+         */
+        static function map(){
 
             $result = "<span class=\"gdcp-chart-colors\"><i>Less</i>";
             
@@ -147,7 +140,10 @@ if (!class_exists('WP_CI_Calendar_Heatmap')) {
 
         }
 
-        private static function get_color($value , $max){
+        /**
+         * @since 2.2.6
+         */
+        static function get_color($value , $max){
 
             $h = (1.0 - ($value / $max)) * 240;
             

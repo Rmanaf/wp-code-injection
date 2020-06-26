@@ -1,25 +1,27 @@
 # Wordpress Code Injection Plugin
-> Current Version [2.4.1](https://github.com/Rmanaf/wp-code-injection) - [Change logs](https://github.com/Rmanaf/wp-code-injection/blob/master/CHANGELOG.md)
-
-Allows You to inject code snippets into the pages by just using the Wordpress shortcode
+> Current Version [2.4.2](https://wordpress.org/plugins/code-injection)
+This plugin allows you to inject code snippets into the pages by just using the WordPress shortcode.
 
 ## Usage
-Once the plugin activated you will see the Code button in the dashboard menu. 
-- Create a new code, that includes HTML, CSS, and javascript.
-- Copy the generated ID, from the Codes list.
-- Put the Shortcode `[inject id='code-#']` in your post or page content, and replace `#` with the ID.
+Once the plugin is activated you will see the Code button in the dashboard menu. 
+- Create a new code.
+- Copy the CID from the list.
+- Put the Shortcode `[inject id='#']` in your post or page.
+- Replace `#` with the CID.
 
 Or
-- Place the Code Injection widget into the desired sidebar.
-- Find and select the Code ID from the Widget drop-down list.
+- Drag the CI widget into the desired sidebar area.
 
-### In order to run PHP codes, follow the instruction below
+>**Note:** You can find the **Code Options** in the editor page.
 
-Go to `Settings > General`, In the **Code Injection** section, You will see **Activator Keys**
+### In order to run PHP scripts, follow the instruction below:
 
-- Create a strong key that includes digits and characters
-- Put the Shortcode `[unsafe key='#']` in Your post or page content, and replace `#` with the Key You've created before.
-- Write Your PHP code and close unsafe section by using `[/unsafe]`
+Head to `Settings > General`, In the **Code Injection** section, you will see **Activator Keys**
 
-## Bug & Issues Reporting
-If you faced any issues, please tell us on [Github](https://github.com/Rmanaf/wp-code-injection/issues/new)
+- Create a strong key.
+- Put the Shortcode `[unsafe key='#']` in your post or page, and replace `#` with the key you created before.
+- Write your PHP script and close unsafe section by using `[/unsafe]`.
+
+    ```php
+    [unsafe key='key-un7la32'] <?php phpinfo(); ?> [/unsafe]
+    ```
