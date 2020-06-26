@@ -1,5 +1,6 @@
 # Wordpress Code Injection Plugin
 > Current Version [2.4.2](https://wordpress.org/plugins/code-injection)
+
 This plugin allows you to inject code snippets into the pages by just using the WordPress shortcode.
 
 ## Usage
