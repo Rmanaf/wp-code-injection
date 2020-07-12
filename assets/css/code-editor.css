@@ -13,6 +13,8 @@
 }
 
 
+
+
 .wp-core-ui .dcp-ci-editor .button, .wp-core-ui .dcp-ci-editor .button-secondary {
     color: inherit!important;
     border: none;
@@ -54,6 +56,47 @@ textarea:focus,
     text-align: left;
 }
 
+
+.ci-description
+{
+    position: relative;
+    font-size: 13px;
+    font-style: italic;
+    margin: 2px 0 5px;
+    color: #666;
+    padding-left: 20px;
+}
+
+.ci-description .dashicons{
+    position: absolute;
+    left: 0;
+}
+
+
+.ci-header {
+
+    display: flex;
+    align-items: center;
+    text-align: justify;
+    margin-top: 14px!important;
+
+}
+
+.ci-header .ci-logo {
+    width: 64px;
+    height: 64px;
+}
+
+.ci-header p {
+    padding-left: 7px;
+}
+
+.rtl .ci-header p {
+    padding-left: 0;
+    padding-right: 7px;
+}
+
+
 #postdivrich.fullscreen {
     position: fixed;
     top: 0;
@@ -68,6 +111,29 @@ textarea:focus,
 
 input.apple-switch:focus{
     box-shadow:unset; 
+}
+
+.dcp-ci-toolbar .ci-languages {
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+.dcp-ci-toolbar .ci-languages li.ci-lang-select {
+    margin: 2px;
+    padding: 3px 10px;
+    cursor: pointer;
+}
+
+.dcp-ci-toolbar .ci-languages li.ci-lang-select.active {
+    background-color: #e91e63;
+    border-radius: 3px;
+    color: white;
+}
+
+.ci-metabox-group {
+    margin-top: 2px;
+    margin-bottom: 2px;
 }
 
 input.apple-switch {

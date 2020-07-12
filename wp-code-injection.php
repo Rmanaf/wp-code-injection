@@ -2,14 +2,15 @@
 
 /**
  * Plugin Name: Code Injection
- * Plugin URI: https://wordpress.org/plugins/code-injection
- * Description: Allows You to inject code snippets into the pages by just using the Wordpress shortcode
- * Version: 2.4.2
- * Author: Arman Afzal
+ * Plugin URI: https://github.com/Rmanaf/wp-code-injection
+ * Description: This plugin allows you to inject code snippets into the pages.
+ * Version: 2.4.3
+ * Author: Rmanaf
  * Author URI: https://profiles.wordpress.org/rmanaf/
  * License: MIT License
  * License URI: https://github.com/Rmanaf/wp-code-injection/blob/master/LICENSE
  * Text Domain: code-injection
+ * Domain Path: /languages
  */
 
 defined('ABSPATH') or die;
@@ -30,12 +31,9 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
         private $database;
 
-        public static $text_domain = 'code-injection';
-
         private static $role_version = '1.0.0';
 
-        private static $client_version = '2.4.2';
-
+        private static $version = '2.4.3';
 
         function __construct()
         {
@@ -45,10 +43,9 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
             $this->database = new WP_CI_Database();
 
-            WP_CI_Code_Metabox::init(self::$text_domain);
+            WP_CI_Code_Metabox::init();
 
-            WP_CI_Asset_Manager::init(__FILE__, self::$client_version);
-
+            WP_CI_Asset_Manager::init(__FILE__, self::$version);
 
             // check "Unsafe" settings
             $use_shortcode = get_option('wp_dcp_unsafe_widgets_shortcodes', 0);
@@ -70,14 +67,26 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
             add_action('widgets_init', [$this, 'widgets_init']);
 
-            add_action('plugins_loaded', [$this, 'load_extra_plugins']);
+            add_action('plugins_loaded', [$this, 'load_plugin_textdomain']);
+
+            add_action('plugins_loaded', [$this, 'load_plugins']);
+
+            add_action( "template_redirect" , [$this , "check_code_publicity"]);
+
+        }
+
+        /**
+         * @since 2.4.3
+         */
+        function load_plugin_textdomain() {
+            load_plugin_textdomain( "code-injection", FALSE, basename( dirname( __FILE__ ) ) . '/languages/' );
         }
 
 
         /**
          * @since 2.2.6
          */
-        public function unsafe_shortcode($atts = [], $content = null)
+        function unsafe_shortcode($atts = [], $content = null)
         {
 
             $use_php = get_option('wp_dcp_unsafe_widgets_php', false);
@@ -133,7 +142,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
         /**
          * @since 1.0.0
          */
-        public function ci_shortcode($atts = [], $content = null)
+        function ci_shortcode($atts = [], $content = null)
         {
 
             extract(shortcode_atts(['id' => ''], $atts));
@@ -148,43 +157,57 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
             $code = get_page_by_title($id, OBJECT, 'code');
 
-            if (is_object($code)) {
+            if (!is_object($code)) {
+                return;
+            }
 
-                $co = WP_CI_Code_Metabox::get_code_options($code);
 
-                $is_plugin =  isset($co['code_is_plugin']) && $co['code_is_plugin'] == '1';
+            if(!self::check_code_status($code))
+            {
+                 // Unauthorized Request
+                 $this->database->record_activity(0, $id, 6 , $code->ID);
 
-                if ($co['code_enabled'] == false || $is_plugin) {
+                return;
+            }
+            
+
+            $co = WP_CI_Code_Metabox::get_code_options($code);
+
+            $is_plugin =  isset($co['code_is_plugin']) && $co['code_is_plugin'] == '1';
+
+            if ($co['code_enabled'] == false || $is_plugin) {
+                return;
+            }
+
+
+            $render_shortcodes = get_option('wp_dcp_code_injection_allow_shortcode', false);
+
+            $nested_injections = $this->get_shortcode_by_name($code->post_content, 'inject');
+
+            foreach ($nested_injections as $i) {
+
+                $params = $i['params'];
+
+                if (isset($params['id']) && $params['id'] == $id) {
+
+                    $this->database->record_activity(0, $id, 3, $code->ID);
+
                     return;
                 }
-
-
-                $render_shortcodes = get_option('wp_dcp_code_injection_allow_shortcode', false);
-
-                $nested_injections = $this->get_shortcode_by_name($code->post_content, 'inject');
-
-                foreach ($nested_injections as $i) {
-
-                    $params = $i['params'];
-
-                    if (isset($params['id']) && $params['id'] == $id) {
-
-                        $this->database->record_activity(0, $id, 3, $code->ID);
-
-                        return;
-                    }
-                }
-
-                if ($render_shortcodes) {
-
-                    $this->database->record_activity(0, $id, 0, $code->ID);
-
-                    return do_shortcode($code->post_content);
-                } else {
-
-                    return $code->post_content;
-                }
             }
+
+            $this->database->record_activity(0, $id, 0, $code->ID);
+
+            if ($render_shortcodes) {
+
+                return do_shortcode($code->post_content);
+
+            } else {
+
+                return $code->post_content;
+
+            }
+            
         }
 
         /**
@@ -224,27 +247,17 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
             $this->update_caps();
 
-            // checks for control panel plugin 
+            $group = 'general';
 
-            if (defined('DIVAN_CONTROL_PANEL')) {
+            $title_version = "<span class=\"gdcp-version-box wp-ui-notification\">v" . self::$version . "</span>";
 
-                global $_DCP_PLUGINS;
-
-                // control panel will take setting section
-
-                $group = 'dcp-settings-general';
-
-                array_push($_DCP_PLUGINS, ['slug' => self::$text_domain, 'version' => $this->get_version()]);
-            } else {
-
-                $group = 'general';
-            }
-
-
+            
+            $title = esc_html__('Code Injection', "code-injection");
+            
             // settings section
             add_settings_section(
                 'wp_code_injection_plugin',
-                __('Code Injection', self::$text_domain) . "<span class=\"gdcp-version-box wp-ui-notification\">" . $this->get_version() . "<span>",
+                is_rtl() ? $title_version . $title : $title . $title_version,
                 [&$this, 'settings_section_cb'],
                 $group
             );
@@ -265,7 +278,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
             // "CI" fields
             add_settings_field(
                 'wp_dcp_code_injection_allow_shortcode',
-                __("Shortcodes", self::$text_domain),
+                esc_html__("Shortcodes", "code-injection"),
                 [&$this, 'settings_field_cb'],
                 $group,
                 'wp_code_injection_plugin',
@@ -294,7 +307,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
             add_settings_field(
                 'wp_dcp_unsafe_ignore_keys',
-                __("Activator Keys", self::$text_domain),
+                esc_html__("Activator Keys", "code-injection"),
                 [&$this, 'settings_field_cb'],
                 $group,
                 'wp_code_injection_plugin',
@@ -315,7 +328,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
         /**
          * @since 1.0.0
          */
-        public function settings_section_cb() {  }
+        function settings_section_cb() {  }
 
 
         /**
@@ -332,7 +345,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
         /** 
          * @since 1.0.0
          */
-        public function settings_field_cb($args)
+        function settings_field_cb($args)
         {
 
             switch ($args['label_for']) {
@@ -344,7 +357,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
             ?>
                     <label>
                         <input type="checkbox" value="1" id="wp_dcp_code_injection_allow_shortcode" name="wp_dcp_code_injection_allow_shortcode" <?php checked($nested_shortcode, true); ?> />
-                        <?php _e("Allow nested shortcodes", self::$text_domain); ?>
+                        <?php esc_html_e("Allow nested shortcodes", "code-injection"); ?>
                     </label>
                 <?php
                     break;
@@ -353,12 +366,28 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
                     $keys = get_option('wp_dcp_unsafe_keys', '');
 
-                ?>
-                    <p class="ack-head-wrapper"><span class="ack-header"><strong><?php _e("Keys:", "code-injection"); ?></strong></span><a class="button ack-new" href="javascript:void(0);" id="wp_dcp_generate_key">Generate</a>
-                        <p>
-                            <textarea data-placeholder="Enter Keys:" class="large-text code" id="wp_dcp_unsafe_keys" name="wp_dcp_unsafe_keys"><?php echo $keys; ?></textarea>
-                        <?php
-                        break;
+                    ?>
+
+                    <p class="ack-head-wrapper">
+                        <span class="ack-header">
+                            <strong><?php esc_html_e("Keys:", "code-injection"); ?></strong>
+                        </span>
+                        <a class="button ack-new" href="javascript:void(0);" id="wp_dcp_generate_key">
+                            <?php esc_html_e("Generate Key" , "code-injection");  ?>
+                        </a>
+                    </p>
+                    <p>
+                        <textarea data-placeholder="<?php esc_html_e("Enter Keys:" , "code-injection")?>" class="large-text code" id="wp_dcp_unsafe_keys" name="wp_dcp_unsafe_keys"><?php echo $keys; ?></textarea>
+                        <dl>
+                            <dd>
+                                <p class="description">
+                                    e.g.&nbsp;&nbsp;&nbsp;&nbsp;key-2im2a5ex4,&nbsp;&nbsp;key-6dp7mwt05 ...
+                                </p>
+                            </dd>
+                        </dl>
+                    </p>
+                    <?php
+                    break;
 
                     case 'wp_dcp_unsafe_ignore_keys':
 
@@ -367,7 +396,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                         ?>
                             <label>
                                 <input type="checkbox" value="1" id="wp_dcp_unsafe_ignore_keys" name="wp_dcp_unsafe_ignore_keys" <?php checked($ignore_keys, true); ?> />
-                                <?php _e("Ignore activator keys", self::$text_domain); ?>
+                                <?php _e("Ignore activator keys", "code-injection"); ?>
                             </label>
                         <?php
                         break;
@@ -379,7 +408,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                         ?>
                             <label>
                                 <input type="checkbox" value="1" id="wp_dcp_unsafe_widgets_shortcodes" name="wp_dcp_unsafe_widgets_shortcodes" <?php checked($shortcodes_enabled, true); ?> />
-                                <?php _e("Allow shortcodes in the <strong>Custom HTML</strong> widget", self::$text_domain); ?>
+                                <?php esc_html_e("Allow shortcodes in the Custom HTML widget", "code-injection"); ?>
                             </label>
                         <?php
                         break;
@@ -391,8 +420,15 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
                         ?>
                             <label>
                                 <input type="checkbox" value="1" id="wp_dcp_unsafe_widgets_php" name="wp_dcp_unsafe_widgets_php" <?php checked($php_enabled, true); ?> />
-                                <?php _e("Enable <code>[unsafe key='']</code> shortcode", self::$text_domain); ?>
+                                <?php printf( esc_html__("Enable %s shortcode", "code-injection") , "<code>[unsafe key='']</code>"); ?>
                             </label>
+                            <dl>
+                                <dd>
+                                    <p class="description">
+                                        See <a href="https://github.com/Rmanaf/wp-code-injection/blob/master/README.md">Readme</a> more information.
+                                    </p>
+                                </dd>
+                            </dl>
                         <?php
                         break;
                 }
@@ -408,9 +444,32 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
 
             /**
+             * @since 2.4.3
+             */
+            static function check_code_status($code){
+
+                $status = get_post_status( $code );
+
+                if($status == "private" && !is_user_logged_in())
+                {
+                    return false;
+                }
+
+                if($status != "private" && $status != "publish")
+                {
+                    return false;
+                }
+
+
+                return true;
+            }
+
+
+
+            /**
              * @since 2.2.9
              */
-            public function load_extra_plugins()
+            function load_plugins()
             {
 
                 global $wpdb;
@@ -427,18 +486,19 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
                 $keys = get_option('wp_dcp_unsafe_keys', '');
 
-                $query = "
-                     SELECT $wpdb->posts.*, $wpdb->postmeta.*
+                $query = "SELECT $wpdb->posts.*, $wpdb->postmeta.*
                      FROM $wpdb->posts, $wpdb->postmeta
                      WHERE $wpdb->posts.ID = $wpdb->postmeta.post_id 
                      AND $wpdb->postmeta.meta_key = 'code_options' 
-                     AND $wpdb->posts.post_status = 'publish' 
                      AND $wpdb->posts.post_type = 'code'
                      AND $wpdb->posts.post_date < NOW()
-                     ORDER BY $wpdb->posts.post_date DESC
-                     ";
+                     ORDER BY $wpdb->posts.post_date DESC";
+
+
 
                 $codes = $wpdb->get_results($query, OBJECT);
+
+                
 
 
                 $plugins = array_filter($codes, function ($element) use ($instance, $ignore_keys, $keys) {
@@ -447,11 +507,26 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
                     extract($options);
 
-                    $is_plugin =  isset($code_is_plugin) && $code_is_plugin == '1';
+                    $is_plugin = isset($code_is_plugin) && $code_is_plugin == '1';
+
+                    $is_public = isset($code_is_publicly_queryable) && $code_is_publicly_queryable == '1';
+
 
                     if (!isset($code_enabled)) {
                         $code_enabled = false;
                     }
+
+
+                    if(!self::check_code_status($element))
+                    {
+                        return false;
+                    }
+
+
+                    if($is_public){
+                        return false;
+                    }
+
 
                     if (!$is_plugin || $code_enabled == false) {
                         return false;
@@ -521,9 +596,8 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
             /**
              * @since 2.2.8
              */
-            public static function generate_id($prefix = '')
+            static function generate_id($prefix = '')
             {
-
                 return $prefix . md5(uniqid(rand(0, 1), true));
             }
 
@@ -535,23 +609,23 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
             private function register_roles()
             {
 
+                $developer = get_role('developer');
+
+
                 $role_version = get_option('wp_dcp_code_injection_role_version', '');
 
-                if ($role_version == self::$role_version) {
 
+                if ($role_version == self::$role_version && isset($developer)) {
                     return;
                 }
 
-                $developer = get_role('developer');
-
-                if (isset($developer)) {
-
-                    remove_role('developer');
-                }
+               
+                remove_role('developer');
+                
 
                 add_role(
                     'developer',
-                    __('Developer', self::$text_domain),
+                    esc_html__('Developer', "code-injection"),
                     [
                         'read' => true,
                         'edit_posts' => false,
@@ -567,32 +641,108 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
 
             /**
-             * @since 1.0.0
+             * @since 2.4.3
              */
-            public function activate()
-            {
+            function check_code_publicity() {
 
-                flush_rewrite_rules();
+                global $wpdb;
+
+                if(!is_home() && !is_front_page()){
+                    return;
+                }
+
+                if(!isset($_GET["raw"])){
+                    return;
+                }
+
+                $id = $_GET["raw"];
+
+                $query = "SELECT $wpdb->posts.*, $wpdb->postmeta.*
+                    FROM $wpdb->posts, $wpdb->postmeta
+                    WHERE $wpdb->posts.ID = $wpdb->postmeta.post_id 
+                    AND $wpdb->postmeta.meta_key = 'code_options' 
+                    AND $wpdb->posts.post_type = 'code'
+                    AND $wpdb->posts.post_title = '$id'";
+
+
+                $results = $wpdb->get_results($query, OBJECT);
+
+
+                if(empty($results)){
+
+                    // Code not found
+                    $this->database->record_activity(0, null, 2);
+
+                    return;
+
+                }
+
+
+                $code = $results[0];
+
+
+                if(!self::check_code_status($code)){
+
+                    // Unauthorized Request
+                    $this->database->record_activity(0, $id, 6 , $code->ID);
+
+                    return;
+
+                }
+
+
+                $options = maybe_unserialize($code->meta_value);
+
+                extract($options);
+
+                $is_plugin =  isset($code_is_plugin) && $code_is_plugin == '1';
+
+                $is_public =  isset($code_is_publicly_queryable) && $code_is_publicly_queryable == '1';
+
+                if(!$is_plugin && $is_public){
+
+                    $render_shortcodes = get_option('wp_dcp_code_injection_allow_shortcode', false);
+
+                    $this->database->record_activity(0, $id, 0, $code->ID);
+
+                    header("Content-Type: $code_content_type; charset=UTF-8" , true);
+
+                    if ($render_shortcodes) {
+
+                        exit(do_shortcode($code->post_content));
+
+                    }else{
+
+                        exit($code->post_content);
+
+                    }
+
+                }
+
             }
+
 
             /**
              * @since 1.0.0
              */
-            public function deactivate()
+            function activate()
+            {
+                flush_rewrite_rules();
+            }
+
+
+            /**
+             * @since 1.0.0
+             */
+            function deactivate()
             {
 
                 flush_rewrite_rules();
+
+                delete_option('wp_dcp_code_injection_role_version');
 
                 remove_role('developer');
-            }
 
-            /**
-             * @since 1.0.0
-             */
-            public static function get_version()
-            {
-
-                return get_plugin_data(__FILE__)['Version'];
             }
         }
     }

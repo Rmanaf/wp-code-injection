@@ -35,33 +35,48 @@ if (!class_exists('WP_CI_Assets_Manager'))
 
             $ver = self::$version;
 
-            $plugin = self::$plugin;
+            $texts = [
+                "The File is too large. Do you want to proceed?",
+                "Are you sure? You are about to replace the current code with the selected file content.",
+                "The selected file type is not supported."
+            ];
 
             
-            wp_register_style('ci-custom-code-editor', plugins_url('assets/css/code-editor.css', $plugin), [], $ver, 'all');
+            wp_register_style('ci-custom-code-editor', self::get_asset_url('/css/code-editor.css'), [], $ver, 'all');
 
-            wp_register_script('ci-monaco-editor-loader', plugins_url('assets/monaco-editor/vs/loader.js', $plugin), ['jquery'], $ver, true);
+            wp_register_script('ci-monaco-editor-loader', self::get_asset_url('/monaco-editor/vs/loader.js'), ['jquery'], $ver, true);
             
-            wp_register_script('ci-code-injection-editor', plugins_url('assets/js/code-editor.js', $plugin), [], $ver, false);
+            wp_register_script('ci-code-injection-editor', self::get_asset_url('/js/code-editor.js'), [], $ver, false);
 
 
-            wp_enqueue_script('ci-code-injection-essentials', plugins_url('assets/js/essentials.js', $plugin), ['jquery'] , $ver, true);
+            wp_enqueue_script('ci-code-injection-essentials', self::get_asset_url('/js/essentials.js'), ['jquery'] , $ver, true);
             
-            wp_enqueue_style('ci-code-injection', plugins_url('assets/css/wp-code-injection-admin.css', $plugin), [], $ver, 'all');
+            wp_localize_script( 'ci-code-injection-essentials', "_ci", [
+                "i18n" => [
+                    "code-injection" => [
+                        "texts" => $texts,
+                        "translates" => array_map(function($item){
+                            return esc_html__( $item ,"code-injection" );
+                        } , $texts)
+                    ]
+                ]
+            ]);
+
+            wp_enqueue_style('ci-code-injection', self::get_asset_url('/css/wp-code-injection-admin.css'), [], $ver, 'all');
 
 
             if(self::is_settings_page()) {  
 
                 // tag-editor styles
-                wp_enqueue_style('ci-tag-editor' , plugins_url('assets/css/jquery.tag-editor.css', $plugin), [], $ver, 'all');
+                wp_enqueue_style('ci-tag-editor' , self::get_asset_url('/css/jquery.tag-editor.css'), [], $ver, 'all');
 
                 // tag-editor scripts
-                wp_enqueue_script('ci-caret' , plugins_url('assets/js/jquery.caret.min.js', $plugin), ['jquery'], $ver, false);
-                wp_enqueue_script('ci-tag-editor' , plugins_url('assets/js/jquery.tag-editor.min.js', $plugin), ['jquery','dcp-caret'], $ver, false);
+                wp_enqueue_script('ci-caret' , self::get_asset_url('/js/jquery.caret.min.js'), ['jquery'], $ver, false);
+                wp_enqueue_script('ci-tag-editor' , self::get_asset_url('/js/jquery.tag-editor.min.js'), ['jquery','ci-caret'], $ver, false);
 
 
                 // admin settings scripts
-                wp_enqueue_script('ci-code-injection', plugins_url('assets/js/wp-ci-general-settings.js', $plugin), ['jquery'], $ver, true);
+                wp_enqueue_script('ci-code-injection', self::get_asset_url('/js/wp-ci-general-settings.js'), ['jquery'], $ver, true);
 
             }
 
@@ -82,6 +97,7 @@ if (!class_exists('WP_CI_Assets_Manager'))
         }
 
 
+
         /**
          * @since 2.2.8
          */
@@ -92,6 +108,14 @@ if (!class_exists('WP_CI_Assets_Manager'))
 
             return $screen->id == 'options-general';
 
+        }
+
+
+        /**
+         * @since 2.4.3
+         */
+        static function get_asset_url($path){
+            return plugins_url("/assets/" . rtrim(ltrim($path , "/") , "/"), self::$plugin);
         }
 
 

@@ -1,4 +1,4 @@
-;(($)=>{
+;(function($) {
 
 
     window.ci = {};
@@ -18,11 +18,5 @@
         $temp.remove();
         
     }
-
-    $(document).ready(() => {
-
-        
-
-    });
 
 })(jQuery);

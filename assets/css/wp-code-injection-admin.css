@@ -110,6 +110,12 @@
   text-decoration: none;
 }
 
+.rtl .gdcp-version-box {
+  margin-right: 8px;
+}
+
+
+
 .tag-editor .tag-editor-delete i {
   line-height: unset !important;
 }
@@ -123,8 +129,16 @@
   float: left;
 }
 
+.rtl .ack-head-wrapper .ack-title {
+  float: right!important;
+}
+
 .ack-head-wrapper .ack-new {
   float: right;
+}
+
+.rtl .ack-head-wrapper .ack-new{
+  float: left!important;
 }
 
 p.description code {

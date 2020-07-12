@@ -12,8 +12,6 @@ if (!class_exists('WP_CI_Code_Type')) {
 
         private static $plugin;
 
-        private static $text_domain;
-
         private static $not_ready_states = ['private', 'draft', 'trash', 'pending'];
 
 
@@ -24,8 +22,6 @@ if (!class_exists('WP_CI_Code_Type')) {
         {
 
             self::$plugin = $plugin;
-
-            self::$text_domain = WP_Code_Injection_Plugin::$text_domain;
 
             add_action('init', 'WP_CI_Code_Type::create_posttype');
 
@@ -84,7 +80,7 @@ if (!class_exists('WP_CI_Code_Type')) {
 
                 // Display filter HTML
                 echo "<select name='{$taxonomy_slug}' id='{$taxonomy_slug}' class='postform'>";
-                echo '<option value="">' . sprintf(esc_html__('Show All %s', self::$text_domain), $taxonomy_name) . '</option>';
+                echo '<option value="">' . sprintf(esc_html__('Show All %s', "code-injection"), $taxonomy_name) . '</option>';
                 foreach ($terms as $term) {
                     printf(
                         '<option value="%1$s" %2$s>%3$s (%4$s)</option>',
@@ -153,8 +149,8 @@ if (!class_exists('WP_CI_Code_Type')) {
 
                 if (!in_array($status, self::$not_ready_states)) {
 
-                    $cid_title = __("Copy the Code ID into the Clipboard", self::$text_domain);
-                    $cid_text = __("Copy CID", self::$text_domain);
+                    $cid_title = esc_html__("Copy the Code ID into the Clipboard", "code-injection");
+                    $cid_text = esc_html__("Copy CID", "code-injection");
 
                     $actions['copy_cid'] = "<a href=\"javascript:window.ci.ctc('#cid-$post->ID');\" title=\"$cid_title\" rel=\"permalink\">$cid_text</a>";
                 }
@@ -297,15 +293,15 @@ if (!class_exists('WP_CI_Code_Type')) {
             self::create_category_tax();
 
             $code_lables = [
-                'name' => __('Codes', self::$text_domain),
-                'singular_name' => __('Code', self::$text_domain),
-                'add_new_item' => __('Add New Code', self::$text_domain),
-                'edit_item' => __('Edit Code', self::$text_domain),
-                'new_item' => __('New Code', self::$text_domain),
-                'search_items ' => __('Search Codes', self::$text_domain),
-                'not_found' => __('No codes found', self::$text_domain),
-                'not_found_in_trash ' => __('No codes found in Trash', self::$text_domain),
-                'all_items' => __('All Codes', self::$text_domain)
+                'name' => esc_html__('Codes', "code-injection"),
+                'singular_name' => esc_html__('Code', "code-injection"),
+                'add_new_item' => esc_html__('Add New Code', "code-injection"),
+                'edit_item' => esc_html__('Edit Code', "code-injection"),
+                'new_item' => esc_html__('New Code', "code-injection"),
+                'search_items ' => esc_html__('Search Codes', "code-injection"),
+                'not_found' => esc_html__('No codes found', "code-injection"),
+                'not_found_in_trash ' => esc_html__('No codes found in Trash', "code-injection"),
+                'all_items' => esc_html__('All Codes', "code-injection")
             ];
 
 
@@ -357,9 +353,9 @@ if (!class_exists('WP_CI_Code_Type')) {
 
             $columns = [];
 
-            $columns['id'] = __("Code", self::$text_domain);
-            $columns['statistics'] = __("Hits", self::$text_domain) . " — " . WP_CI_Calendar_Heatmap::map();
-            $columns['info'] = __("Info", self::$text_domain);
+            $columns['id'] = esc_html__("Code", "code-injection");
+            $columns['statistics'] = esc_html__("Hits", "code-injection") . " — " . WP_CI_Calendar_Heatmap::map();
+            $columns['info'] = esc_html__("Info", "code-injection");
 
             return $columns;
         }
@@ -385,7 +381,7 @@ if (!class_exists('WP_CI_Code_Type')) {
 
                         <?php if (is_array($categories) && count($categories) > 0) : ?>
                             <dt>
-                                <strong><?php _e("Categories") ?></strong>
+                                <strong><?php esc_html_e("Categories" , "code-injection"); ?></strong>
                             <dt>
                             <dd>
                                 <?php
@@ -397,7 +393,7 @@ if (!class_exists('WP_CI_Code_Type')) {
                             <?php endif; ?>
 
                             <dt>
-                                <strong><?php _e("Author") ?></strong>
+                                <strong><?php esc_html_e("Author" , "code-injection"); ?></strong>
                             <dt>
                             <dd>
                                 <?php
@@ -406,7 +402,7 @@ if (!class_exists('WP_CI_Code_Type')) {
                                 ?>
                             <dd>
                             <dt>
-                                <strong><?php _e("Date") ?></strong>
+                                <strong><?php esc_html_e("Date" , "code-injection"); ?></strong>
                             <dt>
                             <dd>
                                 <?php echo date_i18n('F j, Y - g:i a', strtotime($code->post_modified)); ?>
@@ -437,7 +433,7 @@ if (!class_exists('WP_CI_Code_Type')) {
 
                     <dl>
                         <dt>
-                            <strong><?php _e("Code ID") ?></strong>
+                            <strong><?php esc_html_e("Code ID" , "code-injection") ?></strong>
                         <dt>
                         <dd>
                             <code id="<?php echo "cid-$code->ID"; ?>" style="font-size:11px;"><?php echo $code->post_title; ?></code>

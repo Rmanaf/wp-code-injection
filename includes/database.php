@@ -14,11 +14,12 @@ if (!class_exists('WP_CI_Database')) {
 
         private static $db_errors = [
             '',                                   // 0 no error
-            'Rendering of PHP code is disabled',  // 1
-            'Code not founds',                    // 2
-            'Infinity loop ignored',              // 3
+            'PHP scripts are disabled',           // 1
+            'Code not found',                     // 2
+            'Infinite Loop',                      // 3
             'An unexpected error occurred',       // 4
-            'Key not founds',                     // 5
+            'Key not found',                      // 5
+            'Unauthorized Request',               // 6
         ];
 
         private static $db_shortcodes_types = ['HTML', 'PHP'];
@@ -99,35 +100,72 @@ if (!class_exists('WP_CI_Database')) {
 
             $ip =  $this->get_ip_address();
 
+
             if($ip === null){
-
                 //return;
-
             }
 
 
 
-            /**
-             * type 0 for HTML, CSS and, javascript
-             * type 1 for PHP
-             */
-            $wpdb->insert(
-                self::$table_activities_name,
-                [
-                    'time'  => current_time('mysql' , 1),
-                    'ip'    => $ip,
-                    'post'  => isset($post->ID) && is_single() ? $post->ID : null,
-                    'blog'  => get_current_blog_id(),
-                    'user'  => get_current_user_id(),
-                    'type'  => $type,
-                    'code'  => $code,
-                    'error' => $error
-                ]
-            );
+            $table_name = self::$table_activities_name;
 
-            
+            $time = current_time('mysql' , 1);
+
+
+            $start = new DateTime($time);
+
+            $start->sub(new DateInterval("PT10S"));
+
+            $start_date = $start->format('Y-m-d H:i:s');
+
+
+            $blog = get_current_blog_id();
+
+            $user = get_current_user_id();
+
+            $post_param = isset($post->ID) && is_single() ? $post->ID : null;
+
+            $post_query_param = is_null($post_param)  ? "`post` IS NULL" : "`post` = '$post_param'";
+           
+            $ip_query_param =  is_null($ip)  ? "`ip` IS NULL" : "`ip` = '$ip'";
+
+
+            $query =  "SELECT COUNT(*) FROM `$table_name` WHERE 
+                            $ip_query_param AND 
+                            `type` = '$type' AND 
+                            `blog` = '$blog' AND
+                            `user` = '$user' AND
+                            $post_query_param AND
+                            `code` = '$code' AND
+                            `time` BETWEEN '$start_date' AND '$time'";
+
+            $count = $wpdb->get_var($query);
+
+            if ($count == 0) {
+
+                /**
+                 * type 0 for HTML, CSS and, javascript
+                 * type 1 for PHP
+                 */
+                $wpdb->insert(
+                    self::$table_activities_name,
+                    [
+                        'time'  => $time,
+                        'ip'    => $ip,
+                        'post'  => $post_param,
+                        'blog'  => $blog,
+                        'user'  => $user,
+                        'type'  => $type,
+                        'code'  => $code,
+                        'error' => $error
+                    ]
+                );
+
+            }
 
         }
+
+
 
         /**
          * @since 1.0.0

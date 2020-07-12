@@ -16,8 +16,8 @@ if (!class_exists('Wp_Code_Injection_Plugin_Widget')) {
 
             parent::__construct(
                 'wp_code_injection_plugin_widget',
-                __('Code Injection', 'wp-code-injection'),
-                ['description' => __('Allows You to inject code snippets into the pages', 'wp-code-injection')]
+                esc_html__('Code Injection', 'code-injection'),
+                ['description' => esc_html__('This plugin allows you to inject code snippets into the pages.', 'code-injection')]
             );
 
         }
@@ -59,7 +59,7 @@ if (!class_exists('Wp_Code_Injection_Plugin_Widget')) {
             ?>
 
              <p>
-                <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Code ID:' , 'wp-code-injection'); ?></label>
+                <label for="<?php echo $this->get_field_id('title'); ?>"><?php esc_html_e('Code ID:' , 'code-injection'); ?></label>
                 <select style="width:100%;" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>">
                 <option value="0">— Select —</option>
             <?php
