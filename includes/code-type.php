@@ -2,7 +2,7 @@
 
 /**
  * MIT License <https://github.com/Rmanaf/wp-code-injection/blob/master/LICENSE>
- * Copyright (c) 2018 Arman Afzal <rman.afzal@gmail.com>
+ * Copyright (c) 2020 Arman Afzal <rman.afzal@gmail.com>
  */
 
 if (!class_exists('WP_CI_Code_Type')) {
@@ -47,7 +47,7 @@ if (!class_exists('WP_CI_Code_Type')) {
         /**
          * @since 2.2.8
          */
-        public function print_scripts()
+        static function print_scripts()
         {
 
             if (!self::is_code_page()) {
