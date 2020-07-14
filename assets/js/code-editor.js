@@ -1,3 +1,7 @@
+/**
+ * MIT License <https://github.com/Rmanaf/wp-code-injection/blob/master/LICENSE>
+ * Copyright (c) 2018 Arman Afzal <rman.afzal@gmail.com>
+ */
 ; (($) => {
     "user strict"
 

@@ -2,7 +2,7 @@
 
 /**
  * MIT License <https://github.com/Rmanaf/wp-code-injection/blob/master/LICENSE>
- * Copyright (c) 2020 Arman Afzal <rman.afzal@gmail.com>
+ * Copyright (c) 2018 Arman Afzal <rman.afzal@gmail.com>
  */
 
 if (!class_exists('WP_CI_Code_Metabox')) {
@@ -182,7 +182,7 @@ if (!class_exists('WP_CI_Code_Metabox')) {
                         printf(
                             esc_html__('You can find useful codes in the CI %1$s.' , "code-injection" ) ,
                             sprintf(
-                                '<a href="%s">%s</a>',
+                                '<a target="_blank" href="%s">%s</a>',
                                 $url,
                                 esc_html__( 'Library', 'code-injection' )
                             ));
