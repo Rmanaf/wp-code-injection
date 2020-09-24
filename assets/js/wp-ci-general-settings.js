@@ -1,6 +1,6 @@
 /**
- * MIT License <https://github.com/Rmanaf/wp-code-injection/blob/master/LICENSE>
- * Copyright (c) 2018 Arman Afzal <rman.afzal@gmail.com>
+ * Licensed under MIT (https://github.com/Rmanaf/wp-code-injection/blob/master/LICENSE)
+ * Copyright (c) 2018 Arman Afzal (https://rmanaf.com)
  */
 ; (($) => {
 
@@ -17,6 +17,6 @@
             $('#wp_dcp_unsafe_keys').tagEditor('addTag', `key-${id}`);
         });
 
-    })
+    });
 
 })(jQuery);

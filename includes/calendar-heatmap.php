@@ -1,8 +1,8 @@
 <?php
 
 /**
- * MIT License <https://github.com/Rmanaf/wp-code-injection/blob/master/LICENSE>
- * Copyright (c) 2018 Arman Afzal <rman.afzal@gmail.com>
+ * Licensed under MIT (https://github.com/Rmanaf/wp-code-injection/blob/master/LICENSE)
+ * Copyright (c) 2018 Arman Afzal (https://rmanaf.com)
  */
 
 if (!class_exists('WP_CI_Calendar_Heatmap')) {
@@ -10,37 +10,16 @@ if (!class_exists('WP_CI_Calendar_Heatmap')) {
     class WP_CI_Calendar_Heatmap
     {
 
-        public $data = [];
+        private $data = [];
+
         private $dowmap = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
-        /**
-         * @since 2.2.6
-         */
-        public function load($table_name, $id, $start, $end){
-
-            global $wpdb;
-
-            // get post title
-            $post = get_post( $id );
-            $id = $post->post_title;
-
-            // convert dates to mysql format
-            $start = $start->format('Y-m-d H:i:s');
-            $end   = $end->format('Y-m-d H:i:s');
-
-
-            $this->data = $wpdb->get_results(
-                "SELECT time, WEEKDAY(time) weekday, HOUR(time) hour,
-                COUNT(DISTINCT ip) unique_hits,
-                COUNT(*) total_hits,
-                SUM(case when error = '' then 0 else 1 end) total_errors
-                FROM $table_name
-                WHERE code='$id' AND (time BETWEEN '$start' AND '$end')
-                GROUP BY hour"
-            , ARRAY_A );
+        function __construct($data){
+            
+            $this->data = $data;
 
         }
-
+        
         /**
          * @since 2.2.6
          */
@@ -51,7 +30,7 @@ if (!class_exists('WP_CI_Calendar_Heatmap')) {
             if(count($this->data) > 0)
             {
                 $max = max(array_map(function($item){   
-                    return intval($item["unique_hits"]);
+                    return intval($item["total_hits"]);
                 }, $this->data )); 
             }
 
@@ -83,7 +62,7 @@ if (!class_exists('WP_CI_Calendar_Heatmap')) {
                 
                     if(!empty($data)){
 
-                        $hits = intval($data[0]["unique_hits"]);
+                        $hits = intval($data[0]["total_hits"]);
                         
                         $plural = $hits > 1;
 
@@ -95,7 +74,7 @@ if (!class_exists('WP_CI_Calendar_Heatmap')) {
 
                         <div class="gdcp-heatmap-cell" style="background-color: <?php echo $color; ?>;">
                             <p class="info">
-                                <span><strong><?php echo $hits . ($plural ? " hits - " : " hit - "); ?></strong><span><span class="time"><?php echo $time; ?><span>
+                                <strong><?php echo $hits . ($plural ? " hits - " : " hit - "); ?></strong><span><?php echo $time; ?><span>
                                 <i class="arrow-down"></i>
                             </p>
                         </div>
@@ -124,7 +103,7 @@ if (!class_exists('WP_CI_Calendar_Heatmap')) {
          */
         static function map(){
 
-            $result = "<span class=\"gdcp-chart-colors\"><i>Less</i>";
+            $result = "<span class=\"gdcp-chart-colors\">";
             
             foreach(range(0,9) as $i){
 
@@ -134,7 +113,7 @@ if (!class_exists('WP_CI_Calendar_Heatmap')) {
 
             }
             
-            $result = $result . "<i>More</i></span>";
+            $result = $result . "</span>";
 
             return $result;
 

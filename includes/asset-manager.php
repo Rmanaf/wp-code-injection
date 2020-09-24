@@ -1,8 +1,8 @@
 <?php
 
 /**
- * MIT License <https://github.com/Rmanaf/wp-code-injection/blob/master/LICENSE>
- * Copyright (c) 2018 Arman Afzal <rman.afzal@gmail.com>
+ * Licensed under MIT (https://github.com/Rmanaf/wp-code-injection/blob/master/LICENSE)
+ * Copyright (c) 2018 Arman Afzal (https://rmanaf.com)
  */
 
 if (!class_exists('WP_CI_Assets_Manager')) 
@@ -46,12 +46,13 @@ if (!class_exists('WP_CI_Assets_Manager'))
 
             wp_register_script('ci-monaco-editor-loader', self::get_asset_url('/monaco-editor/vs/loader.js'), ['jquery'], $ver, true);
             
-            wp_register_script('ci-code-injection-editor', self::get_asset_url('/js/code-editor.js'), [], $ver, false);
+            wp_register_script('ci-editor', self::get_asset_url('/js/code-editor.js'), [], $ver, false);
 
 
-            wp_enqueue_script('ci-code-injection-essentials', self::get_asset_url('/js/essentials.js'), ['jquery'] , $ver, true);
+            wp_enqueue_script('ci-essentials', self::get_asset_url('/js/essentials.js'), ['jquery'] , $ver, true);
             
-            wp_localize_script( 'ci-code-injection-essentials', "_ci", [
+            wp_localize_script( 'ci-essentials', "_ci", [
+                'ajax_url' => admin_url( 'admin-ajax.php' ),
                 "i18n" => [
                     "code-injection" => [
                         "texts" => $texts,
@@ -62,7 +63,7 @@ if (!class_exists('WP_CI_Assets_Manager'))
                 ]
             ]);
 
-            wp_enqueue_style('ci-code-injection', self::get_asset_url('/css/wp-code-injection-admin.css'), [], $ver, 'all');
+            wp_enqueue_style('ci-styles', self::get_asset_url('/css/wp-code-injection-admin.css'), [], $ver, 'all');
 
 
             if(self::is_settings_page()) {  
@@ -92,10 +93,9 @@ if (!class_exists('WP_CI_Assets_Manager'))
 
             wp_enqueue_script('ci-monaco-editor-loader');
 
-            wp_enqueue_script('ci-code-injection-editor');
+            wp_enqueue_script('ci-editor');
 
         }
-
 
 
         /**

@@ -1,12 +1,11 @@
 /**
- * MIT License <https://github.com/Rmanaf/wp-code-injection/blob/master/LICENSE>
- * Copyright (c) 2018 Arman Afzal <rman.afzal@gmail.com>
+ * Licensed under MIT (https://github.com/Rmanaf/wp-code-injection/blob/master/LICENSE)
+ * Copyright (c) 2018 Arman Afzal (https://rmanaf.com)
  */
 ; (($) => {
     "user strict"
 
-    
-    if(typeof wp.i18n !==  "undefined"){
+    if(typeof wp !==  "undefined" && typeof wp.i18n !==  "undefined"){
         var { __, _x, _n, sprintf } = wp.i18n;
     }else{
         function __(text , ctx){

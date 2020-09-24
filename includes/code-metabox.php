@@ -1,8 +1,8 @@
 <?php
 
 /**
- * MIT License <https://github.com/Rmanaf/wp-code-injection/blob/master/LICENSE>
- * Copyright (c) 2018 Arman Afzal <rman.afzal@gmail.com>
+ * Licensed under MIT (https://github.com/Rmanaf/wp-code-injection/blob/master/LICENSE)
+ * Copyright (c) 2018 Arman Afzal (https://rmanaf.com)
  */
 
 if (!class_exists('WP_CI_Code_Metabox')) {
@@ -18,7 +18,8 @@ if (!class_exists('WP_CI_Code_Metabox')) {
                 'code_activator_key' => '',
                 'code_is_template' => false,
                 'code_is_publicly_queryable' => false,
-                'code_content_type' => "text/plain"
+                'code_content_type' => "text/plain",
+                'code_no_cache' => false
             ];
 
             /**
@@ -150,7 +151,7 @@ if (!class_exists('WP_CI_Code_Metabox')) {
                 $messages = [
                     [
                         "show" => !$code_enabled,
-                        "message" => "This code is disabled."
+                        "message" => "The Code is Suspended."
                     ],
                     [
                         "show" => !$use_php,
@@ -245,12 +246,24 @@ if (!class_exists('WP_CI_Code_Metabox')) {
 
                 <div class="ci-metabox-group">
                     <label>
-                        <input data-checkbox-activator data-show-targets="code_content_type_group" data-hide-targets="code_is_plugin_group" <?php checked($code_is_publicly_queryable , true); ?> type="checkbox" id="code_is_publicly_queryable" name="code_is_publicly_queryable" value="1" />
+                        <input data-checkbox-activator data-show-targets="code_no_cache_group,code_content_type_group" data-hide-targets="code_is_plugin_group" <?php checked($code_is_publicly_queryable , true); ?> type="checkbox" id="code_is_publicly_queryable" name="code_is_publicly_queryable" value="1" />
                         <?php esc_html_e("Publicly Queryable" , "code-injection"); ?>
                     </label>  
                 </div>
 
                 <!-- 'publicly_queryable' section -->
+
+
+                <!-- 'no_cache' section -->
+
+                <div id="code_no_cache_group" class="ci-metabox-group">
+                    <label>
+                        <input <?php checked($code_no_cache , true); ?> type="checkbox" id="code_no_cache" name="code_no_cache" value="1" />
+                        <?php esc_html_e("No-Cache" , "code-injection"); ?>
+                    </label>  
+                </div>
+
+                <!-- 'no_cache' section -->
 
 
 
@@ -325,7 +338,7 @@ if (!class_exists('WP_CI_Code_Metabox')) {
                 <p>
                     <label>
                         <input <?php checked($code_enabled , true); ?> type="checkbox" id="code_enabled" name="code_enabled" value="1" />
-                        <?php esc_html_e("Enabled" , "code-injection"); ?>
+                        <?php esc_html_e("Active" , "code-injection"); ?>
                     </label>               
                 </p>
                 <!-- 'enable' section -->

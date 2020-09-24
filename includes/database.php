@@ -1,8 +1,8 @@
 <?php
 
 /**
- * MIT License <https://github.com/Rmanaf/wp-code-injection/blob/master/LICENSE>
- * Copyright (c) 2018 Arman Afzal <rman.afzal@gmail.com>
+ * Licensed under MIT (https://github.com/Rmanaf/wp-code-injection/blob/master/LICENSE)
+ * Copyright (c) 2018 Arman Afzal (https://rmanaf.com)
  */
 
 if (!class_exists('WP_CI_Database')) {
@@ -165,6 +165,55 @@ if (!class_exists('WP_CI_Database')) {
 
         }
 
+        /**
+         * @since 2.4.5
+         */
+        static function get_weekly_report_query($post_id , $start , $end){
+
+            $table_name = self::$table_activities_name;
+
+            // get post title
+            $post = get_post( $post_id );
+            $code = $post->post_title;
+
+            // convert dates to mysql format
+            $start = $start->format('Y-m-d H:i:s');
+            $end   = $end->format('Y-m-d H:i:s');
+
+            return "SELECT time, WEEKDAY(time) weekday, HOUR(time) hour,
+                        COUNT(DISTINCT ip) unique_hits,
+                        COUNT(*) total_hits,
+                        SUM(case when error = '' then 0 else 1 end) total_errors
+                        FROM $table_name
+                        WHERE code='$code' AND (time BETWEEN '$start' AND '$end')
+                        GROUP BY weekday, hour";
+
+        }
+
+        /**
+         * @since 2.4.5
+         */
+        static function get_monthly_report_query($post_id , $start , $end){
+
+            $table_name = self::$table_activities_name;
+
+            // get post title
+            $post = get_post( $post_id );
+            $code = $post->post_title;
+
+            // convert dates to mysql format
+            $start = $start->format('Y-m-d H:i:s');
+            $end   = $end->format('Y-m-d H:i:s');
+
+            return "SELECT time, MONTHNAME(time) month, DAYOFMONTH(time) day,
+                        COUNT(DISTINCT ip) unique_hits,
+                        COUNT(*) total_hits,
+                        SUM(case when error = '' then 0 else 1 end) total_errors
+                        FROM $table_name
+                        WHERE code='$code' AND (time BETWEEN '$start' AND '$end')
+                        GROUP BY month, day";
+                
+        }
 
 
         /**
@@ -192,6 +241,7 @@ if (!class_exists('WP_CI_Database')) {
 
         }
 
+        
     }
 
 }
