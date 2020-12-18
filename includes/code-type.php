@@ -113,11 +113,11 @@ if (!class_exists('WP_CI_Code_Type')) {
 
             $year = intval( $start->format("Y") );
 
-            $month = intval( $start->format("j") );
+            $month = intval( $start->format("m") );
 
-            $length = cal_days_in_month(CAL_GREGORIAN, $month, $year); 
+            $length = intval(date('t', mktime(0, 0, 0, $month, 1, $year)));
 
-            $bcDataHolder = array_fill(0, $length-1 , [
+            $bcDataHolder = array_fill(0, $length , [
                 "value" => 0
             ]);
 
