@@ -215,15 +215,24 @@ if (!class_exists('WP_CI_Code_Type')) {
                 return;
             }
 
-?>
+            ?>
 
-            <script>
+            <script> 
                 var require = {
                     paths: {
-                        'vs': '<?php echo plugins_url('assets/monaco-editor/vs', self::$plugin) ?>',
+                        'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.21.2/min/vs',
                         'js': '<?php echo plugins_url('assets/js', self::$plugin) ?>'
                     }
                 };
+                window.MonacoEnvironment = { getWorkerUrl: () => proxy };
+                let proxy = URL.createObjectURL(new Blob([`
+                    self.MonacoEnvironment = {
+                        baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.21.2/min'
+                    };
+                    importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.21.2/min/vs/base/worker/workerMain.min.js');
+                `], { type: 'text/javascript' }));
+
+                
             </script>
 
             <?php
@@ -563,7 +572,7 @@ if (!class_exists('WP_CI_Code_Type')) {
 
                     ?>
                     <p class="ci-codes__description">
-                        <?php echo $code_options['code_description']; ?> — <strong><?php echo ucwords($status); ?></strong>
+                        <?php echo esc_html($code_options['code_description']); ?> — <strong><?php esc_html_e(ucwords($status)); ?></strong>
                     </p>
 
                     <?php

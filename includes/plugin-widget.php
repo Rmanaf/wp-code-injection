@@ -61,7 +61,7 @@ if (!class_exists('Wp_Code_Injection_Plugin_Widget')) {
              <p>
                 <label for="<?php echo $this->get_field_id('title'); ?>"><?php esc_html_e('Code ID:' , 'code-injection'); ?></label>
                 <select style="width:100%;" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>">
-                <option value="0">— Select —</option>
+                <option value="0">— <?php esc_html_e("Select" , "code-injection"); ?> —</option>
             <?php
 
             while ($query->have_posts()) {

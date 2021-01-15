@@ -5,6 +5,7 @@
 ; (($) => {
     "user strict"
 
+    // init i18n methods
     if(typeof wp !==  "undefined" && typeof wp.i18n !==  "undefined"){
         var { __, _x, _n, sprintf } = wp.i18n;
     }else{
@@ -77,7 +78,7 @@
 
         toolbar.append(langsList);
 
-
+        
         container = $('<div>')
             .addClass('dcp-ci-editor')
             .appendTo(parent);

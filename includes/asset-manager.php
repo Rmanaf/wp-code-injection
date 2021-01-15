@@ -44,7 +44,7 @@ if (!class_exists('WP_CI_Assets_Manager'))
             
             wp_register_style('ci-custom-code-editor', self::get_asset_url('/css/code-editor.css'), [], $ver, 'all');
 
-            wp_register_script('ci-monaco-editor-loader', self::get_asset_url('/monaco-editor/vs/loader.js'), ['jquery'], $ver, true);
+            wp_register_script('ci-monaco-editor-loader', 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.21.2/min/vs/loader.min.js', ['jquery'], null, true);
             
             wp_register_script('ci-editor', self::get_asset_url('/js/code-editor.js'), [], $ver, false);
 

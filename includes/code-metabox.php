@@ -167,34 +167,7 @@ if (!class_exists('WP_CI_Code_Metabox')) {
                     ],
                 ];
 
-                $logo = WP_CI_Asset_Manager::get_asset_url("/image/ci.svg");
-
                 ?>
-
-
-                <!-- 'header'  section -->
-
-                <div class="ci-metabox-group ci-header" >
-
-                    <img class="ci-logo" src="<?php echo $logo; ?>" />
-                    <p><?php 
-
-                        $url = "https://github.com/Rmanaf/ci-library";
-                        printf(
-                            esc_html__('You can find useful codes in the CI %1$s.' , "code-injection" ) ,
-                            sprintf(
-                                '<a target="_blank" href="%s">%s</a>',
-                                $url,
-                                esc_html__( 'Library', 'code-injection' )
-                            ));
-    
-                     ?></p>
-                
-                </div>
-
-                <!-- 'header'  section -->
-
-
 
                 <!-- 'info' section -->
 
