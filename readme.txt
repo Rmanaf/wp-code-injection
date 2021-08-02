@@ -2,8 +2,8 @@
 Contributors: rmanaf
 Tags: code, snippets, injection
 Requires at least: 4.5.0
-Tested up to: 5.6.0
-Stable tag: 2.4.7
+Tested up to: 5.8.0
+Stable tag: 2.4.8
 License: MIT License
 License URI: https://github.com/Rmanaf/wp-code-injection/blob/master/LICENSE
 

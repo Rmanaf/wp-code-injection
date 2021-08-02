@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Code Injection plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Code Injection 2.4.7\n"
+"Project-Id-Version: Code Injection 2.4.8\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/code-injection\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-01-15T13:10:54+00:00\n"
+"POT-Creation-Date: 2021-02-23T12:08:44+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: code-injection\n"
@@ -82,68 +82,72 @@ msgid "Enable %s shortcode"
 msgstr ""
 
 #: code-injection.php:463
-msgid "Readme"
-msgstr ""
-
-#: code-injection.php:465
 msgid "See %s for more information."
 msgstr ""
 
-#: code-injection.php:668
+#: code-injection.php:467
+msgid "Readme"
+msgstr ""
+
+#: code-injection.php:670
 msgid "Developer"
 msgstr ""
 
-#: includes/code-metabox.php:43
+#: includes/code-metabox.php:44
 msgid "Code Settings"
 msgstr ""
 
-#: includes/code-metabox.php:195
+#: includes/code-metabox.php:197
+msgid "Slug"
+msgstr ""
+
+#: includes/code-metabox.php:206
 msgid "Description"
 msgstr ""
 
-#: includes/code-metabox.php:197
+#: includes/code-metabox.php:208
 msgid "Write something about your code..."
 msgstr ""
 
-#: includes/code-metabox.php:209
+#: includes/code-metabox.php:220
 msgid "Tracking"
 msgstr ""
 
-#: includes/code-metabox.php:223
-#: includes/code-type.php:547
+#: includes/code-metabox.php:234
+#: includes/code-type.php:546
 msgid "Publicly Queryable"
 msgstr ""
 
-#: includes/code-metabox.php:235
+#: includes/code-metabox.php:246
 msgid "No-Cache"
 msgstr ""
 
-#: includes/code-metabox.php:246
+#: includes/code-metabox.php:257
 msgid "Content-Type"
 msgstr ""
 
-#: includes/code-metabox.php:277
-#: includes/code-type.php:541
+#: includes/code-metabox.php:288
+#: includes/code-type.php:540
 msgid "As Plugin"
 msgstr ""
 
-#: includes/code-metabox.php:282
+#: includes/code-metabox.php:293
 msgid "Activator key"
 msgstr ""
 
-#: includes/code-metabox.php:284
+#: includes/code-metabox.php:295
 msgid "Enter key..."
 msgstr ""
 
-#: includes/code-metabox.php:301
+#: includes/code-metabox.php:312
 msgid "From File"
 msgstr ""
 
-#: includes/code-metabox.php:303
+#: includes/code-metabox.php:314
 msgid "Select File"
 msgstr ""
 
-#: includes/code-metabox.php:314
+#: includes/code-metabox.php:325
 msgid "Active"
 msgstr ""
 
@@ -151,88 +155,88 @@ msgstr ""
 msgid "Show All %s"
 msgstr ""
 
-#: includes/code-type.php:268
+#: includes/code-type.php:267
 msgid "Copy the Code ID into the Clipboard"
 msgstr ""
 
-#: includes/code-type.php:269
+#: includes/code-type.php:268
 msgid "Copy CID"
 msgstr ""
 
-#: includes/code-type.php:412
+#: includes/code-type.php:411
 msgid "Codes"
 msgstr ""
 
-#: includes/code-type.php:413
-#: includes/code-type.php:472
+#: includes/code-type.php:412
+#: includes/code-type.php:471
 msgid "Code"
 msgstr ""
 
-#: includes/code-type.php:414
+#: includes/code-type.php:413
 msgid "Add New Code"
 msgstr ""
 
-#: includes/code-type.php:415
+#: includes/code-type.php:414
 msgid "Edit Code"
 msgstr ""
 
-#: includes/code-type.php:416
+#: includes/code-type.php:415
 msgid "New Code"
 msgstr ""
 
-#: includes/code-type.php:417
+#: includes/code-type.php:416
 msgid "Search Codes"
 msgstr ""
 
-#: includes/code-type.php:418
+#: includes/code-type.php:417
 msgid "No codes found"
 msgstr ""
 
-#: includes/code-type.php:419
+#: includes/code-type.php:418
 msgid "No codes found in Trash"
 msgstr ""
 
-#: includes/code-type.php:420
+#: includes/code-type.php:419
 msgid "All Codes"
 msgstr ""
 
-#: includes/code-type.php:474
+#: includes/code-type.php:473
 msgid "Info"
 msgstr ""
 
-#: includes/code-type.php:476
+#: includes/code-type.php:475
 msgid "Hits"
 msgstr ""
 
-#: includes/code-type.php:504
+#: includes/code-type.php:503
 msgid "Categories"
 msgstr ""
 
-#: includes/code-type.php:516
+#: includes/code-type.php:515
 msgid "Author"
 msgstr ""
 
-#: includes/code-type.php:525
+#: includes/code-type.php:524
 msgid "Date"
 msgstr ""
 
-#: includes/code-type.php:550
+#: includes/code-type.php:549
 msgid "Caching Enabled"
 msgstr ""
 
-#: includes/code-type.php:553
+#: includes/code-type.php:552
 msgid "Type: "
 msgstr ""
 
-#: includes/code-type.php:558
+#: includes/code-type.php:557
 msgid "Tracking Enabled"
 msgstr ""
 
-#: includes/code-type.php:586
+#: includes/code-type.php:585
 msgid "Suspended"
 msgstr ""
 
-#: includes/code-type.php:594
+#: includes/code-type.php:593
 msgid "Code ID"
 msgstr ""
 
@@ -244,14 +248,14 @@ msgstr ""
 msgid "Select"
 msgstr ""
 
-#: assets/js/code-editor.js:208
+#: assets/js/code-editor.js:209
 msgid "The File is too large. Do you want to proceed?"
 msgstr ""
 
-#: assets/js/code-editor.js:215
+#: assets/js/code-editor.js:216
 msgid "The selected file type is not supported."
 msgstr ""
 
-#: assets/js/code-editor.js:229
+#: assets/js/code-editor.js:230
 msgid "Are you sure? You are about to replace the current code with the selected file content."
 msgstr ""

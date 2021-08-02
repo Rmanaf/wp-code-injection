@@ -2,7 +2,7 @@
 
 /**
  * Licensed under MIT (https://github.com/Rmanaf/wp-code-injection/blob/master/LICENSE)
- * Copyright (c) 2018 Arman Afzal (https://rmanaf.com)
+ * Copyright (c) 2018 Rmanaf <me@rmanaf.com>
  */
 
 if (!class_exists('Wp_Code_Injection_Plugin_Widget')) {
@@ -50,11 +50,11 @@ if (!class_exists('Wp_Code_Injection_Plugin_Widget')) {
 
             }
 
-            $query = new WP_Query([
-                'post_type' => 'code',
-                'post_status' => 'publish',
-                'posts_per_page' => -1
-            ]);
+            $codes = WP_CI_Database::get_codes();
+
+            $codes = array_filter($codes , function($item){
+                return $item->post_status == 'publish';
+            });
             
             ?>
 
@@ -64,18 +64,15 @@ if (!class_exists('Wp_Code_Injection_Plugin_Widget')) {
                 <option value="0">— <?php esc_html_e("Select" , "code-injection"); ?> —</option>
             <?php
 
-            while ($query->have_posts()) {
+            foreach ($codes as $code) {
 
-                $query->the_post();
+                $codeTitle = get_post_meta( $code->ID, "code_slug", true );
 
-                $post_title = get_the_title();
+                $codeTitle = $codeTitle ?: $code->post_title;
 
                 ?>
-
-                    <option <?php selected( $post_title , $title ) ?> value="<?php echo esc_attr($post_title); ?>" ><?php echo $post_title; ?></option>
-
+                    <option <?php selected( $code->post_title , $title ) ?> value="<?php echo esc_attr($code->post_title); ?>" ><?php echo $codeTitle; ?></option>
                 <?php
-                
             }
 
             echo '</select></p>';

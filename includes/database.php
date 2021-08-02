@@ -2,7 +2,7 @@
 
 /**
  * Licensed under MIT (https://github.com/Rmanaf/wp-code-injection/blob/master/LICENSE)
- * Copyright (c) 2018 Arman Afzal (https://rmanaf.com)
+ * Copyright (c) 2018 Rmanaf <me@rmanaf.com>
  */
 
 if (!class_exists('WP_CI_Database')) {
@@ -74,11 +74,55 @@ if (!class_exists('WP_CI_Database')) {
 
         }
 
+        /**
+         * @since 2.4.8
+         */
+        static function get_codes(){
+
+            global $wpdb;
+
+            $query = "SELECT $wpdb->posts.*, $wpdb->postmeta.*
+                FROM $wpdb->posts, $wpdb->postmeta
+                WHERE $wpdb->posts.ID = $wpdb->postmeta.post_id 
+                AND $wpdb->postmeta.meta_key = 'code_options' 
+                AND $wpdb->posts.post_type = 'code'
+                AND $wpdb->posts.post_date < NOW()
+                ORDER BY $wpdb->posts.post_date DESC";
+
+            return $wpdb->get_results($query, OBJECT);
+
+        }
+
+        /**
+         * @since 2.4.8
+         */
+        static function get_code_by_slug($slug){
+
+            global $wpdb;
+
+            $query = "SELECT $wpdb->posts.*, $wpdb->postmeta.*
+                FROM $wpdb->posts, $wpdb->postmeta
+                WHERE $wpdb->posts.ID = $wpdb->postmeta.post_id 
+                AND $wpdb->postmeta.meta_key = 'code_slug' 
+                AND $wpdb->postmeta.meta_value = '$slug'
+                AND $wpdb->posts.post_type = 'code'
+                LIMIT 1";
+
+            $posts = $wpdb->get_results($query , ARRAY_A);
+
+            if(empty($posts)){
+                return null;
+            }
+
+            return $posts[0];
+            
+        }
+
 
          /**
          * @since 2.2.6
          */
-        public function record_activity($type = 0, $code = null, $error = 0, $id = null)
+        function record_activity($type = 0, $code = null, $error = 0, $id = null)
         {
 
             global $wpdb, $post;

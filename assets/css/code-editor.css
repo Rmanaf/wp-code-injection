@@ -12,7 +12,13 @@
     color: white;
 }
 
-
+#titlediv #title {
+    background: #1e1e1e;
+    border-radius: 0;
+    border: none;
+    color: #d4d4d4;
+    font-family: "Droid Sans Mono", monospace, monospace, "Droid Sans Fallback";
+}
 
 
 .wp-core-ui .dcp-ci-editor .button, .wp-core-ui .dcp-ci-editor .button-secondary {

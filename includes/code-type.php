@@ -2,7 +2,7 @@
 
 /**
  * Licensed under MIT (https://github.com/Rmanaf/wp-code-injection/blob/master/LICENSE)
- * Copyright (c) 2018 Arman Afzal (https://rmanaf.com)
+ * Copyright (c) 2018 Rmanaf <me@rmanaf.com>
  */
 
 if (!class_exists('WP_CI_Code_Type')) {
@@ -207,7 +207,7 @@ if (!class_exists('WP_CI_Code_Type')) {
         static function admin_head()
         {
 
-            self::hide_post_title_input();
+            //self::hide_post_title_input();
 
             self::remove_mediabuttons();
 

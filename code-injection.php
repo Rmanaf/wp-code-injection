@@ -4,7 +4,7 @@
  * Plugin Name: Code Injection
  * Plugin URI: https://github.com/Rmanaf/wp-code-injection
  * Description: This plugin allows you to inject code snippets into the pages.
- * Version: 2.4.7
+ * Version: 2.4.8
  * Author: Rmanaf
  * Author URI: https://profiles.wordpress.org/rmanaf/
  * License: MIT License
@@ -15,8 +15,8 @@
 
 defined('ABSPATH') or die;
 
-require_once __DIR__ . '/includes/plugin-widget.php';
 require_once __DIR__ . '/includes/database.php';
+require_once __DIR__ . '/includes/plugin-widget.php';
 require_once __DIR__ . '/includes/calendar-heatmap.php';
 require_once __DIR__ . '/includes/barchart.php';
 require_once __DIR__ . '/includes/code-metabox.php';
@@ -33,7 +33,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
         private static $role_version = '1.0.0';
 
-        private static $version = '2.4.7';
+        private static $version = '2.4.8';
 
         function __construct()
         {
@@ -62,6 +62,12 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
             add_shortcode('inject', [$this, 'ci_shortcode']);
 
             add_shortcode('unsafe', [$this, 'unsafe_shortcode']);
+
+            add_filter("no_texturize_shortcodes" , function($shortcodes) {
+                $shortcodes[] = 'inject';
+                $shortcodes[] = 'unsafe';
+                return $shortcodes;
+            });
 
             add_action('admin_init', [$this, 'admin_init']);
 
@@ -145,17 +151,30 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
         function ci_shortcode($atts = [], $content = null)
         {
 
-            extract(shortcode_atts(['id' => ''], $atts));
+            if(!is_array($atts)){
+                $atts  = [];
+            }
+    
+            if(!isset($atts["id"]) && !empty($atts) ){
+                $atts["slug"] = $atts['slug'] ?? array_values($atts)[0];
+            }
 
-            if (empty($id)) {
+            extract(shortcode_atts([
+                'id' => '',
+                'slug' => ''
+            ], $atts));
 
+
+            if (empty($id) && empty($slug)) {
                 $this->database->record_activity(0, null, 2);
-
                 return;
             }
 
-
-            $code = get_page_by_title($id, OBJECT, 'code');
+            if(!empty($id)){
+                $code = get_page_by_title($id, OBJECT, 'code');
+            } else {
+                $code = WP_CI_Database::get_code_by_slug($slug);
+            }
 
             if (!is_object($code)) {
                 return;
@@ -210,6 +229,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
             
         }
 
+        
         /**
          * @since 2.2.6
          */
@@ -528,20 +548,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
                 $keys = get_option('wp_dcp_unsafe_keys', '');
 
-                $query = "SELECT $wpdb->posts.*, $wpdb->postmeta.*
-                     FROM $wpdb->posts, $wpdb->postmeta
-                     WHERE $wpdb->posts.ID = $wpdb->postmeta.post_id 
-                     AND $wpdb->postmeta.meta_key = 'code_options' 
-                     AND $wpdb->posts.post_type = 'code'
-                     AND $wpdb->posts.post_date < NOW()
-                     ORDER BY $wpdb->posts.post_date DESC";
-
-
-
-                $codes = $wpdb->get_results($query, OBJECT);
-
-                
-
+                $codes = WP_CI_Database::get_codes();
 
                 $plugins = array_filter($codes, function ($element) use ($instance, $ignore_keys, $keys) {
 
