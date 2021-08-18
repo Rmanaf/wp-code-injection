@@ -53,6 +53,7 @@ if (!class_exists('WP_CI_Assets_Manager'))
             
             wp_localize_script( 'ci-essentials', "_ci", [
                 'ajax_url' => admin_url( 'admin-ajax.php' ),
+                "ajax_nonce" => wp_create_nonce("code-injection-ajax-nonce"),
                 "i18n" => [
                     "code-injection" => [
                         "texts" => $texts,

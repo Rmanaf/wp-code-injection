@@ -26,11 +26,11 @@
     window.ci.gcs = function (id, target) {
         $.get(_ci.ajax_url, {
             action: "code_stats",
+            _wpnonce : _ci.ajax_nonce,
             id: id
         }, function (result) {
             target.parent().html(result);
         }).fail(function () {
-            console.error("Faild");
         });
     }
 

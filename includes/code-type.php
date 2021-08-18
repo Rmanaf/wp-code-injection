@@ -23,25 +23,29 @@ if (!class_exists('WP_CI_Code_Type')) {
 
             self::$plugin = $plugin;
 
-            add_action('init', 'WP_CI_Code_Type::create_posttype');
+            $clazz = get_called_class();
 
-            add_action('admin_head', 'WP_CI_Code_Type::admin_head');
+            add_action('init', "$clazz::create_posttype");
 
-            add_action('admin_enqueue_scripts', 'WP_CI_Code_Type::print_scripts', 51);
+            add_action("admin_head", "$clazz::admin_head");
 
-            add_filter('title_save_pre', 'WP_CI_Code_Type::auto_generate_post_title');
+            add_action("admin_enqueue_scripts", "$clazz::print_scripts", 51);
 
-            add_filter('user_can_richedit', 'WP_CI_Code_Type::disable_wysiwyg');
+            add_filter("title_save_pre", "$clazz::auto_generate_post_title");
 
-            add_filter('post_row_actions', 'WP_CI_Code_Type::custom_row_actions', 10, 2);
+            add_filter("user_can_richedit", "$clazz::disable_wysiwyg");
 
-            add_filter('manage_code_posts_columns', 'WP_CI_Code_Type::manage_code_posts_columns');
+            add_filter("post_row_actions", "$clazz::custom_row_actions", 10, 2);
 
-            add_action('manage_code_posts_custom_column', 'WP_CI_Code_Type::manage_code_posts_custom_column', 10, 2);
+            add_filter("manage_code_posts_columns", "$clazz::manage_code_posts_columns");
 
-            add_action('restrict_manage_posts',  'WP_CI_Code_Type::filter_codes_by_taxonomies', 10, 2);
+            add_action("manage_code_posts_custom_column", "$clazz::manage_code_posts_custom_column", 10, 2);
 
-            add_action('wp_ajax_code_stats' , 'WP_CI_Code_Type::get_code_stats');
+            add_action("restrict_manage_posts",  "$clazz::filter_codes_by_taxonomies", 10, 2);
+
+            add_action("wp_ajax_code_stats" , "$clazz::get_code_stats");
+
+            add_action("wp_ajax_code_generate_title" , "$clazz::ajax_generate_post_title");
 
         }
 
@@ -67,6 +71,8 @@ if (!class_exists('WP_CI_Code_Type')) {
         static function get_code_stats(){
 
             global  $wpdb;
+
+            check_ajax_referer("code-injection-ajax-nonce");
 
             if(!isset($_GET["id"])){
                 exit;
@@ -308,6 +314,17 @@ if (!class_exists('WP_CI_Code_Type')) {
             return $title;
         }
 
+
+        /**
+         * @since 2.4.9
+         */
+        static function ajax_generate_post_title(){
+
+            check_ajax_referer("code-injection-ajax-nonce");
+
+            wp_send_json_success(WP_Code_Injection_Plugin::generate_id('code-'));
+
+        }
 
         /**
          * @since 2.2.8

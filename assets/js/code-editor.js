@@ -6,19 +6,19 @@
     "user strict"
 
     // init i18n methods
-    if(typeof wp !==  "undefined" && typeof wp.i18n !==  "undefined"){
+    if (typeof wp !== "undefined" && typeof wp.i18n !== "undefined") {
         var { __, _x, _n, sprintf } = wp.i18n;
-    }else{
-        function __(text , ctx){
+    } else {
+        function __(text, ctx) {
             var dic = _ci.i18n[ctx] || {
-                "texts" : [],
-                "translates" : []
+                "texts": [],
+                "translates": []
             };
             var index = dic["texts"].indexOf(text);
             return dic["translates"][index];
         }
     }
- 
+
     var parent, textarea, toolbar, fullscreen, code,
         languages = [
             "html",
@@ -29,12 +29,36 @@
             "php"
         ], langsList;
 
+
+    function updatePostTitle(){
+        var $title =  $("#title");
+        var $wrap = $("#titlewrap");
+        if ($title .val().length == 0) {
+            $wrap.addClass('busy');
+            $.get(_ci.ajax_url, {
+                "action": "code_generate_title",
+                "_wpnonce": _ci.ajax_nonce
+            }, function (result) {
+                $wrap.removeClass('busy');
+                if(result.success){
+                    $title.val(result.data);
+                }
+            }).fail(function () {
+                $wrap.removeClass('busy');
+            });
+        }
+    }
+
     $(document).ready(() => {
 
         $('.quicktags-toolbar').hide();
         $('.wp-editor-area').hide();
         $('#wp-content-editor-tools').hide();
         $('#wp-content-wrap').hide();
+
+
+        updatePostTitle();
+
 
         $('#post-status-info').remove();
 
@@ -64,7 +88,7 @@
 
                 });
 
-            if(l == "html"){
+            if (l == "html") {
                 item.addClass("active");
             }
 
@@ -78,7 +102,7 @@
 
         toolbar.append(langsList);
 
-        
+
         container = $('<div>')
             .addClass('dcp-ci-editor')
             .appendTo(parent);
@@ -128,26 +152,26 @@
         });
 
 
-        $("[data-checkbox-activator]").each(function(index, element){
+        $("[data-checkbox-activator]").each(function (index, element) {
 
             var _this = $(this);
 
-            function toggleTargets(obj , reverse = false){
+            function toggleTargets(obj, reverse = false) {
 
-                if(reverse){
+                if (reverse) {
 
                     var hidetargets = obj.attr("data-hide-targets") || "";
 
-                    hidetargets.split(',').forEach(function(e,i){
+                    hidetargets.split(',').forEach(function (e, i) {
 
                         var elem = $(`#${e}`);
-    
-                        if(obj[0].checked){
+
+                        if (obj[0].checked) {
                             elem.hide();
-                        }else{
+                        } else {
                             elem.show();
                         }
-    
+
                     });
 
                     return;
@@ -155,13 +179,13 @@
 
                 var showtargets = obj.attr("data-show-targets") || "";
 
-                showtargets.split(',').forEach(function(e,i){
+                showtargets.split(',').forEach(function (e, i) {
 
                     var elem = $(`#${e}`);
 
-                    if(obj[0].checked){
+                    if (obj[0].checked) {
                         elem.show();
-                    }else{
+                    } else {
                         elem.hide();
                     }
 
@@ -170,12 +194,12 @@
             }
 
             toggleTargets(_this);
-            toggleTargets(_this , true);
+            toggleTargets(_this, true);
 
-            _this.on("click" , function(event){
+            _this.on("click", function (event) {
                 var obj = $(event.target);
                 toggleTargets(obj);
-                toggleTargets(obj , true);
+                toggleTargets(obj, true);
             });
 
         });
@@ -188,7 +212,7 @@
         });
 
 
-        $("#title").attr("disabled" , true);
+        $("#title").attr("disabled", true);
 
 
         $('#fileInput').on("change", function (e) {
@@ -207,14 +231,14 @@
 
 
             if (filesize > 300000) {
-                var sizeConfirm = confirm(__("The File is too large. Do you want to proceed?" , "code-injection"));
+                var sizeConfirm = confirm(__("The File is too large. Do you want to proceed?", "code-injection"));
                 if (!sizeConfirm) {
                     return;
                 }
             }
 
             if (!isSuccess) {
-                alert(__("The selected file type is not supported."  , "code-injection") + " [ *." + fileTypes.join(", *.") + " ]");
+                alert(__("The selected file type is not supported.", "code-injection") + " [ *." + fileTypes.join(", *.") + " ]");
                 return;
             }
 
@@ -228,7 +252,7 @@
                 var editorModel = window.ci.editor.getModel();
 
                 if (textarea.text() != "") {
-                    var overrideConfirm = confirm(__("Are you sure? You are about to replace the current code with the selected file content." , "code-injection"));
+                    var overrideConfirm = confirm(__("Are you sure? You are about to replace the current code with the selected file content.", "code-injection"));
                     if (overrideConfirm) {
                         //textarea.text(e.target.result);
                         editorModel.setValue(value);

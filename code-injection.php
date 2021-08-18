@@ -4,7 +4,7 @@
  * Plugin Name: Code Injection
  * Plugin URI: https://github.com/Rmanaf/wp-code-injection
  * Description: This plugin allows you to inject code snippets into the pages.
- * Version: 2.4.8
+ * Version: 2.4.9
  * Author: Rmanaf
  * Author URI: https://profiles.wordpress.org/rmanaf/
  * License: MIT License
@@ -33,7 +33,7 @@ if (!class_exists('WP_Code_Injection_Plugin')) {
 
         private static $role_version = '1.0.0';
 
-        private static $version = '2.4.8';
+        private static $version = '2.4.9';
 
         function __construct()
         {
