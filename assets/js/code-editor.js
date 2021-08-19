@@ -30,18 +30,19 @@
         ], langsList;
 
 
-    function updatePostTitle(){
-        var $title =  $("#title");
+    function updatePostTitle() {
+        var $title = $("#title");
         var $wrap = $("#titlewrap");
-        if ($title .val().length == 0) {
+        if ($title.val().length == 0) {
             $wrap.addClass('busy');
             $.get(_ci.ajax_url, {
                 "action": "code_generate_title",
                 "_wpnonce": _ci.ajax_nonce
             }, function (result) {
                 $wrap.removeClass('busy');
-                if(result.success){
+                if (result.success) {
                     $title.val(result.data);
+
                 }
             }).fail(function () {
                 $wrap.removeClass('busy');
@@ -211,8 +212,16 @@
             $('#fileInput').trigger("click");
         });
 
+        $("#title").addClass("disabled-input");
 
-        $("#title").attr("disabled", true);
+        $copybtn = $('<a href="javascript:void(0)" class="copy-btn">' +
+            __("Copy", "code-injection") +
+            '<span class="dashicons dashicons-external"></span></a>')
+            .on('click', function () {
+                window.ci.ctc($("#title")[0] , true);
+            });
+
+        $("#titlewrap").append($copybtn);
 
 
         $('#fileInput').on("change", function (e) {

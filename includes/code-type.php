@@ -31,7 +31,7 @@ if (!class_exists('WP_CI_Code_Type')) {
 
             add_action("admin_enqueue_scripts", "$clazz::print_scripts", 51);
 
-            add_filter("title_save_pre", "$clazz::auto_generate_post_title");
+            add_filter("title_save_pre", "$clazz::auto_generate_post_title" , 10, 1);
 
             add_filter("user_can_richedit", "$clazz::disable_wysiwyg");
 
@@ -296,19 +296,26 @@ if (!class_exists('WP_CI_Code_Type')) {
                 return $title;
             }
 
-
             if (isset($post->ID)) {
 
-                if (empty($_POST['post_title'])) {
+                if ('code' !== get_post_type($post->ID)) {
+                    return $title;
+                }
 
-                    if (!empty($title)) {
+                if (empty($_POST['title'])) {
+
+                    if (!empty($title) && $title !== "Auto Draft") {
                         return $title;
                     }
 
-                    if ('code' == get_post_type($post->ID)) {
-                        return WP_Code_Injection_Plugin::generate_id('code-');
-                    }
+                    $title = WP_Code_Injection_Plugin::generate_id('code-');
+                    
+                }else{
+
+                    $title = $_POST['title'];
+                    
                 }
+
             }
 
             return $title;

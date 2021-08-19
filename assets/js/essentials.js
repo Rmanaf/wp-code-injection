@@ -7,9 +7,9 @@
 
     window.ci = {};
 
-    window.ci.ctc = function (element) {
+    window.ci.ctc = function (element , val = false) {
 
-        var text = $(element).text();
+        var text = val ? $(element).val() : $(element).text();
         var $temp = $(`<input value="${text}" />`).css({
             'position': 'absolute',
             'top': '-1000px'

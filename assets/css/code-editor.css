@@ -170,6 +170,29 @@ input.apple-switch:focus {
     animation-iteration-count: infinite;
 }
 
+#title.disabled-input{
+    pointer-events:none;
+}
+
+#titlewrap .copy-btn{
+    position: absolute;
+    right: 0%;
+    top:0;
+
+    width: 67px;
+    height: 30px;
+    color: #50575e;
+    text-decoration: none;
+    text-align: center;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#titlewrap .copy-btn:hover{
+    color: white;
+}
+
 input.apple-switch {
     position: relative;
     appearance: none;
