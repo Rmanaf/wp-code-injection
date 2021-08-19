@@ -15,6 +15,9 @@
                 "translates": []
             };
             var index = dic["texts"].indexOf(text);
+            if(index<0){
+                return text;
+            }
             return dic["translates"][index];
         }
     }
@@ -220,6 +223,13 @@
             .on('click', function () {
                 window.ci.ctc($("#title")[0] , true);
             });
+
+            if(window._ci.is_rtl == "true"){
+                $copybtn.css({
+                    left: "0",
+                    right: "unset"
+                });
+            }
 
         $("#titlewrap").append($copybtn);
 

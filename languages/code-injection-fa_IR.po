@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Code Injection plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Code Injection 2.4.10\n"
+"Project-Id-Version: Code Injection 2.4.11\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/code-injection\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -248,14 +248,18 @@ msgstr "شناسه کد:"
 msgid "Select"
 msgstr "انتخاب کنید"
 
-#: assets/js/code-editor.js:209
+#: assets/js/code-editor.js:243
 msgid "The File is too large. Do you want to proceed?"
 msgstr "حجم فایل بسیار زیاد است. آیا مایل به ادامه هستید؟"
 
-#: assets/js/code-editor.js:216
+#: assets/js/code-editor.js:250
 msgid "The selected file type is not supported."
 msgstr "از این فایل پشتیبانی نمی شود."
 
-#: assets/js/code-editor.js:230
+#: assets/js/code-editor.js:264
 msgid "Are you sure? You are about to replace the current code with the selected file content."
 msgstr "مطمئن هستید؟ شما در حال جایگزین کردن کد با محتویات فایل هستید."
+
+#: assets/js/code-editor.js:218
+msgid "Copy"
+msgstr "کپی"

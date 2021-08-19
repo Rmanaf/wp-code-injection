@@ -38,7 +38,8 @@ if (!class_exists('WP_CI_Assets_Manager'))
             $texts = [
                 "The File is too large. Do you want to proceed?",
                 "Are you sure? You are about to replace the current code with the selected file content.",
-                "The selected file type is not supported."
+                "The selected file type is not supported.",
+                "Copy"
             ];
 
             
@@ -54,6 +55,7 @@ if (!class_exists('WP_CI_Assets_Manager'))
             wp_localize_script( 'ci-essentials', "_ci", [
                 'ajax_url' => admin_url( 'admin-ajax.php' ),
                 "ajax_nonce" => wp_create_nonce("code-injection-ajax-nonce"),
+                "is_rtl" => is_rtl() ? "true" : "false",
                 "i18n" => [
                     "code-injection" => [
                         "texts" => $texts,
