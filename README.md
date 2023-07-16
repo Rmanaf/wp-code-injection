@@ -1,27 +1,25 @@
-# Wordpress Code Injection Plugin
+# Code Injection
 
-This plugin allows you to inject code snippets into the pages.
+This plugin allows you to effortlessly create custom ads for your website. Inject code snippets in HTML, CSS, and JavaScript, write and run custom plugins on-the-fly, and take your website's capabilities to the next level.
 
 ## Usage
-Once the plugin is activated you will see the Code button in the dashboard menu. 
-- Create a new code.
-- Copy the CID from the list.
-- Put the Shortcode `[inject id='#']` in your post or page.
-- Replace `#` with the CID.
+To use this plugin, follow these steps:
 
-Or
-- Drag the CI widget into the desired sidebar area.
+- Activate the plugin from the Plugins menu in your dashboard.
 
->**Note:** You can find the **Code Options** in the editor page.
+- Click on the Code button in the dashboard menu to create and manage your code snippets.
 
-### In order to run PHP scripts, follow the instruction below:
+- To insert a code snippet in your post or page, copy the CID (code identifier) from the list and use the shortcode `[inject id='#']`, where `#` is the CID.
 
-Head to `Settings > General`, In the **Code Injection** section, you will see **Activator Keys**
+- To insert a code snippet in your sidebar, drag and drop the CI widget into the desired widget area and select the code snippet from the dropdown menu.
 
-- Create a strong key.
-- Put the Shortcode `[unsafe key='#']` in your post or page, and replace `#` with the key you created before.
-- Write your PHP script and close unsafe section by using `[/unsafe]`.
+## Advanced Usage
+If you want to run PHP scripts in your website, you need to do some extra steps:
 
-    ```php
-    [unsafe key='key-un7la32'] <?php phpinfo(); ?> [/unsafe]
-    ```
+- Go to `Settings > Code` Injection and create a strong activator key. This key will allow you to run PHP scripts safely and securely.
+
+- To insert a PHP script in your post or page, use the shortcode `[unsafe key='#']`, where `#` is the activator key you created before. Write your PHP script between the opening and closing tags of the shortcode.
+
+- To run a PHP script as a plugin, check the “as plugin” checkbox when creating or editing a code snippet. This will execute your PHP script on every page load.
+
+>**Note:** Be careful when running PHP scripts, as they can cause errors or conflicts with other plugins or themes. If you encounter any problems, you can disable the code snippet from the database by changing its status to “draft” in the wp_posts table.
