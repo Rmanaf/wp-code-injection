@@ -21,13 +21,9 @@ class Barchart
 
     function __construct($data, $w, $h, $g = 1)
     {
-
         $this->data = $data;
-
         $this->width = $w;
-
         $this->height = $h;
-
         $this->gap = $g;
     }
 

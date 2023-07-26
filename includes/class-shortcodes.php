@@ -40,7 +40,7 @@ class Shortcodes
     /**
      * @since 2.4.12
      */
-    private function get_shortcode_by_name($text, $name)
+    private static function get_shortcode_by_name($text, $name)
     {
 
         $result     = array();

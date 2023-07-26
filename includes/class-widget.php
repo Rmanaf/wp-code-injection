@@ -20,7 +20,7 @@ class Widget extends WP_Widget
         parent::__construct(
             'wp_code_injection_plugin_widget',
             esc_html__('Code Injection', 'code-injection'),
-            ['description' => esc_html__('This plugin allows you to inject code snippets into the pages.', 'code-injection')]
+            ['description' => esc_html__("This plugin allows you to effortlessly create custom ads for your website. Inject code snippets in HTML, CSS, and JavaScript, write and run custom plugins on-the-fly, and take your website's capabilities to the next level.", 'code-injection')]
         );
     }
 
