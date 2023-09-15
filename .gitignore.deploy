@@ -1,0 +1,22 @@
+# .gitignore.deploy
+
+# Deployment specific ignores
+
+# Ignore the deployment script
+deploy.sh
+
+# Ignore the README file
+README.md
+
+# Ignore the package.json file
+package.json
+
+# Ignore all .jsx files in all directories
+**/*.jsx
+
+# Ignore the Babel configuration file
+.babelrc
+
+# Ignore the .gitignore files
+.gitignore
+.gitignore.deploy

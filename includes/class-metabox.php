@@ -27,15 +27,16 @@ class Metabox
      */
     static function init()
     {
-        add_action('add_meta_boxes',  array(__CLASS__, 'add_meta_box'));
-        add_action('save_post',  array(__CLASS__, 'save_post'));
+        add_action('add_meta_boxes',  array(__CLASS__, '_add_meta_box'));
+        add_action('save_post',  array(__CLASS__, '_save_post'));
     }
 
 
     /**
+     * @access private
      * @since 2.2.8
      */
-    static function add_meta_box()
+    static function _add_meta_box()
     {
 
         add_meta_box(
@@ -49,9 +50,10 @@ class Metabox
 
 
     /**
+     * @access private
      * @since 2.2.8
      */
-    static function save_post($id)
+    static function _save_post($id)
     {
 
         if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {

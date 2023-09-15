@@ -153,7 +153,7 @@ class Shortcodes
         }
 
         if (!empty($id)) {
-            $code = get_page_by_title($id, OBJECT, 'code');
+            $code = Database::get_code_by_title($id);
         } else {
             $code = Database::get_code_by_slug($slug);
         }

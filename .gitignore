@@ -1,0 +1,10 @@
+# .gitignore
+
+# Ignore common files for all branches
+
+# The VSCode settings directory
+.vscode/
+
+# Node generated files and folders
+node_modules/
+package-lock.json

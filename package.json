@@ -1,0 +1,16 @@
+{
+    "name": "wp-code-injection",
+    "version": "2.4.14",
+    "devDependencies": {
+        "@babel/cli": "^7.16.0",
+        "@babel/core": "^7.16.0",
+        "@babel/preset-env": "^7.16.4",
+        "@babel/preset-react": "^7.16.0"
+    },
+    "scripts": {
+        "build": "babel assets/js/block.jsx --out-file assets/js/block.js"
+    },
+    "dependencies": {
+        "@wordpress/icons": "^9.32.0"
+    }
+}

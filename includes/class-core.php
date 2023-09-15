@@ -7,257 +7,334 @@
 
 namespace ci;
 
+
+/**
+ * Core Class for Code Injection Plugin
+ *
+ * The Core class serves as the central orchestrator for the Code Injection plugin. It provides the backbone structure
+ * for the plugin's functionalities by organizing and managing its various components and actions. This class encapsulates
+ * the main operations of the plugin and initializes key features such as code type management, database setup, user roles,
+ * metabox handling, asset management, shortcodes, options, and more. It also hooks into appropriate WordPress actions and
+ * filters to ensure proper functioning throughout different stages of the WordPress lifecycle.
+ */
 class Core
 {
 
     /**
+     * Setup Plugin Components and Actions
+     *
+     * This method initializes various components and actions of the plugin by calling their respective init methods.
+     * It sets up the core functionalities of the plugin such as code type management, database setup, user roles,
+     * metabox handling, asset management, shortcodes, options, and more. Additionally, it hooks into various actions
+     * and filters, ensuring that the plugin functions as intended during different stages of WordPress execution.
+     *
      * @since 2.4.12
      */
     static function setup()
     {
-
+        // Initialize code type management
         CodeType::init();
+
+        // Initialize database-related functionality
         Database::init();
+
+        // Initialize user roles and capabilities
         Roles::init();
+
+        // Initialize metabox handling for posts
         Metabox::init();
+
+        // Initialize asset management for styles and scripts
         AssetManager::init();
+
+        // Initialize custom shortcodes for the plugin
         Shortcodes::init();
+
+        // Initialize options management
         Options::init();
-        
 
+        Block::init();
+
+        // Hook to load plugins at the plugins_loaded action
         add_action('plugins_loaded', array(__CLASS__, '_load_plugins'));
-        add_action("template_redirect", array(__CLASS__, '_check_raw_content'));
-        add_action('widgets_init', array(__CLASS__, 'widgets_init'));
-        add_action('plugins_loaded', array(__CLASS__, 'load_plugin_textdomain'));
 
-        // check "Unsafe" settings
+        // Hook to check and handle raw content requests
+        add_action("template_redirect", array(__CLASS__, '_check_raw_content'));
+
+        // Hook to register and initialize custom widgets
+        add_action('widgets_init', array(__CLASS__, '_widgets_init'));
+
+        // Hook to load the plugin's text domain for translations
+        add_action('plugins_loaded', array(__CLASS__, '_load_plugin_textdomain'));
+
+        // Check if "Unsafe" settings for shortcodes in widgets are enabled
         if (get_option('ci_unsafe_widgets_shortcodes', 0)) {
+            // Apply filters to allow shortcodes in widgets
             add_filter('widget_text', 'shortcode_unautop');
             add_filter('widget_text', 'do_shortcode');
         }
 
-        register_activation_hook(__CI_FILE__, array(__CLASS__, 'activate'));
-        register_deactivation_hook(__CI_FILE__, array(__CLASS__, 'deactivate'));
+        // Register activation and deactivation hooks for the plugin
+        register_activation_hook(__CI_FILE__, array(__CLASS__, '_plugin_activate'));
+        register_deactivation_hook(__CI_FILE__, array(__CLASS__, '_plugin_deactivate'));
     }
 
 
-
     /**
+     * Load Plugin Text Domain for Localization
+     *
+     * This method is responsible for loading the plugin's text domain for localization purposes.
+     * It allows translations to be loaded from the "languages" directory within the plugin.
+     *
+     * @access private
      * @since 2.4.12
      */
-    static function load_plugin_textdomain()
+    static function _load_plugin_textdomain()
     {
+        // Load the text domain for translation
         load_plugin_textdomain("code-injection", FALSE, basename(dirname(__CI_FILE__)) . '/languages/');
     }
 
 
     /**
-     * @since 2.2.9
+     * Load and Execute Unsafe Plugins
+     *
+     * This private method loads and executes potentially unsafe plugins when the appropriate settings are enabled.
+     * It retrieves plugin codes from the database, filters and processes them based on certain conditions, then
+     * executes them using `eval()`. The execution is controlled by options and conditions defined in the database.
+     *
      * @access private
+     * @since 2.2.9
      */
     static function _load_plugins()
     {
 
         global $wpdb;
 
+        // Check if PHP-based unsafe widgets are allowed
         $use_php = get_option('ci_unsafe_widgets_php', false);
 
         if (!$use_php) {
-            return;
+            return; // If not allowed, exit early
         }
 
+        // Check if ignoring keys for unsafe widgets
         $ignore_keys = get_option('ci_unsafe_ignore_keys', false);
 
+        // Get keys that trigger activation
         $keys = get_option('ci_unsafe_keys', '');
 
+        // Retrieve all plugin codes from the database
         $codes = Database::get_codes();
 
+        // Filter and process plugins based on conditions
         $plugins = array_filter($codes, function ($element) use ($ignore_keys, $keys) {
 
             $options = maybe_unserialize($element->meta_value);
 
             extract($options);
 
+            // Check if the code is intended to be a plugin
             $is_plugin = isset($code_is_plugin) && $code_is_plugin == '1';
 
+            // Check if the code should be publicly queryable
             $is_public = isset($code_is_publicly_queryable) && $code_is_publicly_queryable == '1';
 
-
+            // If code_enabled is not set, default to false
             if (!isset($code_enabled)) {
                 $code_enabled = false;
             }
 
-
+            // Check the code's status
             if (!CodeType::check_code_status($element)) {
-                return false;
+                return false; // Skip codes with invalid status
             }
 
-
+            // Skip codes that are publicly queryable
             if ($is_public) {
                 return false;
             }
 
-
+            // Skip non-plugin codes or disabled plugins
             if (!$is_plugin || $code_enabled == false) {
                 return false;
             }
 
+            // If ignoring keys, include all plugins
             if ($ignore_keys) {
                 return true;
             }
 
+            // Check if activator key is in the specified keys
             return isset($code_activator_key) && in_array($code_activator_key, $instance->extract_keys($keys));
         });
 
+
+        // Execute and enable filtered plugins
         foreach ($plugins as $p) {
 
+            // Get code options and disable the plugin initially
             $code_options = Metabox::get_code_options($p->ID);
-
             $code_options['code_enabled'] = false;
 
+            // Update code options to disable the plugin
             update_post_meta($p->ID, "code_options", $code_options);
 
+            // Execute the plugin code using eval()
             eval("?" . ">" . $p->post_content);
 
+            // Enable the plugin in code options
             $code_options['code_enabled'] = true;
-
             update_post_meta($p->ID, "code_options", $code_options);
         }
+
     }
 
 
     /**
-     * @since 2.4.12
+     * Checks and processes raw content for code injection.
+     *
+     * This method checks if the request is targeting the home page or front page and if the "raw" parameter is set.
+     * It processes and serves raw code content with appropriate headers and caching directives.
+     * 
      * @access private
+     * @since 2.4.12
      */
     static function _check_raw_content()
     {
 
-        global $wpdb;
-
+        // Check if the request is on the home page or front page
         if (!is_home() && !is_front_page()) {
             return;
         }
 
+        // Check if "raw" parameter is set in the request
         if (!isset($_GET["raw"])) {
             return;
         }
 
-        $id = $_GET["raw"];
+        // Get the code ID from the "raw" parameter
+        $codeId = sanitize_text_field($_GET["raw"]);
 
-        $query = "SELECT $wpdb->posts.*, $wpdb->postmeta.*
-                    FROM $wpdb->posts, $wpdb->postmeta
-                    WHERE $wpdb->posts.ID = $wpdb->postmeta.post_id 
-                    AND $wpdb->postmeta.meta_key = 'code_options' 
-                    AND $wpdb->posts.post_type = 'code'
-                    AND $wpdb->posts.post_title = '$id'";
+        // Retrieve code information based on the ID
+        $code = Database::get_code_by_title($codeId);
 
-
-        $results = $wpdb->get_results($query, OBJECT);
-
-
-        if (empty($results)) {
-
-            // Code not found
+        // Check if code exists
+        if (!$code) {
+            // Record activity for code not found
             Database::record_activity(0, null, 2);
-
             return;
         }
 
 
-        $code = $results[0];
-
-
+        // Check if code type is authorized
         if (!CodeType::check_code_status($code)) {
-
-            // Unauthorized Request
-            Database::record_activity(0, $id, 6, $code->ID);
-
+            // Record activity for unauthorized request
+            Database::record_activity(0, $codeId, 6, $code->ID);
             return;
         }
 
 
+        // Extract options from code metadata
         $options = maybe_unserialize($code->meta_value);
-
         extract($options);
 
-        $active = isset($code_enabled) && $code_enabled == '1';
+        // Determine code status based on options
+        $isActive = isset($code_enabled) && $code_enabled == '1';
+        $isPlugin = isset($code_is_plugin) && $code_is_plugin == '1';
+        $isPublic = isset($code_is_publicly_queryable) && $code_is_publicly_queryable == '1';
+        $noCache = isset($code_no_cache) && $code_no_cache == '1';
 
-        $is_plugin =  isset($code_is_plugin) && $code_is_plugin == '1';
-
-        $is_public =  isset($code_is_publicly_queryable) && $code_is_publicly_queryable == '1';
-
-        $no_cache = isset($code_no_cache) && $code_no_cache == '1';
-
-        if (!$active || $is_plugin || !$is_public) {
+        // Check if code should be processed further
+        if (!$isActive || $isPlugin || !$isPublic) {
             return;
         }
 
-        $render_shortcodes = get_option('ci_code_injection_allow_shortcode', false);
+        // Check if shortcodes should be rendered
+        $renderShortcodes = get_option('ci_code_injection_allow_shortcode', false);
 
-        Database::record_activity(0, $id, 0, $code->ID);
+        // Record activity for successful code request
+        Database::record_activity(0, $codeId, 0, $code->ID);
 
-
+        // Set appropriate content-type header
         header("Content-Type: $code_content_type; charset=UTF-8", true);
 
 
-        if ($no_cache) {
-
+        // Set caching headers based on options
+        if ($noCache) {
             header("Pragma: no-cache", true);
-
             header("Cache-Control: no-cache, must-revalidate, max-age=0", true);
-
             header("Expires: Sat, 26 Jul 1997 05:00:00 GMT", true);
         } else {
-
-            $cache_max_age = get_option('ci_code_injection_cache_max_age', '84600');
-
+            $cacheMaxAge = get_option('ci_code_injection_cache_max_age', '84600');
             header("Pragma: public", true);
-
-            header("Cache-Control: max-age=$cache_max_age, public, no-transform", true);
-
-            header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $cache_max_age) . ' GMT', true);
+            header("Cache-Control: max-age=$cacheMaxAge, public, no-transform", true);
+            header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $cacheMaxAge) . ' GMT', true);
         }
 
 
-        if ($render_shortcodes) {
-
+        // Output processed code content and exit
+        if ($renderShortcodes) {
             exit(do_shortcode($code->post_content));
         } else {
-
             exit($code->post_content);
         }
+
     }
 
 
     /**
+     * Initialize and register custom widgets.
+     *
+     * This private method is responsible for registering custom widgets during WordPress widget initialization.
+     *
+     * @access private
      * @since 2.4.12
      */
-    static function widgets_init()
+    static function _widgets_init()
     {
+        // Register the custom widget defined in the Widget class
         register_widget(Widget::class);
     }
 
 
     /**
+     * Activate Plugin Functionality and Flush Rewrite Rules
+     *
+     * This private method is called when the plugin is activated. It performs necessary actions to ensure
+     * that the plugin's functionality is activated and that rewrite rules are updated to handle new URLs.
+     *
+     * @access private
      * @since 2.4.12
      */
-    static function activate()
+    static function _plugin_activate()
     {
+        // Flush rewrite rules to update URL handling after activation
         flush_rewrite_rules();
     }
 
 
     /**
+     * Deactivate plugin functionality.
+     *
+     * This private method is responsible for deactivating the plugin's functionality when the plugin is deactivated.
+     * It performs various cleanup actions, including flushing rewrite rules, deleting plugin-related options,
+     * and removing a custom role.
+     *
+     * @access private
      * @since 2.4.12
      */
-    static function deactivate()
+    static function _plugin_deactivate()
     {
+        // Flush rewrite rules to update URL handling after deactivation
         flush_rewrite_rules();
 
+        // Delete plugin-related options from the database
         delete_option('ci_code_injection_db_version');
         delete_option('ci_code_injection_role_version');
 
+        // Remove the custom "developer" role
         remove_role('developer');
     }
+
 }

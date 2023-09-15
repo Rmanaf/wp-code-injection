@@ -126,16 +126,16 @@ class CodeType
 
         $length = intval(date('t', mktime(0, 0, 0, $month, 1, $year)));
 
-        $bcDataHolder = array_fill(0, $length, [
+        $bcDataHolder = array_fill(0, $length, array(
             "value" => 0
-        ]);
+        ));
 
         $bcDataHolder = array_map(function ($item) {
             $index = $item + 1;
-            return [
+            return array(
                 "value" => 0,
                 "index" => $index < 10 ? "0$index" : $index
-            ];
+            );
         }, array_keys($bcDataHolder));
 
         $month = intval($start->format("m"));
@@ -149,10 +149,10 @@ class CodeType
         $bcData = $wpdb->get_results($bcQuery, ARRAY_A);
 
         foreach ($bcData as $d) {
-            $bcDataHolder[intval($d['day']) - 1] = [
+            $bcDataHolder[intval($d['day']) - 1] = array(
                 "value" => $d["total_hits"],
                 "index" => $d["day"] < 10 ? "0{$d["day"]}" : $d["day"]
-            ];
+            );
         }
 
         $barchart = new Barchart($bcDataHolder, 299,  50, 2);
@@ -178,7 +178,7 @@ class CodeType
         if ('code' !== $post_type)
             return;
 
-        $taxonomies = ['code_category'];
+        $taxonomies = array('code_category');
 
         foreach ($taxonomies as $taxonomy_slug) {
 
@@ -238,7 +238,7 @@ class CodeType
 
             $status = get_post_status($post);
 
-            $needles = [$post->post_title, '”', '“'];
+            $needles = array($post->post_title, '”', '“');
 
             if (isset($actions['edit'])) {
                 $actions['edit'] = str_replace($needles, '', $actions['edit']);
@@ -345,7 +345,7 @@ class CodeType
     static function _create_posttype()
     {
 
-        $code_lables = [
+        $code_lables = array(
             'name' => esc_html__('Codes', "code-injection"),
             'singular_name' => esc_html__('Code', "code-injection"),
             'add_new_item' => esc_html__('Add New Code', "code-injection"),
@@ -355,25 +355,25 @@ class CodeType
             'not_found' => esc_html__('No codes found', "code-injection"),
             'not_found_in_trash ' => esc_html__('No codes found in Trash', "code-injection"),
             'all_items' => esc_html__('All Codes', "code-injection")
-        ];
+        );
 
 
         register_taxonomy(
             'code_category',
             'code',
-            [
+            array(
                 'show_admin_column' => true,
                 'public' => false,
                 'show_ui' => true,
                 'rewrite' => false,
                 'hierarchical' => true
-            ]
+            )
         );
 
 
         register_post_type(
             'Code',
-            [
+            array(
                 'menu_icon' => 'dashicons-editor-code',
                 'labels' => $code_lables,
                 'public' => false,
@@ -382,11 +382,11 @@ class CodeType
                 'query_var' => false,
                 'exclude_from_search' => true,
                 'publicly_queryable' => false,
-                'supports' => ['author', 'revisions', 'title', 'editor'],
+                'supports' => array('author', 'revisions', 'title', 'editor'),
                 'capability_type' => ['code', 'codes'],
                 'can_export' => true,
                 'map_meta_cap' => true
-            ]
+            )
         );
     }
 
@@ -398,15 +398,12 @@ class CodeType
     static function manage_code_posts_columns($columns)
     {
 
-        $columns = [];
+        return array(
+            'id' => esc_html__("Code", "code-injection"),
+            'info' => esc_html__("Info", "code-injection"),
+            'statistics' => esc_html__("Hits", "code-injection")
+        );
 
-        $columns['id'] = esc_html__("Code", "code-injection");
-
-        $columns['info'] = esc_html__("Info", "code-injection");
-
-        $columns['statistics'] = esc_html__("Hits", "code-injection");
-
-        return $columns;
     }
 
 
