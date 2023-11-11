@@ -4,7 +4,7 @@
  * Plugin Name: Code Injection
  * Plugin URI: https://github.com/Rmanaf/wp-code-injection
  * Description: This plugin allows you to effortlessly create custom ads for your website. Inject code snippets in HTML, CSS, and JavaScript, write and run custom plugins on-the-fly, and take your website's capabilities to the next level.
- * Version: 2.4.14
+ * Version: 2.5.0
  * Author: Rmanaf
  * Author URI: https://profiles.wordpress.org/rmanaf/
  * License: MIT License
@@ -22,7 +22,7 @@ defined('ABSPATH') or die;
 define('__CI_FILE__', __FILE__);
 define('__CI_URL__', plugin_dir_url(__FILE__));
 define('__CI_PATH__', plugin_dir_path(__FILE__));
-define('__CI_VERSION__', '2.4.14');
+define('__CI_VERSION__', '2.5.0');
 
 // Require the necessary files for the plugin
 require_once __DIR__ . '/includes/class-database.php';

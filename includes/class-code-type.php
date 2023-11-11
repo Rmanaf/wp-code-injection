@@ -10,38 +10,61 @@ namespace ci;
 use DateInterval;
 use DateTime;
 
-class CodeType
+final class CodeType
 {
 
+    private static $instance = null;
 
     private static $not_ready_states = array('private', 'draft', 'trash', 'pending');
+
+    private $database = null;
+
+
+    /**
+     * @since 2.5.0
+     */
+    private function __construct( $database )
+    {
+
+        $this->database = $database;
+
+        add_action('init', array( $this , '_create_posttype'));
+        add_action("admin_head", array( $this , '_admin_head'));
+        add_action("admin_enqueue_scripts", array( $this , '_enqueue_scripts'), 51);
+        add_action("manage_code_posts_custom_column", array( $this , '_manage_code_posts_custom_column'), 10, 2);
+        add_action("restrict_manage_posts",  array( $this , 'ـfilter_codes_by_taxonomies'), 10, 2);
+        add_action("wp_ajax_code_stats", array( $this , '_get_code_stats'));
+        add_action("wp_ajax_code_generate_title", array( $this , '_ajax_generate_post_title'));
+
+        add_filter("title_save_pre", array( $this , '_auto_generate_post_title'), 10, 1);
+        add_filter("user_can_richedit", array( $this , '_disable_wysiwyg'));
+        add_filter("post_row_actions", array( $this , '_custom_row_actions'), 10, 2);
+        add_filter("manage_code_posts_columns", array( $this , '_manage_code_posts_columns'));
+    }
+
 
 
     /**
      * @since 2.4.2
      */
-    static function init()
+    static function init( $database )
     {
-        add_action('init', array( __CLASS__ , '_create_posttype'));
-        add_action("admin_head", array( __CLASS__ , 'admin_head'));
-        add_action("admin_enqueue_scripts", array( __CLASS__ , 'enqueue_scripts'), 51);
-        add_action("manage_code_posts_custom_column", array( __CLASS__ , 'manage_code_posts_custom_column'), 10, 2);
-        add_action("restrict_manage_posts",  array( __CLASS__ , 'filter_codes_by_taxonomies'), 10, 2);
-        add_action("wp_ajax_code_stats", array( __CLASS__ , 'get_code_stats'));
-        add_action("wp_ajax_code_generate_title", array( __CLASS__ , 'ajax_generate_post_title'));
 
-        add_filter("title_save_pre", array( __CLASS__ , 'auto_generate_post_title'), 10, 1);
-        add_filter("user_can_richedit", array( __CLASS__ , 'disable_wysiwyg'));
-        add_filter("post_row_actions", array( __CLASS__ , 'custom_row_actions'), 10, 2);
-        add_filter("manage_code_posts_columns", array( __CLASS__ , 'manage_code_posts_columns'));
+        if(!is_null(self::$instance)){
+            return null;
+        }
+
+        self::$instance = new self($database);
+
     }
 
 
 
     /**
      * @since 2.2.8
+     * @access private
      */
-    static function enqueue_scripts()
+    public function _enqueue_scripts()
     {
         if (!Helpers::is_code_page()) {
             return;
@@ -49,6 +72,7 @@ class CodeType
         
         AssetManager::enqueue_editor_scripts();
     }
+
 
 
     /**
@@ -75,13 +99,15 @@ class CodeType
 
     /**
      * @since 2.4.5
+     * @access private
      */
-    static function get_code_stats()
+    public function _get_code_stats()
     {
 
         global $wpdb;
 
         check_ajax_referer("code-injection-ajax-nonce");
+
 
         if (!isset($_GET["id"])) {
             exit;
@@ -105,7 +131,7 @@ class CodeType
 
         $end = new DateTime($cdate); // today
 
-        $hmQuery = Database::get_weekly_report_query($post_id, $start, $end);
+        $hmQuery = $this->database->get_weekly_report_query($post_id, $start, $end);
 
         $hmData = $wpdb->get_results($hmQuery, ARRAY_A);
 
@@ -144,7 +170,7 @@ class CodeType
 
         $end = new DateTime("$year-$month-$length");
 
-        $bcQuery = Database::get_monthly_report_query($post_id, $start, $end);
+        $bcQuery = $this->database->get_monthly_report_query($post_id, $start, $end);
 
         $bcData = $wpdb->get_results($bcQuery, ARRAY_A);
 
@@ -171,8 +197,9 @@ class CodeType
 
     /**
      * @since 2.2.8
+     * @access private
      */
-    static function filter_codes_by_taxonomies($post_type, $which)
+    public function ـfilter_codes_by_taxonomies($post_type, $which)
     {
 
         if ('code' !== $post_type)
@@ -208,8 +235,9 @@ class CodeType
 
     /**
      * @since 2.2.8
+     * @access private
      */
-    static function admin_head()
+    public function _admin_head()
     {
 
         if (!Helpers::is_code_page()) {
@@ -228,8 +256,9 @@ class CodeType
 
     /**
      * @since 2.2.8
+     * @access private
      */
-    static function custom_row_actions($actions, $post)
+    public function _custom_row_actions($actions, $post)
     {
 
         if (isset($_GET['post_type']) && $_GET['post_type'] == 'code') {
@@ -263,8 +292,9 @@ class CodeType
 
     /**
      * @since 2.2.8
+     * @access private
      */
-    static function auto_generate_post_title($title)
+    public function _auto_generate_post_title($title)
     {
 
         global $post;
@@ -304,11 +334,15 @@ class CodeType
 
     /**
      * @since 2.4.9
+     * @access private
      */
-    static function ajax_generate_post_title()
+    public function _ajax_generate_post_title()
     {
+
         check_ajax_referer("code-injection-ajax-nonce");
+
         wp_send_json_success(self::generate_id('code-'));
+
     }
 
 
@@ -325,8 +359,9 @@ class CodeType
 
     /**
      * @since 2.2.8
+     * @access private
      */
-    static function disable_wysiwyg($default)
+    public function _disable_wysiwyg($default)
     {
 
         if (Helpers::is_code_page()) {
@@ -342,19 +377,32 @@ class CodeType
      * @since 2.4.12
      * @access private
      */
-    static function _create_posttype()
+    public function _create_posttype()
     {
 
-        $code_lables = array(
-            'name' => esc_html__('Codes', "code-injection"),
-            'singular_name' => esc_html__('Code', "code-injection"),
-            'add_new_item' => esc_html__('Add New Code', "code-injection"),
-            'edit_item' => esc_html__('Edit Code', "code-injection"),
-            'new_item' => esc_html__('New Code', "code-injection"),
-            'search_items ' => esc_html__('Search Codes', "code-injection"),
-            'not_found' => esc_html__('No codes found', "code-injection"),
-            'not_found_in_trash ' => esc_html__('No codes found in Trash', "code-injection"),
-            'all_items' => esc_html__('All Codes', "code-injection")
+        $code_lables = array( 
+            'name'                  => esc_html_x('Codes', 'post type general name', 'code-injection'), 
+            'singular_name'         => esc_html_x('Code', 'post type singular name', 'code-injection'), 
+            'add_new'               => esc_html_x('Add New Code', 'post type add new item', 'code-injection'), 
+            'add_new_item'          => esc_html_x('Add New Code', 'post type add new item', 'code-injection'),
+            'edit_item'             => esc_html_x('Edit Code', 'post type edit item', 'code-injection'), 
+            'new_item'              => esc_html_x('New Code', 'post type new item', 'code-injection'), 
+            'search_items'          => esc_html_x('Search Codes', 'post type search items', 'code-injection'),
+            'not_found'             => esc_html_x('No codes found', 'post type not found', 'code-injection'), 
+            'not_found_in_trash'    => esc_html_x('No codes found in Trash', 'post type not found in trash', 'code-injection'), 
+            'all_items'             => esc_html_x('All Codes', 'post type all items', 'code-injection'), 
+            'name_admin_bar'        => esc_html_x('Code', 'post type name on admin bar', 'code-injection'), 
+            'archives'              => esc_html_x('Code Archives', 'post type archives', 'code-injection'), 
+            'attributes'            => esc_html_x('Code Attributes', 'post type attributes', 'code-injection'), 
+            'parent_item_colon'     => esc_html_x('Parent Code:', 'post type parent item', 'code-injection'), 
+            'view_item'             => esc_html_x('View Code', 'post type view item', 'code-injection'), 
+            'view_items'            => esc_html_x('View Codes', 'post type view items', 'code-injection'), 
+            'update_item'           => esc_html_x('Update Code', 'post type update item', 'code-injection'), 
+            'insert_into_item'      => esc_html_x('Insert into code', 'post type insert into item', 'code-injection'),
+            'uploaded_to_this_item' => esc_html_x('Uploaded to this code', 'post type uploaded to this item', 'code-injection'), 
+            'filter_items_list'     => esc_html_x('Filter codes list', 'post type filter items list', 'code-injection'), 
+            'items_list_navigation' => esc_html_x('Codes list navigation', 'post type items list navigation', 'code-injection'), 
+            'items_list'            => esc_html_x('Codes list', 'post type items list', 'code-injection') 
         );
 
 
@@ -372,14 +420,16 @@ class CodeType
 
 
         register_post_type(
-            'Code',
+            'code',
             array(
-                'menu_icon' => 'dashicons-editor-code',
-                'labels' => $code_lables,
-                'public' => false,
-                'show_ui' => true,
-                'rewrite' => false,
-                'query_var' => false,
+                'label'       => esc_html_x('Codes', 'post type label', "code-injection"),
+                'description' => esc_html_x('Custom post type for the code injection plugin', 'post type description', "code-injection"),
+                'menu_icon'   => 'dashicons-editor-code',
+                'labels'      => $code_lables,
+                'public'      => false,
+                'show_ui'     => true,
+                'rewrite'     => false,
+                'query_var'   => false,
                 'exclude_from_search' => true,
                 'publicly_queryable' => false,
                 'supports' => array('author', 'revisions', 'title', 'editor'),
@@ -394,8 +444,9 @@ class CodeType
 
     /**
      * @since 2.2.8
+     * @access private
      */
-    static function manage_code_posts_columns($columns)
+    public function _manage_code_posts_columns($columns)
     {
 
         return array(
@@ -410,8 +461,9 @@ class CodeType
 
     /**
      * @since 2.2.8
+     * @access private
      */
-    static function manage_code_posts_custom_column($column, $post_id)
+    public function _manage_code_posts_custom_column($column, $post_id)
     {
 
         switch ($column) {

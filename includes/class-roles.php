@@ -15,7 +15,7 @@ namespace ci;
  *
  * @since 2.4.12
  */
-class Roles
+final class Roles
 {
     /**
      * Initializes custom roles and capabilities.

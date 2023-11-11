@@ -14,7 +14,7 @@ namespace ci;
  * This class generates and displays a heatmap based on provided data.
  * @since 2.2.6
  */
-class Heatmap
+final class Heatmap
 {
 
 

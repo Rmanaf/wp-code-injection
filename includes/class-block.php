@@ -10,13 +10,29 @@ namespace ci;
 use WP_REST_Request;
 
 /**
- * This class contains several methods for initialization, block registration,
- * and REST API endpoint registration. It also handles the rendering of code
- * injection blocks and localization of objects related to code injections.
+ * This class handles the rendering of code injection blocks.
  * 
  * @since 2.4.14
  */
-class Block{
+final class Block{
+
+    private static $instance = null;
+
+    private $database = null;
+
+
+    /**
+     * @since 2.5.0
+     */
+    private function __construct($database)
+    {
+        $this->database = $database;
+
+        add_action('init', array($this, '_register_block_type')); 
+        add_action('rest_api_init', array($this, '_rest_api_init'));
+        add_filter('ci_localize_obj', array($this, '_ci_localize_obj'));
+    }
+
 
 
      /**
@@ -24,11 +40,14 @@ class Block{
      *
      * @since 2.4.14
      */
-    static function init()
+    static function init($database)
     {
-        add_action('init', array(__CLASS__, '_register_block_type')); 
-        add_action('rest_api_init', array(__CLASS__, '_rest_api_init'));
-        add_filter('ci_localize_obj', array(__CLASS__, '_ci_localize_obj'));
+
+        if(!is_null(self::$instance)){
+            return null;
+        }
+
+        self::$instance = new self($database);
     }
 
 
@@ -39,7 +58,7 @@ class Block{
      * @since 2.4.14
      * @access private
      */
-    static function _rest_api_init()
+    public function _rest_api_init()
     {
         register_rest_route('ci/v1', '/render-code', [
             'methods' => 'POST',
@@ -47,7 +66,7 @@ class Block{
                 // Get the code ID from the request data
                 $codeId = $request->get_param('codeId');
                 
-                $renderedHtml = self::_render_code_injection_block(array("codeId" => $codeId  ));
+                $renderedHtml = $this->_render_code_injection_block(array("codeId" => $codeId  ));
                 
                 // Return the rendered HTML as the response
                 return [
@@ -68,7 +87,7 @@ class Block{
      * @since 2.4.14
      * @access private
      */
-    static function _register_block_type()
+    public function _register_block_type()
     {
         if (!function_exists('register_block_type')) {
             // Block editor is not available.
@@ -76,7 +95,7 @@ class Block{
         }
 
         register_block_type('ci/inject', array(
-            'render_callback' => array(__CLASS__, '_render_code_injection_block')
+            'render_callback' => array($this , '_render_code_injection_block')
         ));
     }
 
@@ -87,7 +106,7 @@ class Block{
      * @since 2.4.14
      * @access private
      */
-    static function _render_code_injection_block($attributes)
+    public function _render_code_injection_block($attributes)
     {
         $codeId = $attributes['codeId'];
         if ($codeId !== '0') {
@@ -102,13 +121,13 @@ class Block{
      * @since 2.4.14
      * @access private
      */
-    static function _ci_localize_obj($object) {
+    public function _ci_localize_obj($object) {
 
         if(!is_admin()){
             return $object;
         }
 
-        $codes =  Database::get_codes() ;
+        $codes =  $this->database->get_codes() ;
 
         $codes = array_map(function($item){
 

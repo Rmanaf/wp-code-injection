@@ -7,7 +7,7 @@
 
 namespace ci;
 
-class Metabox
+final class Metabox
 {
 
     const default_values = array(

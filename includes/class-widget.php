@@ -20,18 +20,22 @@ use WP_Widget;
  *
  * @since 0.9.0
  */
-class Widget extends WP_Widget
+final class Widget extends WP_Widget
 {
+
+    private static $instance = null;
+
+    private static $database = null;
+
 
     /**
      * Constructor for the Widget class.
      *
-     * Sets up the widget with a unique ID, name, and description.
-     *
      * @since 0.9.0
      */
-    function __construct()
+    private function __construct()
     {
+
         parent::__construct(
             'wp_code_injection_plugin_widget',
             esc_html__('Code Injection', 'code-injection'),
@@ -39,7 +43,28 @@ class Widget extends WP_Widget
                 'description' => esc_html__("This plugin allows you to effortlessly create custom ads for your website. Inject code snippets in HTML, CSS, and JavaScript, write and run custom plugins on-the-fly, and take your website's capabilities to the next level.", 'code-injection')
             )
         );
+
     }
+
+
+
+    /**
+     * @since 2.5.0
+     */
+    public static function create( $database ){
+
+        if(!is_null(self::$instance)){
+            return  null;
+        }
+
+        self::$database = $database;
+
+        self::$instance = new self();
+
+        return self::$instance;
+
+    }
+
 
 
     /**
@@ -75,7 +100,7 @@ class Widget extends WP_Widget
     {
 
         $title = isset($instance['title']) ? $instance['title'] : 'code-#########';
-        $codes = Database::get_codes();
+        $codes = self::$database->get_codes();
 
         // Filter and retain only published code snippets
         $published_codes = array_filter($codes, function ($item) {

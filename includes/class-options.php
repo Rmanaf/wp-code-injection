@@ -14,7 +14,7 @@ namespace ci;
  * 
  * @since 2.4.12
  */
-class Options
+final class Options
 {
 
     const option_group = 'ci-general'; // The option group used for registering settings

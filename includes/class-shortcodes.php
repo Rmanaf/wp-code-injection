@@ -12,15 +12,42 @@ use Exception;
 class Shortcodes
 {
 
+
+    private static $instance = null;
+
+    private $database = null;
+
+
+
+    /**
+     * @since 2.5.0
+     */
+    private function __construct($database)
+    {
+
+        $this->database = $database;
+
+
+        add_shortcode('inject', array($this, '_ci_shortcode'));
+        add_shortcode('unsafe', array($this, '_unsafe_shortcode'));
+
+        add_filter("no_texturize_shortcodes", array($this, '_no_texturize_shortcodes'));
+
+    }
+
+
+
     /**
      * @since 2.4.12
      */
-    static function init()
+    static function init($database)
     {
-        add_shortcode('inject', array(__CLASS__, '_ci_shortcode'));
-        add_shortcode('unsafe', array(__CLASS__, '_unsafe_shortcode'));
+       if(!is_null(self::$instance)){
+        return null;
+       }
 
-        add_filter("no_texturize_shortcodes", array(__CLASS__, '_no_texturize_shortcodes'));
+       self::$instance = new self($database);
+
     }
 
 
@@ -29,7 +56,7 @@ class Shortcodes
      * @since 2.4.12
      * @access private
      */
-    static function _no_texturize_shortcodes($shortcodes){
+    public function _no_texturize_shortcodes($shortcodes){
         $shortcodes[] = 'inject';
         $shortcodes[] = 'unsafe';
         return $shortcodes;
@@ -76,14 +103,14 @@ class Shortcodes
      * @since 2.4.12
      * @access private
      */
-    static function _unsafe_shortcode($atts = [], $content = null)
+    public function _unsafe_shortcode($atts = [], $content = null)
     {
 
         $use_php = get_option('ci_unsafe_widgets_php', false);
 
         if (!$use_php) {
 
-            Database::record_activity(1, null, 1);
+            $this->database->record_activity(1, null, 1);
 
             return;
         }
@@ -98,7 +125,7 @@ class Shortcodes
 
             if (empty($keys) || !in_array($key, $keys)) {
 
-                Database::record_activity(1, $key, 5);
+                $this->database->record_activity(1, $key, 5);
 
                 return;
             }
@@ -115,7 +142,7 @@ class Shortcodes
             try {
                 $html = ob_get_contents();
             } catch (Exception $ex) {
-                Database::record_activity(1, $key, 4);
+                $this->database->record_activity(1, $key, 4);
                 return;
             }
 
@@ -130,7 +157,7 @@ class Shortcodes
      * @since 2.4.12
      * @access private
      */
-    static function _ci_shortcode($atts = [], $content = null)
+    public function _ci_shortcode($atts = [], $content = null)
     {
 
         if (!is_array($atts)) {
@@ -148,14 +175,14 @@ class Shortcodes
 
 
         if (empty($id) && empty($slug)) {
-            Database::record_activity(0, null, 2);
+            $this->database->record_activity(0, null, 2);
             return;
         }
 
         if (!empty($id)) {
-            $code = Database::get_code_by_title($id);
+            $code = $this->database->get_code_by_title($id);
         } else {
-            $code = Database::get_code_by_slug($slug);
+            $code = $this->database->get_code_by_slug($slug);
         }
 
         if (!is_object($code)) {
@@ -166,7 +193,7 @@ class Shortcodes
         if (!CodeType::check_code_status($code)) {
 
             // Unauthorized Request
-            Database::record_activity(0, $id, 6, $code->ID);
+            $this->database->record_activity(0, $id, 6, $code->ID);
 
             return;
         }
@@ -189,12 +216,12 @@ class Shortcodes
             $params = $i['params'];
 
             if (isset($params['id']) && $params['id'] == $id) {
-                Database::record_activity(0, $id, 3, $code->ID);
+                $this->database->record_activity(0, $id, 3, $code->ID);
                 return;
             }
         }
 
-        Database::record_activity(0, $id, 0, $code->ID);
+        $this->database->record_activity(0, $id, 0, $code->ID);
 
         if ($render_shortcodes) {
             return do_shortcode($code->post_content);

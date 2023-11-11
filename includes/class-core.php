@@ -12,31 +12,30 @@ namespace ci;
  * Core Class for Code Injection Plugin
  *
  * The Core class serves as the central orchestrator for the Code Injection plugin. It provides the backbone structure
- * for the plugin's functionalities by organizing and managing its various components and actions. This class encapsulates
- * the main operations of the plugin and initializes key features such as code type management, database setup, user roles,
- * metabox handling, asset management, shortcodes, options, and more. It also hooks into appropriate WordPress actions and
- * filters to ensure proper functioning throughout different stages of the WordPress lifecycle.
+ * for the plugin's functionalities by organizing and managing its various components and actions.
  */
-class Core
+final class Core
 {
 
-    /**
-     * Setup Plugin Components and Actions
-     *
-     * This method initializes various components and actions of the plugin by calling their respective init methods.
-     * It sets up the core functionalities of the plugin such as code type management, database setup, user roles,
-     * metabox handling, asset management, shortcodes, options, and more. Additionally, it hooks into various actions
-     * and filters, ensuring that the plugin functions as intended during different stages of WordPress execution.
-     *
-     * @since 2.4.12
-     */
-    static function setup()
-    {
-        // Initialize code type management
-        CodeType::init();
+    private static $instance = null;
 
-        // Initialize database-related functionality
-        Database::init();
+    private $database = null;
+
+
+    /**
+     * @since 2.5.0
+     */
+    private function __construct()
+    {
+
+        // Initialize the Database class
+        $this->database = Database::init();
+
+
+        // Initialize code type management
+        CodeType::init( $this->database );
+
+        Block::init( $this->database );
 
         // Initialize user roles and capabilities
         Roles::init();
@@ -48,24 +47,26 @@ class Core
         AssetManager::init();
 
         // Initialize custom shortcodes for the plugin
-        Shortcodes::init();
+        Shortcodes::init( $this->database );
 
         // Initialize options management
         Options::init();
 
-        Block::init();
+
 
         // Hook to load plugins at the plugins_loaded action
-        add_action('plugins_loaded', array(__CLASS__, '_load_plugins'));
+        add_action('plugins_loaded', array($this, '_load_plugins'));
 
         // Hook to check and handle raw content requests
-        add_action("template_redirect", array(__CLASS__, '_check_raw_content'));
+        add_action("template_redirect", array($this, '_check_raw_content'));
 
         // Hook to register and initialize custom widgets
-        add_action('widgets_init', array(__CLASS__, '_widgets_init'));
+        add_action('widgets_init', array($this, '_widgets_init'));
 
         // Hook to load the plugin's text domain for translations
-        add_action('plugins_loaded', array(__CLASS__, '_load_plugin_textdomain'));
+        add_action('plugins_loaded', array($this, '_load_plugin_textdomain'));
+
+
 
         // Check if "Unsafe" settings for shortcodes in widgets are enabled
         if (get_option('ci_unsafe_widgets_shortcodes', 0)) {
@@ -73,6 +74,26 @@ class Core
             add_filter('widget_text', 'shortcode_unautop');
             add_filter('widget_text', 'do_shortcode');
         }
+    }
+
+
+
+    /**
+     * Setup Plugin Components and Actions
+     *
+     * @since 2.4.12
+     */
+    static function setup()
+    {
+
+        if(!is_null(self::$instance)){
+            return null;
+        }
+
+
+        self::$instance = new self();
+
+        
 
         // Register activation and deactivation hooks for the plugin
         register_activation_hook(__CI_FILE__, array(__CLASS__, '_plugin_activate'));
@@ -89,7 +110,7 @@ class Core
      * @access private
      * @since 2.4.12
      */
-    static function _load_plugin_textdomain()
+    public function _load_plugin_textdomain()
     {
         // Load the text domain for translation
         load_plugin_textdomain("code-injection", FALSE, basename(dirname(__CI_FILE__)) . '/languages/');
@@ -106,7 +127,7 @@ class Core
      * @access private
      * @since 2.2.9
      */
-    static function _load_plugins()
+    public function _load_plugins()
     {
 
         global $wpdb;
@@ -125,7 +146,7 @@ class Core
         $keys = get_option('ci_unsafe_keys', '');
 
         // Retrieve all plugin codes from the database
-        $codes = Database::get_codes();
+        $codes = $this->database->get_codes();
 
         // Filter and process plugins based on conditions
         $plugins = array_filter($codes, function ($element) use ($ignore_keys, $keys) {
@@ -200,7 +221,7 @@ class Core
      * @access private
      * @since 2.4.12
      */
-    static function _check_raw_content()
+    public function _check_raw_content()
     {
 
         // Check if the request is on the home page or front page
@@ -217,26 +238,28 @@ class Core
         $codeId = sanitize_text_field($_GET["raw"]);
 
         // Retrieve code information based on the ID
-        $code = Database::get_code_by_title($codeId);
+        $code = $this->database->get_code_by_title($codeId);
 
         // Check if code exists
         if (!$code) {
             // Record activity for code not found
-            Database::record_activity(0, null, 2);
+            $this->database->record_activity(0, null, 2);
             return;
         }
 
 
-        // Check if code type is authorized
+        // Check the code's status
         if (!CodeType::check_code_status($code)) {
-            // Record activity for unauthorized request
-            Database::record_activity(0, $codeId, 6, $code->ID);
+            // Skip codes with invalid status
+            $this->database->record_activity(0, $codeId, 6, $code->ID);
             return;
         }
 
 
         // Extract options from code metadata
         $options = maybe_unserialize($code->meta_value);
+
+
         extract($options);
 
         // Determine code status based on options
@@ -254,7 +277,7 @@ class Core
         $renderShortcodes = get_option('ci_code_injection_allow_shortcode', false);
 
         // Record activity for successful code request
-        Database::record_activity(0, $codeId, 0, $code->ID);
+        $this->database->record_activity(0, $codeId, 0, $code->ID);
 
         // Set appropriate content-type header
         header("Content-Type: $code_content_type; charset=UTF-8", true);
@@ -286,15 +309,13 @@ class Core
     /**
      * Initialize and register custom widgets.
      *
-     * This private method is responsible for registering custom widgets during WordPress widget initialization.
-     *
      * @access private
      * @since 2.4.12
      */
-    static function _widgets_init()
+    public function _widgets_init()
     {
-        // Register the custom widget defined in the Widget class
-        register_widget(Widget::class);
+        // Register the custom widget
+        register_widget(Widget::create( $this->database ));
     }
 
 

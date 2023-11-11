@@ -14,16 +14,13 @@ use DateInterval,  DateTime;
 /**
  * The Database class handles interactions with the database for tracking and reporting activities.
  *
- * This class is responsible for managing database interactions related to tracking and reporting
- * activities within the context of the code snippet tracking system. It encapsulates various
- * functions that generate SQL queries for retrieving activity reports and recording activity events.
- * The class utilizes DateInterval and DateTime objects for handling time calculations and formatting.
- *
- * @namespace ci
  * @since 2.2.6
  */
-class Database
+final class Database
 {
+
+    private static $instance = null;
+
 
     /**
      * The name of the database table used for storing activity records.
@@ -72,21 +69,37 @@ class Database
     private static $db_shortcodes_types = array('HTML', 'PHP');
 
 
+
+
+    /**
+     * @since 2.5.0
+     */
+    private function __construct()
+    {
+    }
+
+
+
     /**
      * Initializes the plugin by performing necessary setup actions.
-     *
-     * This static function serves as the initialization point for the plugin. It is called
-     * upon plugin activation or when required during the plugin's lifecycle. The primary
-     * purpose of this function is to ensure the proper setup of the plugin's components.
-     * It accomplishes this by invoking the 'check_db' method, which verifies and updates
-     * the plugin's database schema as needed to maintain compatibility.
      *
      * @since 2.4.12
      */
     static function init()
     {
+
+        if(!is_null(self::$instance)){
+            return null;
+        }
+
+
+        self::$instance = new self();
+        
         // Perform the necessary setup actions, including checking and updating the database
-        self::check_db();
+        self::$instance->check_db();
+
+        return self::$instance;
+
     }
 
 
@@ -95,16 +108,9 @@ class Database
     /**
      * Checks and updates the custom database table used by the plugin.
      *
-     * This private function is responsible for verifying and updating the database
-     * schema to ensure compatibility with the plugin's version. It compares the stored
-     * database version with the current version of the plugin. If the versions match,
-     * no action is taken. If they differ, the function creates or updates a custom
-     * database table with necessary columns. This table is used to store activity log
-     * entries associated with various events triggered by the plugin.
-     *
      * @since 2.2.6
      */
-    private static function check_db()
+    private function check_db()
     {
         global $wpdb;
 
@@ -155,17 +161,11 @@ class Database
     /**
      * Retrieves an array of code snippets with associated metadata.
      *
-     * This static function queries the WordPress database to retrieve an array of code
-     * snippet posts along with their associated metadata. It retrieves posts that have
-     * the 'code' post type, have a meta key 'code_options', and have a post date earlier
-     * than the current date and time. The retrieved results are ordered in descending order
-     * based on the post date.
-     *
      * @since 2.4.8
      *
      * @return array An array of objects containing code snippet post data and metadata.
      */
-    static function get_codes()
+    public function get_codes()
     {
 
         global $wpdb;
@@ -177,17 +177,15 @@ class Database
         $code_post_type = 'code';
 
         // Construct the SQL query to retrieve code snippets
-        $query = $wpdb->prepare(
-            "SELECT $posts_table.*, $postmeta_table.*
+        $query = "SELECT $posts_table.*, $postmeta_table.*
             FROM $posts_table, $postmeta_table
             WHERE $posts_table.ID = $postmeta_table.post_id
-            AND $postmeta_table.meta_key = %s
-            AND $posts_table.post_type = %s
+            AND $postmeta_table.meta_key = '%s'
+            AND $posts_table.post_type = '%s'
             AND $posts_table.post_date < NOW()
-            ORDER BY $posts_table.post_date DESC",
-            $code_options_meta_key,
-            $code_post_type
-        );
+            ORDER BY $posts_table.post_date DESC";
+
+        $query = $wpdb->prepare($query , $code_options_meta_key ,  $code_post_type);
 
         // Execute the query and fetch results as an array of objects
         return $wpdb->get_results($query);
@@ -199,30 +197,34 @@ class Database
     /**
      * Retrieves a code snippet by its title.
      *
-     * This function queries the WordPress database to retrieve a code snippet
-     * post based on the provided title. It fetches both post and postmeta
-     * information associated with the given title.
-     *
      * @since 2.4.14
      *
      * @param string $title The title of the code snippet to retrieve.
      * @return object|null An object containing the code snippet's post and postmeta data as properties,
      *                    or null if no matching snippet is found.
      */
-    static function get_code_by_title($title)
+    public function get_code_by_title($title)
     {
         global $wpdb;
 
+        $posts_table = $wpdb->posts;
+        $postmeta_table = $wpdb->postmeta;
+        $code_options_meta_key = 'code_options';
+        $code_post_type = 'code';
+
         // Construct the SQL query to retrieve the code snippet by title
-        $query = "SELECT $wpdb->posts.*, $wpdb->postmeta.*
-                FROM $wpdb->posts, $wpdb->postmeta
-                WHERE $wpdb->posts.ID = $wpdb->postmeta.post_id 
+        $query = "SELECT $posts_table.*, $postmeta_table.*
+                FROM $posts_table, $postmeta_table
+                WHERE $posts_table.ID = $postmeta_table.post_id
                 AND $wpdb->posts.post_title = '$title'
-                AND $wpdb->posts.post_type = 'code'
-                LIMIT 1";
+                AND $postmeta_table.meta_key = '%s'
+                AND $posts_table.post_type = '%s'";
+
+        $query = $wpdb->prepare($query , $code_options_meta_key ,  $code_post_type);
 
         // Execute the query and fetch a single row as an object
         $row = $wpdb->get_row($query);
+
 
         // If no matching snippet is found, return null
         if (!$row) {
@@ -237,28 +239,30 @@ class Database
     /**
      * Retrieves a code snippet by its unique slug.
      *
-     * This function queries the WordPress database to retrieve a code snippet
-     * post based on the provided unique slug. It fetches both post and postmeta
-     * information associated with the given slug.
-     *
      * @since 2.4.8
      *
      * @param string $slug The unique slug of the code snippet to retrieve.
      * @return object|null An object containing the code snippet's post and postmeta data as properties,
      *                    or null if no matching snippet is found.
      */
-    static function get_code_by_slug($slug)
+    public function get_code_by_slug($slug)
     {
         global $wpdb;
 
+        $posts_table = $wpdb->posts;
+        $postmeta_table = $wpdb->postmeta;
+        $code_options_meta_key = 'code_slug';
+        $code_post_type = 'code';
+
         // Construct the SQL query to retrieve the code snippet by slug
-        $query = "SELECT $wpdb->posts.*, $wpdb->postmeta.*
-                FROM $wpdb->posts, $wpdb->postmeta
-                WHERE $wpdb->posts.ID = $wpdb->postmeta.post_id 
-                AND $wpdb->postmeta.meta_key = 'code_slug' 
-                AND $wpdb->postmeta.meta_value = '$slug'
-                AND $wpdb->posts.post_type = 'code'
-                LIMIT 1";
+        $query = "SELECT $posts_table.*, $wpdb->postmeta.*
+                FROM $posts_table, $postmeta_table
+                WHERE $posts_table.ID = $postmeta_table.post_id 
+                AND $postmeta_table.meta_key = '%s' 
+                AND $postmeta_table.meta_value = '%s'
+                AND $posts_table.post_type = '%s'";
+
+        $query = $wpdb->prepare($query , $code_options_meta_key , $slug , $code_post_type);
 
         // Execute the query and fetch a single row as an object
         $row = $wpdb->get_row($query);
@@ -277,13 +281,6 @@ class Database
     /**
      * Records an activity event in the database for tracking purposes.
      *
-     * This static function is responsible for recording activity events in the database
-     * for tracking purposes. It records various details such as the event type, associated
-     * code snippet, error status, and relevant identifiers like IP address, post ID, blog ID,
-     * and user ID. The function first checks whether the event should be tracked based on
-     * provided conditions. If tracking is enabled, the function inserts a new activity record
-     * into the database table, capturing key information about the event.
-     *
      * @since 2.2.6
      *
      * @param int $type The type of activity event (0 for HTML, CSS, JavaScript, 1 for PHP, etc.).
@@ -291,17 +288,21 @@ class Database
      * @param int $error The error status (0 for no error, 1 for error).
      * @param int|null $id The post ID or identifier associated with the event (used in specific cases).
      */
-    static function record_activity($type = 0, $code = null, $error = 0, $id = null)
+    public function record_activity($type = 0, $code = null, $error = 0, $id = null)
     {
         global $wpdb, $post;
 
         // Check if tracking is required based on provided conditions
         if ($code !== null && $type === 0 && $id !== null) {
             $co = Metabox::get_code_options($id);
-            if (!$co['code_tracking']) {
+
+            if (!boolval($co['code_tracking'])) {
                 return; // No tracking needed
             }
         }
+
+        
+
 
         // Capture essential information for the activity record
         $ip = Helpers::get_ip_address();
@@ -316,9 +317,9 @@ class Database
         $post_query_param = is_null($post_param) ? "`post` IS NULL" : "`post` = '$post_param'";
         $ip_query_param = is_null($ip) ? "`ip` IS NULL" : "`ip` = '$ip'";
 
+
         // Construct and execute query to check if similar event was recorded recently
-        $query = $wpdb->prepare("
-            SELECT COUNT(*)
+        $query = "SELECT COUNT(*)
             FROM `$table_name`
             WHERE $ip_query_param 
             AND `type` = %d 
@@ -326,9 +327,11 @@ class Database
             AND `user` = %d 
             AND $post_query_param 
             AND `code` = %s 
-            AND `time` BETWEEN %s AND %s",
-            $type, $blog, $user, $code, $start_date, $time
-        );
+            AND `time` BETWEEN %s AND %s";
+
+
+        $query = $wpdb->prepare($query , $type, $blog, $user, $code, $start_date, $time);
+
         $count = $wpdb->get_var($query);
 
         // If no similar event was recently recorded, insert the activity record
@@ -356,12 +359,6 @@ class Database
     /**
      * Generates a SQL query for retrieving a weekly activity report for a specific code snippet.
      *
-     * This static function constructs a SQL query for retrieving a weekly activity report
-     * for a given code snippet within a specified time range. The query calculates metrics
-     * such as unique hits, total hits, and total errors for each day of the week and each hour
-     * of the day within the specified range. The report is organized by weekday and hour,
-     * providing insights into the snippet's activity patterns.
-     *
      * @since 2.4.5
      *
      * @param int $post_id The ID of the code snippet post.
@@ -369,7 +366,7 @@ class Database
      * @param DateTime $end The end date of the report's time range.
      * @return string A SQL query for generating the weekly activity report.
      */
-    static function get_weekly_report_query($post_id, $start, $end)
+    public function get_weekly_report_query($post_id, $start, $end)
     {
 
         global $wpdb;
@@ -407,11 +404,6 @@ class Database
     /**
      * Generates a SQL query for retrieving a monthly activity report for a specific code snippet.
      *
-     * This static function constructs a SQL query for retrieving a monthly activity report
-     * for a given code snippet within a specified time range. The query calculates metrics
-     * such as unique hits, total hits, and total errors for each day within the specified range.
-     * The report is organized by month and day, providing insights into the snippet's activity.
-     *
      * @since 2.4.5
      *
      * @param int $post_id The ID of the code snippet post.
@@ -419,7 +411,7 @@ class Database
      * @param DateTime $end The end date of the report's time range.
      * @return string A SQL query for generating the monthly activity report.
      */
-    static function get_monthly_report_query($post_id, $start, $end)
+    public function get_monthly_report_query($post_id, $start, $end)
     {
 
         global $wpdb;

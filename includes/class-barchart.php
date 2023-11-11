@@ -15,7 +15,7 @@ namespace ci;
  * 
  * @since 2.4.5
  */
-class Barchart
+final class Barchart
 {
 
     private $data = array();
